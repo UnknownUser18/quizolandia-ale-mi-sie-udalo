@@ -8,4 +8,8 @@ Nie rozmawiamy o motoroli (która już się pewnie skończyła)
 Bzbz 🐝🐝🐝
 
 #### Zasada czwarta
+J python django flask tornado pyramid. GO the goat
+
+##### Zasada piąta
 Link do [chlopów](https://github.com/Zenic1/quizolandia-ale-mi-sie-udalo)
+
