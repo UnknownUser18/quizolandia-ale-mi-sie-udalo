@@ -25,7 +25,7 @@ npm install
 ```
 2. Stwórz plik `.env` w katalogu głównym projektu i dodaj do niego dane do bazy danych.
 
-3Uruchom serwer:
+3. Uruchom serwer:
 
 ```bash
 node --env-file=.env index.js
