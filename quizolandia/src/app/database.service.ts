@@ -27,6 +27,8 @@ enum QuestionType {
  * @enum {number} BUG - Zgłoszenie błędu.
  * @enum {number} CHEATING - Zgłoszenie oszustwa.
  * @enum {number} SUGGESTION - Zgłoszenie sugestii.
+ * @enum {number} INAPPROPRIATE_CONTENT - Zgłoszenie nieodpowiedniej treści.
+ * @enum {number} OTHER - Inne zgłoszenie.
  * @example
  * const reportType: ReportType = ReportType.BUG;
  * console.log(reportType); // 0
@@ -35,6 +37,8 @@ enum ReportType {
   BUG,
   CHEATING,
   SUGGESTION,
+  INAPPROPRIATE_CONTENT,
+  OTHER,
 }
 
 /** @enum Permission
