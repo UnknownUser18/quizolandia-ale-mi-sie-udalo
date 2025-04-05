@@ -7,11 +7,92 @@
     <meta name="description" content="Skontaktuj się z twórcami" />
     <meta name="author" content="Quizolandia Team" />
     <meta name="robots" content="noindex, nofollow" />
+
     <link rel="icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="styles.scss">
+    <link rel="stylesheet" href="styles.css">
     <title>Czarny na sprzedaż</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Just+Another+Hand&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Just+Another+Hand&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
+<main>
+    <div class="comment-container">
+        <img src="chlop.png" alt="User Image">
+        <form action="#" method="post">
+            <div class="rate">
+                <input type="radio" id="star5" name="rate" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="rate" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="rate" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="rate" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="rate" value="1" />
+                <label for="star1" title="text">1 star</label>
+            </div>
+            <textarea name="Komentarz" id="komentarz" cols="30" rows="1" placeholder="Dodaj Komentarz"></textarea>
+            <div class="buttons">
+                <input class="button" type="reset" value="Anuluj">
+                <input class="button" type="submit" value="Skomentuj">
+            </div>
+        </form>
+    </div>
+    <div class="example-comment">
+        <img src="chlop.png" alt="User Image">
+        <div class="comment-content">
+            <div>
+                <span class="username">Kamil P</span>
+                <span class="timestamp">4h temu</span>
+            </div>
 
+            <div class="comment-rate">
+                <span class="filled-star">★</span>
+                <span class="filled-star">★</span>
+                <span class="empty-star">★</span>
+                <span class="empty-star">★</span>
+                <span class="empty-star">★</span>
+            </div>
+            <p>Gruben nic nie robi bo się leni</p>
+        </div>
+    </div>
+    <div class="example-comment">
+        <img src="chlop.png" alt="User Image">
+        <div class="comment-content">
+            <div>
+                <span class="username">JC</span>
+                <span class="timestamp">1h temu</span>
+            </div>
+
+            <div class="comment-rate">
+                <span class="filled-star">★</span>
+                <span class="filled-star">★</span>
+                <span class="filled-star">★</span>
+                <span class="filled-star">★</span>
+                <span class="filled-star">★</span>
+            </div>
+            <p>Nie mogę się doczekać pojedynku DW i SS!!!</p>
+        </div>
+    </div>
+</main>
+<script>
+    document.getElementById('komentarz').addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+        document.querySelector('.buttons').style.display = 'flex';
+    });
+
+    document.getElementById('komentarz').addEventListener('focus', function() {
+        document.querySelector('.buttons').style.display = 'flex';
+    });
+
+    document.querySelector('input[type="reset"]').addEventListener('click', function() {
+        document.querySelector('.buttons').style.display = 'none';
+    });
+</script>
 </body>
 </html>
