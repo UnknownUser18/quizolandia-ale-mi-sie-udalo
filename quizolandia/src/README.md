@@ -11,7 +11,7 @@ A więc: <br>
 W pliku `.env` powinny znajdować się następujące zmienne:
 ```dotenv
 HOST=''
-USERNAME=''
+USER=''
 PASSWORD=''
 DATABASE=''
 ```
