@@ -28,5 +28,5 @@ npm install
 3. Uruchom serwer:
 
 ```bash
-node --env-file=.env index.js
+node --env-file=.env .\backend.js
 ```
