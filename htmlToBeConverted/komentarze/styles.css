@@ -199,3 +199,6 @@ input[type="reset"]:hover {
   font-size: 30px;
   color: #ccc; /* same color as the unselected stars in the form */
 }
+.delete-comment {
+  display: none;
+}
