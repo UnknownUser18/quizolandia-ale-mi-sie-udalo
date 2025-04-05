@@ -97,6 +97,7 @@ export interface User {
  * @property {Date} creationDate - Data utworzenia quizu.
  * @property {Date} lastUpdate - Data ostatniej aktualizacji quizu.
  * @property {boolean} isPublic - Czy quiz jest publiczny, czy jako wersja robocza.
+ * @property {number} id_category - Identyfikator kategorii quizu.
  * @example
  * const quiz: Quiz = {
  *  id_quiz: 1,
@@ -116,6 +117,7 @@ export interface User {
  *  creationDate: new Date('2023-10-01'),
  *  lastUpdate: new Date('2023-10-01'),
  *  isPublic: true,
+ *  id_category: 1,
  * }
  */
 export interface Quiz {
@@ -127,6 +129,7 @@ export interface Quiz {
   creationDate: Date,
   lastUpdate: Date,
   isPublic: boolean,
+  id_category: Category["id_category"],
 }
 
 /** @interface Questions
@@ -208,52 +211,62 @@ export interface Solve {
   whenSolve: Date,
   isPublic: boolean,
 }
+/** @interface Category
+ * @description Obiekt reprezentujący kategorię quizu.
+ * @property {number} id_category - Unikalny identyfikator kategorii.
+ * @property {string} name - Nazwa kategorii.
+ * @example
+ *  const category: Category = {
+ *  id_category: 1,
+ *  name: 'Programowanie',
+ * }
+ */
+export interface Category {
+  id_category: number,
+  name: string,
+}
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
   constructor() {}
   private socket! : WebSocket
-  result : BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  private initWebSocket() : number {
+  public result : BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  public initWebSocket() : number {
     try {
       this.socket = new WebSocket('ws://localhost:8080');
       this.socket.onopen = () => {
         console.log('WebSocket connection established');
         return 0;
       };
-      this.socket.onmessage = (event) => {
-        if(!event.data) {
-          throw new Error('Error in data', event.data);
-        }
-        this.result.next(JSON.parse(event.data));
-        return 0;
-      }
-      this.socket.onerror = (error) => {
-        throw new Error(`${error}`);
+      this.socket.onerror = (error : Event) => {
+        console.error('WebSocket error:', error);
+        return 1;
       };
       this.socket.onclose = () => {
         console.log('WebSocket connection closed');
         return 0;
       };
     } catch (error) {
-      throw new Error(`WebSocket connection error: ${error}`);
+      console.error('WebSocket error:', error);
+      return 1;
     }
     return 2;
   }
-  public test() : void {
-    try {
-      const status = this.initWebSocket();
-      let time = 0;
-      if(status !== 0) {
-        time = 2000;
+  public async getData(sql : string) : Promise<void> {
+    if(!this.socket.readyState) throw new Error('WebSocket connection does not exist');
+    this.socket.send(sql);
+    return new Promise((resolve, reject) : void => {
+      this.socket.onmessage = (event : MessageEvent) => {
+        if(!event.data) {
+          reject(new Error('Error in data', event.data));
+          return;
+        }
+        console.log('WebSocket message received:', event.data);
+        this.result.next(JSON.parse(event.data));
+        resolve();
       }
-      setTimeout(() => {
-        this.socket.send("SELECT * FROM user");
-      }, time);
-    } catch (error) {
-      console.error(`Error initializing WebSocket: ${error}`);
-      return;
-    }
+    });
   }
 }

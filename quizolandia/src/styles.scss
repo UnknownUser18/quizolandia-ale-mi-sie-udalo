@@ -1,8 +1,48 @@
 :root {
-
+  --border-color: #17385A;
+  --accent-color: #1F61A2;
+  --secondary-color: #39A6D5;
+  --primary-color: #518BC0;
+  --background-color: #FAFAFA;
+  --text-color: #212121;
+  --white-text-color: #FAFAFA;
+  --gradient-text-color: #BDAFBB;
 }
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+a {
+  text-decoration: none;
+  transition: color 150ms ease-in-out;
+  will-change: transition;
+  color: inherit;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+input, textarea, select, option, button {
+  border: 0;
+  outline: 0;
+  color: inherit;
+  font-family: inherit;
+  background-color: transparent;
+  &:placeholder-shown {
+    color: var(--gradient-text-color);
+  }
+}
+button {
+  cursor: pointer;
+  will-change: transition;
+  transition: background-color 150ms ease-in-out;
+}
+input {
+  will-change: transition;
+  transition: all 150ms ease-in-out;
 }

@@ -1,6 +1,5 @@
 const mysql2 = require('mysql2');
 const ws = require('ws');
-require('dotenv').config();
 const wss = new ws.WebSocketServer({
   port: 8080,
   perMessageDeflate: {
