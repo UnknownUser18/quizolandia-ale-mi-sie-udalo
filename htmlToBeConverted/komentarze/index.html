@@ -36,7 +36,7 @@
                 <input type="radio" id="star1" name="rate" value="1" />
                 <label for="star1" title="text">1 star</label>
             </div>
-            <textarea name="Komentarz" id="komentarz" cols="30" rows="1" placeholder="Dodaj Komentarz"></textarea>
+            <textarea name="Komentarz" id="komentarz" cols="30" rows="1" placeholder="Dodaj Komentarz" maxlength="255"></textarea>
             <div class="buttons">
                 <input class="button" type="reset" value="Anuluj">
                 <input class="button" type="submit" value="Skomentuj">
@@ -93,6 +93,25 @@
 
     document.querySelector('input[type="reset"]').addEventListener('click', function() {
         document.querySelector('.buttons').style.display = 'none';
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const textarea = document.getElementById('komentarz');
+        const charCounter = document.createElement('div');
+        charCounter.classList.add('char-counter');
+        charCounter.textContent = '0/255';
+        textarea.parentNode.appendChild(charCounter);
+
+        textarea.addEventListener('input', function() {
+            const currentLength = textarea.value.length;
+            charCounter.textContent = `${currentLength}/255`;
+
+            if (currentLength >= 255) {
+                charCounter.style.color = 'var(--color-secondary)';
+                textarea.value = textarea.value.substring(0, 255);
+            } else {
+                charCounter.style.color = 'var(--color-text)';
+            }
+        });
     });
 </script>
 </body>
