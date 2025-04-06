@@ -1,0 +1,361 @@
+/* paleta - 
+#17385A
+#1F61A2
+#39A6D5
+#39A6D5
+#FFFFFF
+*/
+*{
+    margin: 0;
+
+}
+body{
+    background-color: #ffffff;
+    font-family: 'Inter', sans-serif;
+}
+#mainmenu{
+    background-color: #17385a;
+width: 100%;
+height: 150px;
+display: flex;
+justify-content: space-around;
+}
+.searchbar {
+    display: flex;
+    width: 96%;
+    border: 1px solid #000;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 20px;
+  }
+  
+  .searchbar input {
+    flex: 1;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .searchbar button {
+    background-color: #518BC0;
+    border: none;
+    padding: 0 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+#sbs{
+    display: flex;
+    justify-content:left ;
+    align-items: center ;
+}
+#sb{
+    color: #FFFFFF;
+    font-family: 'Poppins', sans-serif;
+    font-size: 64px;
+    text-decoration: none;
+}
+nav{
+    width: 50%;
+  opacity: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+nav ul{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    list-style-type: none;
+    gap: 65px   ;
+}
+ nav ul li{
+    display: flex;
+    justify-content: space-around;
+}
+ul li a{
+    color: white;
+    text-decoration: none;
+    font-size: 40px;
+}
+ul li a:visited{
+  color: #1F1F1F;
+  background-color: #17385A;
+  text-decoration: none;
+  font-size: 40px;
+}
+main{
+    padding: 0 10px 0 10px;
+    margin-top: 30px;
+    display: flex;
+}
+main h2{
+    font-size: 48px;
+    font-family: 'Poppins' , sans-serif;
+    font-weight: normal;
+}
+main hr{
+    margin: -20px 0 20px 0;
+    height: 10px;
+    background-color: #17385A;
+    width: 30%;
+    border-radius: 10px;
+}
+.quizy{
+    display: flex   ;
+    flex-direction: row;
+    gap: 30px   ;
+    margin-bottom: 20px;
+}
+.quizy article{
+    background-color: #518BC0;
+    border-radius: 10px;
+}
+.quizy article p{
+    border-radius: 10px;
+    padding: 10px;
+}
+.quizy article h6{
+    border-radius: 10px;
+    padding: 10px;
+}
+.statykontener {
+    background: #518BC0;
+    border-radius: 12px;
+    padding: 20px 30px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 50px;
+    margin-top: 70px;
+    height: 200px;
+  }
+  
+  .statykontener h2 {
+    color: white;
+    text-align: right;
+    font-size: 38px;
+    margin-bottom: 15px;
+  }
+  
+  .staty {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+  
+  .kart {
+    background: #39A6D5;
+    border-radius: 10px;
+    padding: 15px 20px;
+    min-width: 100px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    color: white;
+  }
+  
+  .emoji {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 5px;
+  }
+  .statykontener2 {
+    background: #518BC0;
+    border-radius: 12px;
+    padding: 30px 10px 30px 10px;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 50px;
+    margin-top: 30px;
+    color: white;
+  }
+  
+  .statykontener2 h2 {
+    font-size: 40px;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  #yap{
+    font-size: 28px;
+    font-weight: 400;
+  }
+  #tekstdol{
+margin: 15px 0 15px 0;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .statykontener2 button{
+    background-color: #17385A;
+    padding: 12px 20px 12px 20px;
+    border: 0;
+    border-radius: 20px;
+    color: white;
+  }
+  footer{
+    background-color: #17385a;
+    width: 100%;
+    height: 100px;
+    margin-top: 100px;
+  }
+
+.main{
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+.kartaprofilowa {
+  background: #d9e5f4;
+  width: 800px;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inofuz h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.inofuz p {
+  margin: 2px 0 5px;
+  color: #555;
+}
+
+.poziom {
+  font-size: 14px;
+  color: #333;
+}
+
+.przyciskedytuj {
+  background: #9333EA;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.statsyst {
+  display: flex;
+  justify-content: space-around;
+  margin: 25px 0;
+  text-align: center;
+}
+
+.statyuzyt h3 {
+  font-size: 28px;
+  margin-bottom: 5px;
+  color: #111;
+}
+
+.statyuzyt p {
+  font-size: 14px;
+  color: #444;
+}
+
+.taby {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.taby span {
+  margin-right: 20px;
+  padding-bottom: 5px;
+  font-weight: 500;
+  color: #888;
+  cursor: pointer;
+}
+
+.taby .active {
+  border-bottom: 2px solid #9333EA;
+  color: #9333EA;
+}
+
+.powiadomienia h4 {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.powiadomienia ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.powiadomienia li {
+  display: flex;
+  align-items: center;
+  background: #eafaf1;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.icon {
+  background: #45d68d;
+  color: white;
+  border-radius: 50%;
+  padding: 5px;
+  margin-right: 10px;
+  font-size: 16px;
+}
+.wyzej {
+  display: flex;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 900px;
+  margin: auto;
+  gap: 40px;
+}
+
+.lewypanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.progressbar {
+  height: 8px;
+  background-color: #17385A;
+  border-radius: 5px;
+  width: 40%;
+}
+
+.padmin{
+background-color: #17385A;
+color: white;
+border: none;
+padding: 8px 14px;
+border-radius: 8px;
+cursor: pointer;
+font-weight: bold;
+}
+#przyciskiadmina{
+  margin-top: 10px;
+display: grid;
+gap: 10px ;
+grid-template-areas:
+"b1 b2 b3"
+"b4 b5 b6";
+}
+.padmin1{grid-area: b1;}
+.padmin2{grid-area: b2;}
+.padmin3{grid-area: b3;}
+.padmin4{grid-area: b4;}
+.padmin5{grid-area: b5;}
+.padmin6{grid-area: b6;}
