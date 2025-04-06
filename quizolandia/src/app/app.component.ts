@@ -4,6 +4,7 @@ import {NavComponent} from './header/nav/nav.component';
 import {Router} from '@angular/router';
 import {SearchResultsComponent} from './search-results/search-results.component';
 import {QuizPageComponent} from './quizy/quiz-page/quiz-page.component';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ import {QuizPageComponent} from './quizy/quiz-page/quiz-page.component';
 })
 export class AppComponent implements AfterViewInit {
   title = 'quizolandia';
-  constructor(private databaseService: DatabaseService, private router: Router) { }
+  constructor(private databaseService: DatabaseService, protected router: Router) { }
   ngAfterViewInit(): void {
     this.router.navigate(['']).then();
     this.databaseService.initWebSocket();

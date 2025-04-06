@@ -1,6 +1,6 @@
 <input placeholder="Czego chcesz się dzisiaj nauczyć..." [(ngModel)]="searchQuery" (focus)="fetchCategories()" (keydown)="searchQuizzes($event)">
 <select [(ngModel)]="selectedCategory" (focus)="fetchCategories();">
   <option value="wszystkie">Wszystkie</option>
-  <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
+  <option *ngFor="let category of categories" [value]="category.category_name">{{ category.category_name }}</option>
 </select>
 <button (click)="searchQuizzes($event)"><img ngSrc="assets/search.svg" width="40" height="40" alt="Wyszukaj, Lupa"></button>

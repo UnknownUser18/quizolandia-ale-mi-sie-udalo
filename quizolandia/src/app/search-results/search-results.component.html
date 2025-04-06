@@ -4,7 +4,7 @@
     <p>Kategoria: {{ selectedCategory }}</p>
     <h3>Wyniki:</h3>
     <div>
-      <div *ngFor="let quiz of result">
+      <div *ngFor="let quiz of result" (click)="goToQuiz(quiz.id_quiz, quiz.quiz_name)">
         <h3>{{ quiz.quiz_name }}</h3>
         <p>Opis: {{ quiz.description }}</p>
         <p>Autor: {{ quiz.username }}</p>

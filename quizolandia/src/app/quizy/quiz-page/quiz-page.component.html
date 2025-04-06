@@ -1,2 +1,8 @@
-<p>quiz-page works!</p>
-<app-comments></app-comments>
+@if (router.url.match('/quiz/')) {
+  Nazwa: {{ result?.quiz_name }}
+  Opis: {{ result?.description }}
+  Kategoria: {{ result?.category_name }}
+  <img ngSrc="{{ result?.image }}" alt="Quiz Image" width="1000" height="500">
+
+  <app-comments [quizId]="quizId"></app-comments>
+}

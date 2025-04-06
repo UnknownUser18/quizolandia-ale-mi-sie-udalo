@@ -70,10 +70,11 @@ enum Permission {
  *  @example
  *  const user: User = {
  *  id_User: 1,
- *  name: 'Jan Kowalski',
+ *  username: 'Jan Kowalski',
  *  email: 'janek@srebnoreki.pl',
  *  password: 'haslo123',
  *  avatar: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpreview.redd.it%2Fliteralnie-cibab-v0-jzrcwke4bslc1.jpeg%3Fauto%3Dwebp%26s%3De8a5241bcaa74a46978a78451db6651d6ce21806&f=1&nofb=1&ipt=1bbfa37bdbf81dd2123db5b6032c7377fe000a8036e703bd0019c8bb6b116fb1&ipo=images',
+ *  nationality: 'Poland',
  *  lastLogin: new Date('2023-10-01'),
  *  accCreation: new Date('2023-01-01'),
  *  permission: Permission.USER,
@@ -81,10 +82,11 @@ enum Permission {
  */
 export interface User {
   id_User: number,
-  name: string,
+  username: string,
   email: string,
   password: string,
   avatar: string,
+  nationality: string,
   lastLogin: Date,
   accCreation: Date,
   permission: Permission,
@@ -93,8 +95,9 @@ export interface User {
 /** @interface Quiz
  * @description Obiekt reprezentujący quiz w bazie danych.
  * @property {number} id_quiz - Unikalny identyfikator quizu.
- * @property {string} name - Nazwa quizu.
+ * @property {string} quiz_name - Nazwa quizu.
  * @property {string} description - Opis quizu.
+ * @property {string} image - Ścieżka URL do obrazu quizu.
  * @property {Questions[]} questions - JSON z pytaniami w quizie.
  * @property {number} createdBy - Identyfikator użytkownika, który stworzył quiz.
  * @property {Date} creationDate - Data utworzenia quizu.
@@ -104,8 +107,9 @@ export interface User {
  * @example
  * const quiz: Quiz = {
  *  id_quiz: 1,
- *  name: 'Quiz o programowaniu',
+ *  quiz_name: 'Quiz o programowaniu',
  *  description: 'Sprawdź swoją wiedzę o programowaniu',
+ *  image: 'https://example.com/quiz-image.jpg',
  *  questions: [
  *    {
  *      question: 'Co to jest programowanie?',
@@ -125,8 +129,9 @@ export interface User {
  */
 export interface Quiz {
   id_quiz: number,
-  name: string,
+  quiz_name: string,
   description: string,
+  image: string,
   questions: Questions[],
   createdBy: User["id_User"],
   creationDate: Date,
@@ -226,7 +231,7 @@ export interface Solve {
  */
 export interface Category {
   id_category: number,
-  name: string,
+  category_name: string,
 }
 
 /** @interface Comment

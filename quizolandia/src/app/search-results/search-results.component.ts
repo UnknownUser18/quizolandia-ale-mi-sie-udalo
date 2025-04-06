@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { DatabaseService } from '../database.service';
+import { ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { Category, DatabaseService, Quiz, User } from '../database.service';
 import { NgForOf } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -16,9 +17,9 @@ import { Subscription } from 'rxjs';
 export class SearchResultsComponent implements OnInit, OnDestroy {
   protected searchQuery : string = '';
   protected selectedCategory : string = '';
-  protected result : any | null = null;
+  protected result : Array<Quiz & User & Category> | null = null;
   private routerSubscription: Subscription | undefined;
-  constructor(private route : ActivatedRoute, private database : DatabaseService, private router : Router) {}
+  constructor(private title : Title, private route : ActivatedRoute, private database : DatabaseService, private router : Router) {}
   public ngOnInit() : void {
     this.route.queryParams.subscribe(params => {
       this.searchQuery = params['searchQuery'] || '';
@@ -31,6 +32,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       sql += ` ORDER BY quiz.name;`;
       this.database.getData(sql).then(() : void => {
         this.result = this.database.result.value;
+        this.title.setTitle("Wyszukiwanie quizów - Quizolandia");
       });
     });
     this.routerSubscription = this.router.events.subscribe(event => {
@@ -44,5 +46,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
+  }
+
+  goToQuiz(quizId : number, name : string) : void {
+    this.router.navigate(['/quiz', quizId]).then(() : void => {});
+    this.title.setTitle(`${name} - Quizolandia`);
   }
 }
