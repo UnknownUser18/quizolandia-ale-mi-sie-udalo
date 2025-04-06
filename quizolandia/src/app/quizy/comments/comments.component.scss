@@ -1,26 +1,3 @@
-:root {
-  --color-primary: #518BC0;
-  --color-secondary: #17385A;
-  --color-background: #39A6D5;
-  --color-text: #1F61A2;
-  --color-border: #cccccc;
-  --button-background: #518BC0;
-  --button-text: #ffffff;
-  --button-border: #17385A;
-}
-
-body {
-  font-family: "Inter", sans-serif;
-  background-color: white;
-  color: var(--color-text);
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
 .comment-container {
   display: flex;
   align-items: flex-start;
@@ -50,7 +27,6 @@ body {
     outline: none;
     border-bottom: 2px solid var(--color-border);
     font-family: "Roboto", sans-serif;
-    maxlength: 255;
 
     &::after {
       content: "";
@@ -70,19 +46,11 @@ body {
     }
   }
 
-  .char-counter {
-    position: absolute;
-    bottom: -20px;
-    right: 10px;
-    font-size: 12px;
-    color: var(--color-text);
-  }
-
   .buttons {
     display: none;
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 50%;
     transform: translateX(-50%);
     margin-top: 5px;
     justify-content: center;

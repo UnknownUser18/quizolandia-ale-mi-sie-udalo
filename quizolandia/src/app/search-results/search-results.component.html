@@ -1,0 +1,17 @@
+@if (result) {
+  @if (result.length > 0) {
+    <h2>Wyniki wyszukiwania dla: {{ searchQuery }}</h2>
+    <p>Kategoria: {{ selectedCategory }}</p>
+    <h3>Wyniki:</h3>
+    <div>
+      <div *ngFor="let quiz of result">
+        <h3>{{ quiz.quiz_name }}</h3>
+        <p>Opis: {{ quiz.description }}</p>
+        <p>Autor: {{ quiz.username }}</p>
+        <p>Kategoria: {{ quiz.category_name }}</p>
+      </div>
+    </div>
+  } @else if (result.length === 0) {
+    <h2>Nie znaleziono quizów na twoje zapytanie 🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝</h2>
+  }
+}

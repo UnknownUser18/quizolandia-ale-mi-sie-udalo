@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {Category, DatabaseService} from '../../database.service';
-import {NgForOf, NgOptimizedImage} from '@angular/common';
+import { Category, DatabaseService } from '../../database.service';
+import { NgForOf, NgOptimizedImage } from '@angular/common';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -14,7 +15,7 @@ import {NgForOf, NgOptimizedImage} from '@angular/common';
   styleUrl: './search.component.scss'
 })
 export class SearchComponent {
-  constructor(private databaseService: DatabaseService) {}
+  constructor(private databaseService: DatabaseService, private router : Router) {}
   protected searchQuery: string = '';
   protected categories: Category[] = [];
   protected selectedCategory: string = 'wszystkie';
@@ -28,14 +29,11 @@ export class SearchComponent {
   protected searchQuizzes(event : MouseEvent | KeyboardEvent) : void {
     if(event instanceof KeyboardEvent && event.key !== 'Enter') return;
     if(this.searchQuery.trim() === '') return;
-    const query : string = this.searchQuery.trim();
-    const category : string = this.selectedCategory;
-    let sql : string = `SELECT * FROM quiz WHERE name LIKE '%${query}%'`;
-    if(category !== 'wszystkie') {
-      sql = `SELECT * FROM quiz JOIN category ON quiz.id_category = category.id_category WHERE name LIKE '%${query}%' AND category.name = '${category}'`;
-    }
-    this.databaseService.getData(sql).then(() : void => {
-      console.log(this.databaseService.result.value);
-    });
+    this.router.navigate(['search-results'], {
+      queryParams : {
+        searchQuery : this.searchQuery.trim(),
+        selectedCategory : this.selectedCategory
+      }
+    }).then(() => {})
   }
 }

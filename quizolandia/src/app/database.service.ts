@@ -63,6 +63,7 @@ enum Permission {
  *  @property {string} name - Imię i nazwisko użytkownika.
  *  @property {string} email - Adres e-mail użytkownika.
  *  @property {string} password - Hasło użytkownika.
+ *  @property {string} avatar - Ścieżka URL do awatara użytkownika.
  *  @property {Date} lastLogin - Data ostatniego logowania użytkownika.
  *  @property {Date} accCreation - Data utworzenia konta użytkownika.
  *  @property {Permission} permission - Uprawnienia użytkownika.
@@ -72,6 +73,7 @@ enum Permission {
  *  name: 'Jan Kowalski',
  *  email: 'janek@srebnoreki.pl',
  *  password: 'haslo123',
+ *  avatar: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpreview.redd.it%2Fliteralnie-cibab-v0-jzrcwke4bslc1.jpeg%3Fauto%3Dwebp%26s%3De8a5241bcaa74a46978a78451db6651d6ce21806&f=1&nofb=1&ipt=1bbfa37bdbf81dd2123db5b6032c7377fe000a8036e703bd0019c8bb6b116fb1&ipo=images',
  *  lastLogin: new Date('2023-10-01'),
  *  accCreation: new Date('2023-01-01'),
  *  permission: Permission.USER,
@@ -82,6 +84,7 @@ export interface User {
   name: string,
   email: string,
   password: string,
+  avatar: string,
   lastLogin: Date,
   accCreation: Date,
   permission: Permission,
@@ -224,6 +227,33 @@ export interface Solve {
 export interface Category {
   id_category: number,
   name: string,
+}
+
+/** @interface Comment
+ * @description Obiekt reprezentujący komentarz do quizu.
+ * @property {number} id_comment - Unikalny identyfikator komentarza.
+ * @property {number} id_user - Identyfikator użytkownika, który dodał komentarz.
+ * @property {number} id_quiz - Identyfikator quizu, do którego dodano komentarz.
+ * @property {string} content - Treść komentarza.
+ * @property {Date} publicTime - Data dodania komentarza.
+ * @property {number} stars - Ocena komentarza w skali 1-5.
+ * @example
+ * const comment: Comment = {
+ *  id_comment: 1,
+ *  id_user: 1,
+ *  id_quiz: 1,
+ *  content: 'Bardzo dobry quiz!',
+ *  publicTime: new Date('2023-10-01'),
+ *  stars: 5,
+ * }
+ */
+export interface Comment {
+  id_comment: number,
+  id_user: User["id_User"],
+  id_quiz: Quiz["id_quiz"],
+  content: string,
+  publicTime: Date,
+  stars: number,
 }
 @Injectable({
   providedIn: 'root'

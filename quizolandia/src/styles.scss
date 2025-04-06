@@ -34,7 +34,8 @@ input, textarea, select, option, button {
   font-family: inherit;
   background-color: transparent;
   &:placeholder-shown {
-    color: var(--gradient-text-color);
+    font-style: italic;
+    color: var(--gradient-text-color) !important;
   }
 }
 button {
