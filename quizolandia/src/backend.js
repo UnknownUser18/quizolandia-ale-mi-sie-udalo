@@ -1,6 +1,5 @@
 const mysql2 = require('mysql2');
 const ws = require('ws');
-require('dotenv').config();
 const wss = new ws.WebSocketServer({
   port: 8080,
   perMessageDeflate: {
@@ -23,23 +22,6 @@ const wss = new ws.WebSocketServer({
     // should not be compressed if context takeover is disabled.
   }
 });
-
-console.log('WebSocket server started on ws://localhost:8080, waiting for connections...');
-wss.on('connection', (ws) => {
-  console.log('Connection connected');
-  wss.on('error', (error) => {
-    console.error('WebSocket error:', error);
-  });
-  ws.on('message', (message) => {
-    console.log('Received:', message);
-
-    const response = `Server received: ${message}`;
-    ws.send(response);
-  });
-  wss.on('close', () => {
-    console.log('Connection closed');
-  });
-});
 const db_config = {
   host: process.env.HOST,
   user: process.env.USER,
@@ -54,3 +36,27 @@ connection.connect((err) => {
   }
   console.log('Connected to the database');
 });
+console.log('WebSocket server started on ws://localhost:8080, waiting for connections...');
+wss.on('connection', (ws) => {
+  console.log('Connection connected');
+  ws.on('error', (error) => {
+    console.error('WebSocket error:', error);
+  });
+  ws.on('message', (message) => {
+    console.log(`Received message: ${message}`);
+    executeQuery(ws, message);
+  });
+  ws.on('close', () => {
+    console.log('Connection closed');
+  });
+});
+function executeQuery(ws, value) {
+  connection.query(value.toString(), function (err, results) {
+    if (err) {
+      console.error('Error executing query:', err);
+      ws.send(JSON.stringify({ error: err.message }));
+      return;
+    }
+    ws.send(JSON.stringify(results));
+  })
+}
