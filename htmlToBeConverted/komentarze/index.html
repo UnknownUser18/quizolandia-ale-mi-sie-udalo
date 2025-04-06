@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="pl">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +10,8 @@
 
     <link rel="icon" href="/favicon.ico" />
     <link rel="stylesheet" href="styles.css">
-    <title>Czarny na sprzedaż</title>
+
+    <title>Komentarze</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Just+Another+Hand&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -36,7 +37,7 @@
                 <input type="radio" id="star1" name="rate" value="1" />
                 <label for="star1" title="text">1 star</label>
             </div>
-            <textarea name="Komentarz" id="komentarz" cols="30" rows="1" placeholder="Dodaj Komentarz"></textarea>
+            <textarea name="Komentarz" id="komentarz" cols="30" rows="1" placeholder="Dodaj Komentarz" maxlength="255"></textarea>
             <div class="buttons">
                 <input class="button" type="reset" value="Anuluj">
                 <input class="button" type="submit" value="Skomentuj">
@@ -94,6 +95,25 @@
 
     document.querySelector('input[type="reset"]').addEventListener('click', function() {
         document.querySelector('.buttons').style.display = 'none';
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const textarea = document.getElementById('komentarz');
+        const charCounter = document.createElement('div');
+        charCounter.classList.add('char-counter');
+        charCounter.textContent = '0/255';
+        textarea.parentNode.appendChild(charCounter);
+
+        textarea.addEventListener('input', function() {
+            const currentLength = textarea.value.length;
+            charCounter.textContent = `${currentLength}/255`;
+
+            if (currentLength >= 255) {
+                charCounter.style.color = 'var(--color-secondary)';
+                textarea.value = textarea.value.substring(0, 255);
+            } else {
+                charCounter.style.color = 'var(--color-text)';
+            }
+        });
     });
 </script>
 </body>
