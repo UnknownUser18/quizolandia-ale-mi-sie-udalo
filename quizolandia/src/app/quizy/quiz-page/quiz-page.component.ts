@@ -28,11 +28,9 @@ export class QuizPageComponent implements OnInit {
       const urlSegments : string[] = event.url.split('/');
       if(!urlSegments.includes('quiz')) return;
       this.quizId = parseInt(urlSegments[urlSegments.length - 1], 10);
-      this.database.getData(`SELECT quiz.name AS quiz_name, category.name AS category_name, description, creationDate, lastUpdate, user.username, image FROM quiz JOIN user ON user.id_User = quiz.createdBy JOIN category ON quiz.id_category = category.id_category WHERE id_quiz = ${this.quizId};`).then(() => {
-        this.result = this.database.result.value;
-        if (Array.isArray(this.result) && this.result.length > 0) {
-          this.result = this.result[0];
-        }
+      this.database.getQuiz(this.quizId).then((r : Quiz & Category & User | null) : void => {
+        this.result = r!;
+        console.log(r);
       });
     });
   }

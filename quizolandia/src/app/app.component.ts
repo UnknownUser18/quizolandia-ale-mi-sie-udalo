@@ -4,7 +4,6 @@ import {NavComponent} from './header/nav/nav.component';
 import {Router} from '@angular/router';
 import {SearchResultsComponent} from './search-results/search-results.component';
 import {QuizPageComponent} from './quizy/quiz-page/quiz-page.component';
-import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-root',

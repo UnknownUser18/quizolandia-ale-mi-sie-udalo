@@ -21,8 +21,8 @@ export class SearchComponent {
   protected selectedCategory: string = 'wszystkie';
   protected fetchCategories() : void {
     if(this.categories.length !== 0) return; // if categories already fetched, do nothing
-    this.databaseService.getData('SELECT name FROM category;').then(() => {
-      this.categories = this.databaseService.result.value as Category[];
+    this.databaseService.getCategoryName().then((r : Category[]) : void => {
+      this.categories = r;
     });
   }
 

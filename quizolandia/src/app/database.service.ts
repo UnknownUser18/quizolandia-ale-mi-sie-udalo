@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 
 /** @enum QuestionType
  * @description Typ pytania w quizie.
@@ -289,9 +289,9 @@ export class DatabaseService {
     }
     return 2;
   }
-  public async getData(sql : string) : Promise<void> {
+  private async sendData(type : string, data : any | null) : Promise<Array<any>> {
     if(!this.socket.readyState) throw new Error('WebSocket connection does not exist');
-    this.socket.send(sql);
+    this.socket.send(JSON.stringify({type, data}));
     return new Promise((resolve, reject) : void => {
       this.socket.onmessage = (event : MessageEvent) => {
         if(!event.data) {
@@ -299,9 +299,41 @@ export class DatabaseService {
           return;
         }
         console.log('WebSocket message received:', event.data);
-        this.result.next(JSON.parse(event.data));
-        resolve();
+        resolve(JSON.parse(event.data));
       }
     });
+  }
+  public async getCategoryName() : Promise<Category[]> {
+    try {
+      return await this.sendData('getCategoryName', null);
+    } catch (error) {
+      console.error('Error getting category name:', error);
+      return [];
+    }
+  }
+  public async getCommentsFromQuiz(id_quiz: number): Promise<(Comment & User)[]> {
+    try {
+      return await this.sendData('getCommentsFromQuiz', id_quiz);
+    } catch (error) {
+      console.error('Error getting comments from quiz:', error);
+      return [];
+    }
+  }
+  public async getQuizzes(quiz_name : string, category_name : string | null) : Promise<(User & Quiz & Category)[]> {
+    try {
+      return await this.sendData('getQuizzes', {quiz_name, category_name});
+    } catch (error) {
+      console.error('Error getting quizzes:', error);
+      return [];
+    }
+  }
+  public async getQuiz(id_quiz : number) : Promise<(User & Quiz & Category) | null> {
+    try {
+      return (await this.sendData('getQuiz', id_quiz))[0];
+    } catch (error) {
+      console.error('Error getting quiz:', error);
+      return null;
+
+    }
   }
 }

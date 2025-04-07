@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 export class SearchResultsComponent implements OnInit, OnDestroy {
   protected searchQuery : string = '';
   protected selectedCategory : string = '';
-  protected result : Array<Quiz & User & Category> | null = null;
+  protected result : (Quiz & User & Category)[] | null = null;
   private routerSubscription: Subscription | undefined;
   constructor(private title : Title, private route : ActivatedRoute, private database : DatabaseService, private router : Router) {}
   public ngOnInit() : void {
@@ -25,13 +25,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.searchQuery = params['searchQuery'] || '';
       this.selectedCategory = params['selectedCategory'] || '';
       if(this.searchQuery === '' || this.searchQuery === undefined) return;
-      let sql : string = `SELECT id_quiz, quiz.name AS quiz_name, description, user.username, category.name AS category_name FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE '%${this.searchQuery}%' AND isPublic = 1`;
-      if(this.selectedCategory !== 'wszystkie') {
-        sql += ` AND category.name = '${this.selectedCategory}'`;
-      }
-      sql += ` ORDER BY quiz.name;`;
-      this.database.getData(sql).then(() : void => {
-        this.result = this.database.result.value;
+      this.database.getQuizzes(this.searchQuery, this.selectedCategory).then((r : (Quiz & User & Category)[]) : void => {
+        this.result = r;
         this.title.setTitle("Wyszukiwanie quizów - Quizolandia");
       });
     });
