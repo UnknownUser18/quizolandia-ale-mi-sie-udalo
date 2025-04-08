@@ -24,7 +24,7 @@ justify-content: space-around;
     display: flex;
     width: 96%;
     border: 1px solid #000;
-    border-radius: 20px;
+    border-radius: 32px;
     overflow: hidden;
     margin: 20px;
   }
@@ -45,8 +45,8 @@ justify-content: space-around;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-top-right-radius: 32px;
+    border-bottom-right-radius: 32px;
   }
 #sbs{
     display: flex;
@@ -83,12 +83,6 @@ ul li a{
     text-decoration: none;
     font-size: 40px;
 }
-ul li a:visited{
-  color: #1F1F1F;
-  background-color: #17385A;
-  text-decoration: none;
-  font-size: 40px;
-}
 main{
     padding: 0 10px 0 10px;
     margin-top: 30px;
@@ -104,29 +98,32 @@ main hr{
     height: 10px;
     background-color: #17385A;
     width: 30%;
-    border-radius: 10px;
+    border-radius: 32px;
 }
 .quizy{
     display: flex   ;
     flex-direction: row;
     gap: 30px   ;
     margin-bottom: 20px;
+    color: white;
 }
 .quizy article{
     background-color: #518BC0;
-    border-radius: 10px;
+    border-radius: 32px;
 }
 .quizy article p{
-    border-radius: 10px;
+    border-radius: 32px;
     padding: 10px;
 }
 .quizy article h6{
-    border-radius: 10px;
+    border-radius: 32px;
     padding: 10px;
+    color: black;
+    font-size: 20px;
 }
 .statykontener {
     background: #518BC0;
-    border-radius: 12px;
+    border-radius: 32px;
     padding: 20px 30px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -149,8 +146,8 @@ main hr{
   }
   
   .kart {
-    background: #39A6D5;
-    border-radius: 10px;
+    background: #518BC0;
+    border-radius: 32px;
     padding: 15px 20px;
     min-width: 100px;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
@@ -164,7 +161,7 @@ main hr{
   }
   .statykontener2 {
     background: #518BC0;
-    border-radius: 12px;
+    border-radius: 32px;
     padding: 30px 10px 30px 10px;
     text-align: left;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -191,7 +188,8 @@ margin: 15px 0 15px 0;
     background-color: #17385A;
     padding: 12px 20px 12px 20px;
     border: 0;
-    border-radius: 20px;
+    border-radius: 32px;
+    font-size: 24px;
     color: white;
   }
   footer{
