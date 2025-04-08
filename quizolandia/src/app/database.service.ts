@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 
 /** @enum QuestionType
  * @description Typ pytania w quizie.
@@ -63,15 +63,18 @@ enum Permission {
  *  @property {string} name - Imię i nazwisko użytkownika.
  *  @property {string} email - Adres e-mail użytkownika.
  *  @property {string} password - Hasło użytkownika.
+ *  @property {string} avatar - Ścieżka URL do awatara użytkownika.
  *  @property {Date} lastLogin - Data ostatniego logowania użytkownika.
  *  @property {Date} accCreation - Data utworzenia konta użytkownika.
  *  @property {Permission} permission - Uprawnienia użytkownika.
  *  @example
  *  const user: User = {
  *  id_User: 1,
- *  name: 'Jan Kowalski',
+ *  username: 'Jan Kowalski',
  *  email: 'janek@srebnoreki.pl',
  *  password: 'haslo123',
+ *  avatar: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpreview.redd.it%2Fliteralnie-cibab-v0-jzrcwke4bslc1.jpeg%3Fauto%3Dwebp%26s%3De8a5241bcaa74a46978a78451db6651d6ce21806&f=1&nofb=1&ipt=1bbfa37bdbf81dd2123db5b6032c7377fe000a8036e703bd0019c8bb6b116fb1&ipo=images',
+ *  nationality: 'Poland',
  *  lastLogin: new Date('2023-10-01'),
  *  accCreation: new Date('2023-01-01'),
  *  permission: Permission.USER,
@@ -79,9 +82,11 @@ enum Permission {
  */
 export interface User {
   id_User: number,
-  name: string,
+  username: string,
   email: string,
   password: string,
+  avatar: string,
+  nationality: string,
   lastLogin: Date,
   accCreation: Date,
   permission: Permission,
@@ -90,8 +95,9 @@ export interface User {
 /** @interface Quiz
  * @description Obiekt reprezentujący quiz w bazie danych.
  * @property {number} id_quiz - Unikalny identyfikator quizu.
- * @property {string} name - Nazwa quizu.
+ * @property {string} quiz_name - Nazwa quizu.
  * @property {string} description - Opis quizu.
+ * @property {string} image - Ścieżka URL do obrazu quizu.
  * @property {Questions[]} questions - JSON z pytaniami w quizie.
  * @property {number} createdBy - Identyfikator użytkownika, który stworzył quiz.
  * @property {Date} creationDate - Data utworzenia quizu.
@@ -101,8 +107,9 @@ export interface User {
  * @example
  * const quiz: Quiz = {
  *  id_quiz: 1,
- *  name: 'Quiz o programowaniu',
+ *  quiz_name: 'Quiz o programowaniu',
  *  description: 'Sprawdź swoją wiedzę o programowaniu',
+ *  image: 'https://example.com/quiz-image.jpg',
  *  questions: [
  *    {
  *      question: 'Co to jest programowanie?',
@@ -122,8 +129,9 @@ export interface User {
  */
 export interface Quiz {
   id_quiz: number,
-  name: string,
+  quiz_name: string,
   description: string,
+  image: string,
   questions: Questions[],
   createdBy: User["id_User"],
   creationDate: Date,
@@ -223,7 +231,34 @@ export interface Solve {
  */
 export interface Category {
   id_category: number,
-  name: string,
+  category_name: string,
+}
+
+/** @interface Comment
+ * @description Obiekt reprezentujący komentarz do quizu.
+ * @property {number} id_comment - Unikalny identyfikator komentarza.
+ * @property {number} id_user - Identyfikator użytkownika, który dodał komentarz.
+ * @property {number} id_quiz - Identyfikator quizu, do którego dodano komentarz.
+ * @property {string} content - Treść komentarza.
+ * @property {Date} publicTime - Data dodania komentarza.
+ * @property {number} stars - Ocena komentarza w skali 1-5.
+ * @example
+ * const comment: Comment = {
+ *  id_comment: 1,
+ *  id_user: 1,
+ *  id_quiz: 1,
+ *  content: 'Bardzo dobry quiz!',
+ *  publicTime: new Date('2023-10-01'),
+ *  stars: 5,
+ * }
+ */
+export interface Comment {
+  id_comment: number,
+  id_user: User["id_User"],
+  id_quiz: Quiz["id_quiz"],
+  content: string,
+  publicTime: Date,
+  stars: number,
 }
 @Injectable({
   providedIn: 'root'
@@ -254,9 +289,9 @@ export class DatabaseService {
     }
     return 2;
   }
-  public async getData(sql : string) : Promise<void> {
+  private async sendData(type : string, data : any | null) : Promise<Array<any>> {
     if(!this.socket.readyState) throw new Error('WebSocket connection does not exist');
-    this.socket.send(sql);
+    this.socket.send(JSON.stringify({type, data}));
     return new Promise((resolve, reject) : void => {
       this.socket.onmessage = (event : MessageEvent) => {
         if(!event.data) {
@@ -264,9 +299,41 @@ export class DatabaseService {
           return;
         }
         console.log('WebSocket message received:', event.data);
-        this.result.next(JSON.parse(event.data));
-        resolve();
+        resolve(JSON.parse(event.data));
       }
     });
+  }
+  public async getCategoryName() : Promise<Category[]> {
+    try {
+      return await this.sendData('getCategoryName', null);
+    } catch (error) {
+      console.error('Error getting category name:', error);
+      return [];
+    }
+  }
+  public async getCommentsFromQuiz(id_quiz: number): Promise<(Comment & User)[]> {
+    try {
+      return await this.sendData('getCommentsFromQuiz', id_quiz);
+    } catch (error) {
+      console.error('Error getting comments from quiz:', error);
+      return [];
+    }
+  }
+  public async getQuizzes(quiz_name : string, category_name : string | null) : Promise<(User & Quiz & Category)[]> {
+    try {
+      return await this.sendData('getQuizzes', {quiz_name, category_name});
+    } catch (error) {
+      console.error('Error getting quizzes:', error);
+      return [];
+    }
+  }
+  public async getQuiz(id_quiz : number) : Promise<(User & Quiz & Category) | null> {
+    try {
+      return (await this.sendData('getQuiz', id_quiz))[0];
+    } catch (error) {
+      console.error('Error getting quiz:', error);
+      return null;
+
+    }
   }
 }

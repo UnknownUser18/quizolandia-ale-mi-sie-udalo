@@ -7,6 +7,7 @@
   --text-color: #212121;
   --white-text-color: #FAFAFA;
   --gradient-text-color: #BDAFBB;
+  --white-color: #EAEAEA;
 }
 * {
   margin: 0;
@@ -34,7 +35,8 @@ input, textarea, select, option, button {
   font-family: inherit;
   background-color: transparent;
   &:placeholder-shown {
-    color: var(--gradient-text-color);
+    font-style: italic;
+    color: var(--gradient-text-color) !important;
   }
 }
 button {

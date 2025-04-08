@@ -50,8 +50,33 @@ wss.on('connection', (ws) => {
     console.log('Connection closed');
   });
 });
+const queries = {
+    'getCategoryName': 'SELECT category_name FROM category;',
+    'getCommentsFromQuiz': 'SELECT username, content, publicTime, avatar, stars FROM comments JOIN user ON comments.id_user = user.id_user WHERE id_quiz = ?;',
+    'getQuiz': `SELECT quiz.name AS quiz_name, category_name, description, creationDate, lastUpdate, user.username, image FROM quiz JOIN user ON user.id_User = quiz.createdBy JOIN category ON quiz.id_category = category.id_category WHERE id_quiz = ?;`,
+    'getQuizzes': `SELECT id_quiz, quiz.name AS quiz_name, description, user.username, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE ? AND  (category_name = ? OR ? = 'wszystkie') AND isPublic = 1  ORDER BY quiz.name;`,
+  }
 function executeQuery(ws, value) {
-  connection.query(value.toString(), function (err, results) {
+  value = JSON.parse(value);
+  let query = '';
+  let params = [];
+  if (value.type.toString() in queries) {
+    query = queries[value.type.toString()];
+    switch (value.type) {
+      case 'getQuizzes':
+        params = [`%${value.data.quiz_name}%`, value.data.category_name, value.data.category_name];
+        break;
+      case 'getQuiz':
+        params = [`${value.data}`];
+        break;
+      default:
+        if(value.data) {
+          params = [`${value.data}`];
+        }
+        break;
+    }
+  }
+  connection.query(query, params, function (err, results) {
     if (err) {
       console.error('Error executing query:', err);
       ws.send(JSON.stringify({ error: err.message }));
