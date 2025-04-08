@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
 
 /** @enum QuestionType
  * @description Typ pytania w quizie.
@@ -13,7 +12,7 @@ import {BehaviorSubject} from 'rxjs';
  * const questionType: QuestionType = QuestionType.TWO_CHOICE;
  * console.log(questionType); // 1
  */
-enum QuestionType {
+export enum QuestionType {
   TRUE_FALSE,
   TWO_CHOICE,
   THREE_CHOICE,
@@ -33,11 +32,11 @@ enum QuestionType {
  * const reportType: ReportType = ReportType.BUG;
  * console.log(reportType); // 0
  */
-enum ReportType {
+export enum ReportType {
   BUG,
   CHEATING,
   SUGGESTION,
-  INAPPROPRIATE_CONTENT,
+  INAPPROPRIATE,
   OTHER,
 }
 
@@ -51,7 +50,7 @@ enum ReportType {
  * const permission: Permission = Permission.ADMIN;
  * console.log(permission); // 3
  */
-enum Permission {
+export enum Permission {
   USER,
   BANNED,
   MODERATOR,
@@ -265,9 +264,8 @@ export interface Comment {
 })
 export class DatabaseService {
   constructor() {}
-  private socket! : WebSocket
-  public result : BehaviorSubject<any> = new BehaviorSubject<any>(null);
-
+  private socket! : WebSocket;
+  private isBusy : boolean = false;
   public initWebSocket() : number {
     try {
       this.socket = new WebSocket('ws://localhost:8080');
@@ -291,9 +289,12 @@ export class DatabaseService {
   }
   private async sendData(type : string, data : any | null) : Promise<Array<any>> {
     if(!this.socket.readyState) throw new Error('WebSocket connection does not exist');
+    if(this.isBusy) throw new Error('WebSocket is busy making a request, cannot send another request');
     this.socket.send(JSON.stringify({type, data}));
+    this.isBusy = true;
     return new Promise((resolve, reject) : void => {
       this.socket.onmessage = (event : MessageEvent) => {
+        this.isBusy = false;
         if(!event.data) {
           reject(new Error('Error in data', event.data));
           return;
@@ -333,7 +334,36 @@ export class DatabaseService {
     } catch (error) {
       console.error('Error getting quiz:', error);
       return null;
-
+    }
+  }
+  public async insertReport(id_user : number, type : ReportType, description : string) : Promise<boolean> {
+    try {
+      const result : any = await this.sendData('insertReport', { id_user, type, description });
+      return !!result.affectedRows;
+    } catch (error) {
+      console.error('Error inserting report:', error);
+      return false;
+    }
+  }
+  public async checkLogin(username : string, password : string) : Promise<boolean> {
+    try {
+      const result : any = await this.sendData('checkLogin', {username, password});
+      return result[0].userExists;
+    } catch (error) {
+      console.error('Error checking login:', error);
+      return false;
+    }
+  }
+  public async insertUser(username : string, password : string, email : string) : Promise<boolean> {
+    try {
+      let date: Date = new Date();
+      let date_sql : string = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+      console.log(date_sql);
+      const result : any = await this.sendData('insertUser', {username, password, email, date_sql});
+      return !!result.affectedRows;
+    } catch (error) {
+      console.error('Error inserting user:', error);
+      return false;
     }
   }
 }

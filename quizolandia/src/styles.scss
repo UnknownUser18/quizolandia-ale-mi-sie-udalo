@@ -29,6 +29,8 @@ a {
   }
 }
 input, textarea, select, option, button {
+  transition: color 150ms ease-in-out;
+  will-change: transition;
   border: 0;
   outline: 0;
   color: inherit;
@@ -39,6 +41,12 @@ input, textarea, select, option, button {
     color: var(--gradient-text-color) !important;
   }
 }
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
 button {
   cursor: pointer;
   will-change: transition;
@@ -47,4 +55,14 @@ button {
 input {
   will-change: transition;
   transition: all 150ms ease-in-out;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span > small {
+    color: #cd0c0c;
+    font-size: 0.8em;
+    margin-left: 5px;
+  }
 }

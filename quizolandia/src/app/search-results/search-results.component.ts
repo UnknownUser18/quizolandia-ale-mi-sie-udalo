@@ -8,7 +8,8 @@ import { Subscription } from 'rxjs';
   selector: 'app-search-results',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    NgOptimizedImage
   ],
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.scss'

@@ -1,9 +1,12 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { DatabaseService } from './database.service';
-import {NavComponent} from './header/nav/nav.component';
-import {Router} from '@angular/router';
-import {SearchResultsComponent} from './search-results/search-results.component';
-import {QuizPageComponent} from './quizy/quiz-page/quiz-page.component';
+import { NavComponent } from './header/nav/nav.component';
+import { Router, RouterLink } from '@angular/router';
+import { SearchResultsComponent } from './search-results/search-results.component';
+import { QuizPageComponent } from './quizy/quiz-page/quiz-page.component';
+import { ContactComponent } from './contact/contact.component';
+import { LoginComponent } from './login-page/login/login.component';
+import { UserPageComponent } from './user/user-page/user-page.component';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +14,11 @@ import {QuizPageComponent} from './quizy/quiz-page/quiz-page.component';
   imports: [
     NavComponent,
     SearchResultsComponent,
-    QuizPageComponent
+    QuizPageComponent,
+    RouterLink,
+    ContactComponent,
+    LoginComponent,
+    UserPageComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

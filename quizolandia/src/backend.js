@@ -55,6 +55,9 @@ const queries = {
     'getCommentsFromQuiz': 'SELECT username, content, publicTime, avatar, stars FROM comments JOIN user ON comments.id_user = user.id_user WHERE id_quiz = ?;',
     'getQuiz': `SELECT quiz.name AS quiz_name, category_name, description, creationDate, lastUpdate, user.username, image FROM quiz JOIN user ON user.id_User = quiz.createdBy JOIN category ON quiz.id_category = category.id_category WHERE id_quiz = ?;`,
     'getQuizzes': `SELECT id_quiz, quiz.name AS quiz_name, description, user.username, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE ? AND  (category_name = ? OR ? = 'wszystkie') AND isPublic = 1  ORDER BY quiz.name;`,
+    'insertReport': `INSERT INTO report(id_user, type, description) VALUES (?, ?, ?);`,
+    'checkLogin': `SELECT EXISTS (SELECT 1 FROM user WHERE (username = ? OR email = ?) AND password = ?) AS userExists;`,
+    'insertUser': `INSERT INTO user(email, username, password, accCreation, avatar) VALUES(?, ?, ?, ?, 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.IFpxNz18Dg9hE4nTR_GAgQHaHa%26pid%3DApi&f=1&ipt=cdf1d7913e3aca2929e55cc1be469f595b956c4148e24db30b08360dcc142241');`,
   }
 function executeQuery(ws, value) {
   value = JSON.parse(value);
@@ -69,6 +72,41 @@ function executeQuery(ws, value) {
       case 'getQuiz':
         params = [`${value.data}`];
         break;
+      case 'insertReport':
+        params = [`${value.data.id_user}`, `${value.data.type}`, `${value.data.description}`];
+        break;
+      case 'checkLogin':
+        params = [`${value.data.username}`, `${value.data.username}`, `${value.data.password}`];
+        break;
+      case 'insertUser':
+        params = [`${value.data.email}`, `${value.data.username}`, `${value.data.password}`, `${value.data.date_sql}`];
+        connection.query(query, params, (err, results) => {
+          if (err) {
+            console.error('Error executing query:', err);
+            return ws.send(JSON.stringify({ error: err.message }));
+          }
+          const id_user = results.insertId;
+          console.log('Inserted user with ID:', id_user);
+
+          const insertPermissionQuery = `INSERT INTO permissions(id_user, name) VALUES(?, 'USER');`;
+          connection.query(insertPermissionQuery, [id_user], (err, results) => {
+            if (err) {
+              console.error('Error executing query:', err);
+              return ws.send(JSON.stringify({ error: err.message }));
+            }
+            const permissionId = results.insertId;
+
+            const updateUserQuery = `UPDATE user SET permission = ? WHERE id_user = ?;`;
+            connection.query(updateUserQuery, [permissionId, id_user], (err, results) => {
+              if (err) {
+                console.error('Error executing query:', err);
+                return ws.send(JSON.stringify({ error: err.message }));
+              }
+              ws.send(JSON.stringify(results));
+            });
+          });
+        });
+        return;
       default:
         if(value.data) {
           params = [`${value.data}`];

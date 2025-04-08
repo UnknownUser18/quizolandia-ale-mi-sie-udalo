@@ -1,9 +1,20 @@
-<header>
+<nav>
   <h1><a routerLink="">Quizo Landia</a></h1>
   <ul>
     <li><a routerLink="/dziedziny">Dziedziny</a></li>
     <li><a routerLink="/ranking">Ranking</a></li>
-    <li><a routerLink="/konto">Konto</a></li>
+    <li>
+      @if (localStorage && localStorage.getItem('username')) {
+        <a routerLink="profile">Konto</a>
+      } @else {
+        <a routerLink="login">Zaloguj się</a>
+      }
+<!--    <li> @if (!localStorage.getItem('username')) {-->
+<!--    } @else if (localStorage.getItem('username')) {-->
+<!--    }-->
+    </li>
   </ul>
-</header>
-<app-search></app-search>
+</nav>
+@if (!(router.url.match('login') || router.url.match('register'))) {
+  <app-search></app-search>
+}
