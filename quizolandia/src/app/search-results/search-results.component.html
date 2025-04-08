@@ -1,16 +1,18 @@
 @if (result) {
   @if (result.length > 0) {
-    <h2>Wyniki wyszukiwania dla: {{ searchQuery }}</h2>
-    <p>Kategoria: {{ selectedCategory }}</p>
-    <h3>Wyniki:</h3>
-    <div>
-      <div *ngFor="let quiz of result" (click)="goToQuiz(quiz.id_quiz, quiz.quiz_name)">
-        <h3>{{ quiz.quiz_name }}</h3>
-        <p>Opis: {{ quiz.description }}</p>
-        <p>Autor: {{ quiz.username }}</p>
-        <p>Kategoria: {{ quiz.category_name }}</p>
-      </div>
+    <div class="result">
+      <h2>Wyniki wyszukiwania dla: {{ searchQuery }}</h2>
+      <p>Kategoria: {{ selectedCategory }}</p>
     </div>
+    <section>
+      <div *ngFor="let quiz of result" (click)="goToQuiz(quiz.id_quiz, quiz.quiz_name)">
+        <img src="{{ quiz.image }}" alt="User Image">
+        <span>
+          <i>{{ quiz.category_name }}</i>
+          <h3>{{ quiz.quiz_name }}</h3>
+        </span>
+      </div>
+    </section>
   } @else if (result.length === 0) {
     <h2>Nie znaleziono quizów na twoje zapytanie 🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝</h2>
   }

@@ -2,9 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Category, DatabaseService, Quiz, User } from '../database.service';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgOptimizedImage } from '@angular/common';
 import { Subscription } from 'rxjs';
-
 @Component({
   selector: 'app-search-results',
   standalone: true,

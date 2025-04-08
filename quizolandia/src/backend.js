@@ -54,7 +54,7 @@ const queries = {
     'getCategoryName': 'SELECT category_name FROM category;',
     'getCommentsFromQuiz': 'SELECT username, content, publicTime, avatar, stars FROM comments JOIN user ON comments.id_user = user.id_user WHERE id_quiz = ?;',
     'getQuiz': `SELECT quiz.name AS quiz_name, category_name, description, creationDate, lastUpdate, user.username, image FROM quiz JOIN user ON user.id_User = quiz.createdBy JOIN category ON quiz.id_category = category.id_category WHERE id_quiz = ?;`,
-    'getQuizzes': `SELECT id_quiz, quiz.name AS quiz_name, description, user.username, category_name FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE ? AND  (category_name = ? OR ? = 'wszystkie') AND isPublic = 1  ORDER BY quiz.name;`,
+    'getQuizzes': `SELECT id_quiz, quiz.name AS quiz_name, description, user.username, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE ? AND  (category_name = ? OR ? = 'wszystkie') AND isPublic = 1  ORDER BY quiz.name;`,
   }
 function executeQuery(ws, value) {
   value = JSON.parse(value);
