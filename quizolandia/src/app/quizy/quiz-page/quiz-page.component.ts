@@ -3,15 +3,17 @@ import { CommentsComponent } from '../comments/comments.component';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import {Quiz, DatabaseService, User, Category} from '../../database.service';
-import {NgOptimizedImage} from '@angular/common';
+import { Quiz, DatabaseService, User, Category } from '../../database.service';
+import { NgOptimizedImage } from '@angular/common';
+import { QuizSolveComponent } from '../quiz-solve/quiz-solve.component';
 
 @Component({
   selector: 'app-quiz-page',
   standalone: true,
   imports: [
     CommentsComponent,
-    NgOptimizedImage
+    NgOptimizedImage,
+    QuizSolveComponent
   ],
   templateUrl: './quiz-page.component.html',
   styleUrl: './quiz-page.component.scss'
@@ -30,8 +32,11 @@ export class QuizPageComponent implements OnInit {
       this.quizId = parseInt(urlSegments[urlSegments.length - 1], 10);
       this.database.getQuiz(this.quizId).then((r : Quiz & Category & User | null) : void => {
         this.result = r!;
-        console.log(r);
       });
     });
+  }
+
+  startQuiz() : void {
+    this.router.navigate([`quiz/${this.quizId}/solve`]).then();
   }
 }

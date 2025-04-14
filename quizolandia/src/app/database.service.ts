@@ -265,7 +265,6 @@ export interface Comment {
 export class DatabaseService {
   constructor() {}
   private socket! : WebSocket;
-  private isBusy : boolean = false;
   public initWebSocket() : number {
     try {
       this.socket = new WebSocket('ws://localhost:8080');
@@ -289,12 +288,9 @@ export class DatabaseService {
   }
   private async sendData(type : string, data : any | null) : Promise<Array<any>> {
     if(!this.socket.readyState) throw new Error('WebSocket connection does not exist');
-    if(this.isBusy) throw new Error('WebSocket is busy making a request, cannot send another request');
     this.socket.send(JSON.stringify({type, data}));
-    this.isBusy = true;
     return new Promise((resolve, reject) : void => {
       this.socket.onmessage = (event : MessageEvent) => {
-        this.isBusy = false;
         if(!event.data) {
           reject(new Error('Error in data', event.data));
           return;
@@ -358,12 +354,27 @@ export class DatabaseService {
     try {
       let date: Date = new Date();
       let date_sql : string = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-      console.log(date_sql);
       const result : any = await this.sendData('insertUser', {username, password, email, date_sql});
-      return !!result.affectedRows;
+      return !!result[result.length - 2].affectedRows;
     } catch (error) {
       console.error('Error inserting user:', error);
       return false;
+    }
+  }
+  public async getQuizzesFromToday() : Promise<(Quiz & Category)[]> {
+    try {
+      return await this.sendData('getQuizzesFromToday', null);
+    } catch (error) {
+      console.error('Error getting quizzes from today:', error);
+      return [];
+    }
+  }
+  public async getQuizzesFromWeekend() : Promise<(Quiz & Category)[]> {
+    try {
+      return await this.sendData('getQuizzesFromWeekend', null);
+    } catch (error) {
+      console.error('Error getting quizzes from weekend:', error);
+      return [];
     }
   }
 }

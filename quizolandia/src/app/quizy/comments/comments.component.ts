@@ -18,9 +18,11 @@ export class CommentsComponent implements OnChanges {
   @Input() quizId!: number | undefined;
   public ngOnChanges(changes: SimpleChanges) {
     if(changes['quizId'] && changes['quizId'].currentValue !== undefined) {
-      this.database.getCommentsFromQuiz(changes['quizId'].currentValue).then((r : Array<Comment & User>) : void => {
-        this.comments = r;
-      });
+      setTimeout(() : void => {
+        this.database.getCommentsFromQuiz(changes['quizId'].currentValue).then((r : (Comment & User)[]) : void => {
+          this.comments = r;
+        });
+      }, 1000)
     }
   }
 }

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { NavComponent } from './header/nav/nav.component';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { QuizPageComponent } from './quizy/quiz-page/quiz-page.component';
 import { ContactComponent } from './contact/contact.component';
@@ -19,6 +19,7 @@ import { UserPageComponent } from './user/user-page/user-page.component';
     ContactComponent,
     LoginComponent,
     UserPageComponent,
+    RouterOutlet,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

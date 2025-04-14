@@ -12,7 +12,7 @@ import { DatabaseService } from '../../database.service';
     RouterLink
   ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: '../login-page.scss'
 })
 export class RegisterComponent {
   protected username : string = '';
@@ -20,7 +20,6 @@ export class RegisterComponent {
   protected email : string = '';
   protected password_repeat : string = '';
   constructor(private database : DatabaseService, private router : Router) {}
-
   protected register() : void {
     if(this.password !== this.password_repeat) {
       alert('Passwords do not match');
