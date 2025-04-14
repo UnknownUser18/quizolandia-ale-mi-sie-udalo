@@ -6,7 +6,7 @@
     </div>
     <section>
       <div *ngFor="let quiz of result" (click)="goToQuiz(quiz.id_quiz, quiz.quiz_name)">
-        <img ngSrc="{{ quiz.image }}" alt="User Image" width="400" height="300">
+        <img src="{{ quiz.image }}" alt="User Image">
         <span>
           <i>{{ quiz.category_name }}</i>
           <h3>{{ quiz.quiz_name }}</h3>
@@ -14,9 +14,6 @@
       </div>
     </section>
   } @else if (result.length === 0) {
-    <div class="result">
-      <h2>Nie znaleziono quizów na twoje zapytanie.</h2>
-      <p>Spróbuj wyszukać z użyciem innych filtrów.</p>
-    </div>
+    <h2>Nie znaleziono quizów na twoje zapytanie 🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝</h2>
   }
 }

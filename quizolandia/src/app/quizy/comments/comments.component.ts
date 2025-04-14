@@ -22,7 +22,7 @@ export class CommentsComponent implements OnChanges {
         this.database.getCommentsFromQuiz(changes['quizId'].currentValue).then((r : (Comment & User)[]) : void => {
           this.comments = r;
         });
-      }, 1000)
+      }, 1000);
     }
   }
 }
