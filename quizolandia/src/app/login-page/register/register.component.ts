@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { DatabaseService } from '../../../../../../quizolandia-ale-mi-sie-udalo2/quizolandia/src/app/database.service';
+import { DatabaseService } from '../../database.service';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +12,7 @@ import { DatabaseService } from '../../../../../../quizolandia-ale-mi-sie-udalo2
     RouterLink
   ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: '../login-page.scss'
 })
 export class RegisterComponent {
   protected username : string = '';

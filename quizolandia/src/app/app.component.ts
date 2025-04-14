@@ -2,24 +2,16 @@ import { AfterViewInit, Component } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { NavComponent } from './header/nav/nav.component';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
-import { SearchResultsComponent } from './search-results/search-results.component';
-import { QuizPageComponent } from './quizy/quiz-page/quiz-page.component';
-import { ContactComponent } from './contact/contact.component';
-import { LoginComponent } from './login-page/login/login.component';
-import { UserPageComponent } from './user/user-page/user-page.component';
+import {ContactComponent} from './contact/contact.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     NavComponent,
-    SearchResultsComponent,
-    QuizPageComponent,
     RouterLink,
-    ContactComponent,
-    LoginComponent,
-    UserPageComponent,
     RouterOutlet,
+    ContactComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

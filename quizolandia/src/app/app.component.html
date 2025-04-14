@@ -1,13 +1,4 @@
 <app-nav></app-nav>
-<app-search-results></app-search-results>
-<app-quiz-page></app-quiz-page>
-<app-contact></app-contact>
-@if (router.url.match('login') || router.url.match('register')) {
-  <app-login></app-login>
-}
-@if (router.url.match('profile')) {
-  <app-user-page></app-user-page>
-}
 <router-outlet></router-outlet>
 <footer>
   <h3>Masz problem?</h3>
@@ -15,3 +6,6 @@
   <p>Quizolandia &copy; 2025</p>
   <p>Wszelkie prawa zastrzeżone.</p>
 </footer>
+@if(router.url.match('contact')) {
+  <app-contact></app-contact>
+}

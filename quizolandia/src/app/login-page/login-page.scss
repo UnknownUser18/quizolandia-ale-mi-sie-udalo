@@ -8,7 +8,12 @@ span {
   margin: 5px 0;
 }
 label {
+  display: block;
   align-items: start;
+}
+small {
+  margin-left: 6px;
+  color: #941717;
 }
 input {
   will-change: transition;

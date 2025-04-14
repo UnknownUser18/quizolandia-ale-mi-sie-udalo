@@ -1,18 +1,17 @@
 import { Component } from '@angular/core';
-import { RegisterComponent } from '../register/register.component';
-import {Router, RouterLink} from '@angular/router';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { DatabaseService } from '../../../../../../quizolandia-ale-mi-sie-udalo2/quizolandia/src/app/database.service';
+import { DatabaseService } from '../../database.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [
-    RegisterComponent,
     FormsModule,
-    RouterLink
+    RouterLink,
+    RouterOutlet
   ],
   templateUrl: './login.component.html',
+  standalone: true,
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
