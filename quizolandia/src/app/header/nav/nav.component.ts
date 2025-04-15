@@ -13,7 +13,7 @@ import {RouterLink} from '@angular/router';
   styleUrl: './nav.component.scss'
 })
 export class NavComponent implements AfterViewInit {
-  protected localStorageUsername: string | null = null;
+  public localStorageUsername: string | null = null;
   constructor() {}
   ngAfterViewInit(): void {
     this.localStorageUsername = localStorage.getItem('username');

@@ -61,6 +61,7 @@ const queries = {
     'insertReport': `INSERT INTO report(id_user, type, description) VALUES (?, ?, ?);`,
     'checkLogin': `SELECT EXISTS (SELECT 1 FROM user WHERE (username = ? OR email = ?) AND password = ?) AS userExists;`,
     'insertUser': `INSERT INTO user (email, username, password, accCreation, avatar) VALUES (?, ?, ?, ?, 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.IFpxNz18Dg9hE4nTR_GAgQHaHa%26pid%3DApi&f=1&ipt=cdf1d7913e3aca2929e55cc1be469f595b956c4148e24db30b08360dcc142241'); SET @last_user_id = LAST_INSERT_ID(); INSERT INTO permissions (id_user, name)VALUES (@last_user_id, 'USER'); UPDATE user SET permission = (SELECT id_permissions FROM permissions WHERE name = 'USER' AND id_user = @last_user_id) WHERE id_user = @last_user_id;`,
+    'getUser': `SELECT u.username, u.avatar, u.nationality, u.accCreation, COUNT(q.id_quiz) AS quiz_count FROM user u LEFT JOIN quiz q ON q.createdBy = u.id_User WHERE username = ?;`
   }
 function executeQuery(ws, value) {
   value = JSON.parse(value);
@@ -83,6 +84,9 @@ function executeQuery(ws, value) {
         break;
       case 'insertUser':
         params = [`${value.data.email}`, `${value.data.username}`, `${value.data.password}`, `${value.data.date_sql}`];
+        break;
+      case 'getUser':
+        params = [`${value.data}`];
         break;
       default:
         if(value.data) {

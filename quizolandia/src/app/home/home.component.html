@@ -1,4 +1,4 @@
-@if (quizzes) {
+@if (quizzes.length > 0) {
   <section>
     <h2>Top Quizy Dzisiaj</h2>
     <div>
@@ -11,7 +11,7 @@
   </section>
 } @else {
   <section>
-    <h2>Nie znaleziono quizów</h2>
+    <h2>Top Quizy Dzisiaj</h2>
     <p>Nikt nie stworzył dzisiaj quizów. 🥀🥀🥀🥀🥀🥀🥀🥀🥀🥀🥀</p>
   </section>
 }
@@ -28,7 +28,7 @@
   </section>
 } @else {
   <section>
-    <h2>Nie znaleziono quizów</h2>
+    <h2>Najpopularniejsze w tym tygodniu</h2>
     <p>Nikt nie stworzył w ostatnich 7 dniach. 🥀🥀🥀🥀🥀🥀🥀🥀🥀</p>
   </section>
 }

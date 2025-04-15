@@ -378,4 +378,12 @@ export class DatabaseService {
       return [];
     }
   }
+  public async getUserData(username : string) : Promise<(User & any)> {
+    try {
+      return (await this.sendData('getUser', username))[0];
+    } catch (error) {
+      console.error('Error getUserData:', error);
+      return [];
+    }
+  }
 }

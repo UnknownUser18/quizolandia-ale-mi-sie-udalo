@@ -1,11 +1,28 @@
+small {
+  margin-left: 6px;
+  color: #941717;
+}
 h2 {
   margin: 10px 0;
   font-size: 1.8em;
   color: var(--border-color);
 }
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+label {
+  margin: 10px 0;
+}
 span {
   font-size: 1.2em;
   margin: 10px 0;
+}
+select {
+  width: 90%;
+  margin: 0 auto;
 }
 select {
   font-size: 1em;
