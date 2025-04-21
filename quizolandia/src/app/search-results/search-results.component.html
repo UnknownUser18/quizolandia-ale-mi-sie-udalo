@@ -4,16 +4,21 @@
       <h2>Wyniki wyszukiwania dla: {{ searchQuery }}</h2>
       <p>Kategoria: {{ selectedCategory }}</p>
     </div>
-    <section>
-      <div *ngFor="let quiz of result" (click)="goToQuiz(quiz.id_quiz, quiz.quiz_name)">
-        <img src="{{ quiz.image }}" alt="User Image">
+  }
+  <section>
+    @for (quiz of result; track quiz.id_quiz ) {
+      <div [routerLink]="'../quiz/' + quiz.id_quiz">
+        <img ngSrc="{{ quiz.image }}"  width="600" height="350" [alt]="'Obraz ' + quiz.quiz_name">
         <span>
           <i>{{ quiz.category_name }}</i>
           <h3>{{ quiz.quiz_name }}</h3>
         </span>
       </div>
-    </section>
-  } @else if (result.length === 0) {
-    <h2>Nie znaleziono quizów na twoje zapytanie 🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝🐝</h2>
-  }
+    } @empty {
+      <div class="results">
+        <h2>Nie znaleziono wyników dla twego wyszukiwania.</h2>
+        <p routerLink="" class="try-again">Spróbuj ponownie.</p>
+      </div>
+    }
+  </section>
 }
