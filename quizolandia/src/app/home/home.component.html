@@ -1,0 +1,34 @@
+@if (quizzes.length > 0) {
+  <section>
+    <h2>Top Quizy Dzisiaj</h2>
+    <div>
+      <article *ngFor="let quiz of quizzes" routerLink="quiz/{{ quiz.id_quiz }}">
+        <img ngSrc="{{ quiz.image }}" alt="Zdjęcie do {{ quiz.quiz_name }}" width="40" height="50" priority>
+        <span>{{ quiz.category_name }}</span>
+        <h3>{{ quiz.quiz_name }}</h3>
+      </article>
+    </div>
+  </section>
+} @else {
+  <section>
+    <h2>Top Quizy Dzisiaj</h2>
+    <p>Nikt nie stworzył dzisiaj quizów. 🥀🥀🥀🥀🥀🥀🥀🥀🥀🥀🥀</p>
+  </section>
+}
+@if (quizzesWeekend){
+  <section>
+    <h2>Najpopularniejsze w tym tygodniu</h2>
+    <div>
+      <article *ngFor="let quiz of quizzesWeekend" routerLink="quiz/{{ quiz.id_quiz }}">
+        <img ngSrc="{{ quiz.image }}" alt="Zdjęcie do {{ quiz.quiz_name }}" width="40" height="50" priority>
+        <span>{{ quiz.category_name }}</span>
+        <h3>{{ quiz.quiz_name }}</h3>
+      </article>
+    </div>
+  </section>
+} @else {
+  <section>
+    <h2>Najpopularniejsze w tym tygodniu</h2>
+    <p>Nikt nie stworzył w ostatnich 7 dniach. 🥀🥀🥀🥀🥀🥀🥀🥀🥀</p>
+  </section>
+}

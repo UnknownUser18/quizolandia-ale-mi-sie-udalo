@@ -1,9 +1,13 @@
 <header>
   <h1><a routerLink="">Quizo Landia</a></h1>
   <ul>
-    <li><a routerLink="/dziedziny">Dziedziny</a></li>
-    <li><a routerLink="/ranking">Ranking</a></li>
-    <li><a routerLink="/konto">Konto</a></li>
+    <li><a routerLink="dziedziny">Dziedziny</a></li>
+    <li><a routerLink="ranking">Ranking</a></li>
+    @if (localStorageUsername) {
+      <li><a routerLink="profile">Konto</a></li>
+    } @else {
+      <li><a routerLink="login">Login</a></li>
+    }
   </ul>
 </header>
 <app-search></app-search>

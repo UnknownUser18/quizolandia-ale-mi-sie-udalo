@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import { Injectable
+} from '@angular/core';
 
 /** @enum QuestionType
  * @description Typ pytania w quizie.
@@ -13,7 +13,7 @@ import {BehaviorSubject} from 'rxjs';
  * const questionType: QuestionType = QuestionType.TWO_CHOICE;
  * console.log(questionType); // 1
  */
-enum QuestionType {
+export enum QuestionType {
   TRUE_FALSE,
   TWO_CHOICE,
   THREE_CHOICE,
@@ -33,11 +33,11 @@ enum QuestionType {
  * const reportType: ReportType = ReportType.BUG;
  * console.log(reportType); // 0
  */
-enum ReportType {
+export enum ReportType {
   BUG,
   CHEATING,
   SUGGESTION,
-  INAPPROPRIATE_CONTENT,
+  INAPPROPRIATE,
   OTHER,
 }
 
@@ -51,7 +51,7 @@ enum ReportType {
  * const permission: Permission = Permission.ADMIN;
  * console.log(permission); // 3
  */
-enum Permission {
+export enum Permission {
   USER,
   BANNED,
   MODERATOR,
@@ -265,9 +265,7 @@ export interface Comment {
 })
 export class DatabaseService {
   constructor() {}
-  private socket! : WebSocket
-  public result : BehaviorSubject<any> = new BehaviorSubject<any>(null);
-
+  private socket! : WebSocket;
   public initWebSocket() : number {
     try {
       this.socket = new WebSocket('ws://localhost:8080');
@@ -333,7 +331,59 @@ export class DatabaseService {
     } catch (error) {
       console.error('Error getting quiz:', error);
       return null;
-
+    }
+  }
+  public async insertReport(id_user : number, type : ReportType, description : string) : Promise<boolean> {
+    try {
+      const result : any = await this.sendData('insertReport', { id_user, type, description });
+      return !!result.affectedRows;
+    } catch (error) {
+      console.error('Error inserting report:', error);
+      return false;
+    }
+  }
+  public async checkLogin(username : string, password : string) : Promise<boolean> {
+    try {
+      const result : any = await this.sendData('checkLogin', {username, password});
+      return result[0].userExists;
+    } catch (error) {
+      console.error('Error checking login:', error);
+      return false;
+    }
+  }
+  public async insertUser(username : string, password : string, email : string) : Promise<boolean> {
+    try {
+      let date: Date = new Date();
+      let date_sql : string = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+      const result : any = await this.sendData('insertUser', {username, password, email, date_sql});
+      return !!result[result.length - 2].affectedRows;
+    } catch (error) {
+      console.error('Error inserting user:', error);
+      return false;
+    }
+  }
+  public async getQuizzesFromToday() : Promise<(Quiz & Category)[]> {
+    try {
+      return await this.sendData('getQuizzesFromToday', null);
+    } catch (error) {
+      console.error('Error getting quizzes from today:', error);
+      return [];
+    }
+  }
+  public async getQuizzesFromWeekend() : Promise<(Quiz & Category)[]> {
+    try {
+      return await this.sendData('getQuizzesFromWeekend', null);
+    } catch (error) {
+      console.error('Error getting quizzes from weekend:', error);
+      return [];
+    }
+  }
+  public async getUserData(username : string) : Promise<(User & any)> {
+    try {
+      return (await this.sendData('getUser', username))[0];
+    } catch (error) {
+      console.error('Error getUserData:', error);
+      return [];
     }
   }
 }

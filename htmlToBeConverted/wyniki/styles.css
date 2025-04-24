@@ -1,0 +1,126 @@
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+}
+
+
+.results-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+
+.results-title {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 1rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.results-over {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 600px;
+}
+
+
+.results-box {
+    background-color: #518BC0;
+    border-radius: 10px;
+    padding: 2rem;
+    color: white;
+}
+
+
+.results-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.circle {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0d335d;
+    border-radius: 100%;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.circle img {
+    width: 25px;
+    height: 20px;
+}
+
+.results-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.results-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1.5rem 0;
+    font-size: 1.2rem;
+    font-weight: normal;
+}
+
+.results-stats strong {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+
+.results-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+}
+
+.results-buttons button {
+    background-color: white;
+    color: #0d335d;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #0d335d;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.results-buttons button:hover {
+    background-color: #dceeff;
+}
+
+.results-buttons button img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}

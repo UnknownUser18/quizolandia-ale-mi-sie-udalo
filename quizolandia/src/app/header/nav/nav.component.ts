@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {AfterViewInit, Component } from '@angular/core';
 import {SearchComponent} from '../search/search.component';
 import {RouterLink} from '@angular/router';
 
@@ -12,6 +12,10 @@ import {RouterLink} from '@angular/router';
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss'
 })
-export class NavComponent {
-
+export class NavComponent implements AfterViewInit {
+  public localStorageUsername: string | null = null;
+  constructor() {}
+  ngAfterViewInit(): void {
+    this.localStorageUsername = localStorage.getItem('username');
+  }
 }

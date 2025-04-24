@@ -7,7 +7,7 @@
   --text-color: #212121;
   --white-text-color: #FAFAFA;
   --gradient-text-color: #BDAFBB;
-  --white-color: #EAEAEA;
+  --white-color: #FAFAFA;
 }
 * {
   margin: 0;
@@ -47,4 +47,25 @@ button {
 input {
   will-change: transition;
   transition: all 150ms ease-in-out;
+}
+app-login, app-register {
+  box-shadow: 10px 10px 26px -18px rgba(0,0,0,0.75);
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  background-color: var(--white-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  margin: 10px auto;
+}
+app-contact {
+  border-radius: 20px;
+  width: 30%;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--white-color);
+  box-shadow: 10px 10px 26px -18px rgba(0,0,0,0.75);
 }
