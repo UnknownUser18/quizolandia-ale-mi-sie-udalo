@@ -1,25 +1,23 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import { Component } from '@angular/core';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Category, DatabaseService, Quiz, User } from '../database.service';
-import { NgForOf, NgOptimizedImage } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { NgOptimizedImage } from '@angular/common';
 @Component({
   selector: 'app-search-results',
   standalone: true,
   imports: [
-    NgForOf
+    RouterLink,
+    NgOptimizedImage
   ],
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.scss'
 })
-export class SearchResultsComponent implements OnInit, OnDestroy {
+export class SearchResultsComponent {
   protected searchQuery : string = '';
   protected selectedCategory : string = '';
   protected result : (Quiz & User & Category)[] | null = null;
-  private routerSubscription: Subscription | undefined;
-  constructor(private title : Title, private route : ActivatedRoute, private database : DatabaseService, private router : Router) {}
-  public ngOnInit() : void {
+  constructor(private title : Title, private route : ActivatedRoute, private database : DatabaseService) {
     this.route.queryParams.subscribe(params => {
       this.searchQuery = params['searchQuery'] || '';
       this.selectedCategory = params['selectedCategory'] || '';
@@ -29,21 +27,5 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.title.setTitle("Wyszukiwanie quizów - Quizolandia");
       });
     });
-    this.routerSubscription = this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd && !event.urlAfterRedirects.includes('search-results')) {
-        this.result = null;
-      }
-    });
-  }
-
-  public ngOnDestroy(): void {
-    if (this.routerSubscription) {
-      this.routerSubscription.unsubscribe();
-    }
-  }
-
-  goToQuiz(quizId : number, name : string) : void {
-    this.router.navigate(['/quiz', quizId]).then(() : void => {});
-    this.title.setTitle(`${name} - Quizolandia`);
   }
 }

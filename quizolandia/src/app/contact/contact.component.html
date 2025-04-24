@@ -1,21 +1,19 @@
-@if (router.url.match('contact')) {
-  <h2>Zgłoś problem</h2>
-  <form>
-    <label>
-      <span>Wybierz typ problemu:<small>*</small></span>
-      <select required name="report_problem" [(ngModel)]="report_problem">
-        <option value="" disabled selected>Wybierz typ problemu</option>
-        <option value="BUG">Błąd</option>
-        <option value="CHEATING">Oszukiwanie</option>
-        <option value="SUGGESTION">Sugestia</option>
-        <option value="INAPPROPRIATE">Nieodpowiednia zawartość</option>
-        <option value="OTHER">Inne</option>
-      </select>
-    </label>
-    <label>
-      <span>Opisz problem:<small>*</small></span>
-      <textarea placeholder="Opisz problem..." name="description" required [(ngModel)]="description"></textarea>
-    </label>
-    <input type="submit" value="Wyślij zgłoszenie" (click)="sendReport()">
-  </form>
-}
+<h2>Zgłoś problem</h2>
+<form>
+  <label>
+    <span>Wybierz typ problemu:<small>*</small></span>
+    <select required name="report_problem" [(ngModel)]="report_problem">
+      <option value="" disabled selected>Wybierz typ problemu</option>
+      <option value="BUG">Błąd</option>
+      <option value="CHEATING">Oszukiwanie</option>
+      <option value="SUGGESTION">Sugestia</option>
+      <option value="INAPPROPRIATE">Nieodpowiednia zawartość</option>
+      <option value="OTHER">Inne</option>
+    </select>
+  </label>
+  <label>
+    <span>Opisz problem:<small>*</small></span>
+    <textarea placeholder="Opisz problem..." name="description" required [(ngModel)]="description"></textarea>
+  </label>
+  <input type="submit" value="Wyślij zgłoszenie" (click)="sendReport()">
+</form>

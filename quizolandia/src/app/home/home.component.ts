@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Category, DatabaseService, Quiz } from '../database.service';
-import {NgForOf, NgOptimizedImage} from '@angular/common';
-import {RouterLink} from '@angular/router';
+import { NgForOf, NgOptimizedImage } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,8 @@ import {RouterLink} from '@angular/router';
 export class HomeComponent {
   protected quizzes: (Quiz & Category)[] = [];
   protected quizzesWeekend: (Quiz & Category)[] = [];
-  constructor(private databaseService: DatabaseService) {
+  constructor(private databaseService: DatabaseService, private title : Title) {
+    this.title.setTitle('Quizolandia');
     setTimeout(() : void => {
       this.databaseService.getQuizzesFromToday().then((r : (Quiz & Category)[]) : void => {
         this.quizzes = r;
