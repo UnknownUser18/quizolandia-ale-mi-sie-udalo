@@ -16,9 +16,9 @@ import {Router, RouterLink, RouterOutlet} from '@angular/router';
 })
 export class AppComponent implements AfterViewInit {
   title = 'quizolandia';
-  result: number | undefined;
+  result: boolean | undefined;
   constructor(private databaseService: DatabaseService, protected router: Router) { }
-  ngAfterViewInit(): void {
-    this.result = this.databaseService.initWebSocket();
+  async ngAfterViewInit(): Promise<void> {
+    this.result = await this.databaseService.initWebSocket();
   }
 }

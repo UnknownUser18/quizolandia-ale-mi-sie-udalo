@@ -1,12 +1,5 @@
 <app-nav></app-nav>
-{{result}}
-@defer(when result === 0) {
-  <router-outlet></router-outlet>
-} @placeholder (minimum 1000ms) {
-  <h2>Ładowanie...</h2>
-} @error {
-  <h2>Wystąpił błąd podczas ładowania quizów.</h2>
-}
+<router-outlet></router-outlet>
 
 <footer>
   <div>

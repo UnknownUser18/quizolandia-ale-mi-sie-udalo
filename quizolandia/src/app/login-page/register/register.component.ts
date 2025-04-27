@@ -54,8 +54,11 @@ export class RegisterComponent {
       alert('Email cannot contain spaces');
       return;
     }
-    this.database.insertUser(this.username, this.password, this.email).then((r : boolean) : void => {
-      if(r) {
+    let date: Date = new Date();
+    let date_sql : string = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+    this.database.send('insertUser', {email : this.email, username : this.username, password : this.password, accDate : date_sql}, 'success').then(() : void => {
+      const result = this.database.get_variable('success')![0];
+      if(!!result[result.length - 2].affectedRows) {
         alert('User registered successfully');
         this.router.navigate(['/login']).then();
       } else {

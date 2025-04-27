@@ -24,7 +24,8 @@ export class LoginComponent {
     if(this.username === '' || this.password === '') {
       throw new Error(`${this.username} and ${this.password} is required`);
     }
-    this.database.checkLogin(this.username, this.password).then((result : boolean) : void => {
+    this.database.send('checkLogin', {username: this.username, password: this.password}, 'success').then(() : void => {
+      const result = this.database.get_variable('success')![0].userExists;
       if (result) {
         localStorage.setItem('username', this.username);
         alert('Login successful');

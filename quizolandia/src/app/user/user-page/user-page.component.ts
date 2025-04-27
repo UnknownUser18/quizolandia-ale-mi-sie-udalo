@@ -11,8 +11,13 @@ import { DatabaseService, User } from '../../database.service';
 export class UserPageComponent {
   protected result : User & any;
   constructor(private database : DatabaseService) {
-    this.database.getUserData(localStorage.getItem('username')!).then((r : User & any) : void => {
-      this.result = r!;
-    })
+    this.database.send('getUser', {username : localStorage.getItem('username')}, 'user').then(() : void => {
+      const result = this.database.get_variable('user')![0];
+      if(result === undefined) {
+        alert('User not found');
+        return;
+      }
+      this.result = result;
+    });
   }
 }

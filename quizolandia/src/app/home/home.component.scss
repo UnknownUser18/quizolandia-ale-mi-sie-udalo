@@ -12,10 +12,6 @@ h2 {
   font-weight: 500;
   border-bottom: 5px solid var(--border-color);
 }
-img {
-  width: 100%;
-  height: auto;
-}
 div {
   column-gap: 10px;
   display: flex;
@@ -23,6 +19,13 @@ div {
   align-items: center;
 }
 article {
+  max-width: 400px;
+  max-height: 300px;
+  img {
+    border-radius: 32px 32px 0 0;
+    width: 100%;
+    height: auto;
+  }
   cursor: pointer;
   border-radius: 32px;
   width: fit-content;

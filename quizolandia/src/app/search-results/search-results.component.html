@@ -1,10 +1,13 @@
-@if (result) {
-  @if (result.length > 0) {
+@defer (when result !== null) {
     <div class="result">
-      <h2>Wyniki wyszukiwania dla: {{ searchQuery }}</h2>
-      <p>Kategoria: {{ selectedCategory }}</p>
+      @if (result?.length! > 0) {
+        <h2>Wyniki wyszukiwania dla: {{ searchQuery }}</h2>
+        <p>Kategoria: {{ selectedCategory }}</p>
+      } @else {
+        <h2>Nie znaleziono wyników dla twego wyszukiwania.</h2>
+        <p routerLink="" class="try-again">Spróbuj ponownie.</p>
+      }
     </div>
-  }
   <section>
     @for (quiz of result; track quiz.id_quiz ) {
       <div [routerLink]="'../quiz/' + quiz.id_quiz">
@@ -13,11 +16,6 @@
           <i>{{ quiz.category_name }}</i>
           <h3>{{ quiz.quiz_name }}</h3>
         </span>
-      </div>
-    } @empty {
-      <div class="results">
-        <h2>Nie znaleziono wyników dla twego wyszukiwania.</h2>
-        <p routerLink="" class="try-again">Spróbuj ponownie.</p>
       </div>
     }
   </section>

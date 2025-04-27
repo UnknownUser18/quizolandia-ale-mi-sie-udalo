@@ -26,7 +26,7 @@ export class ContactComponent {
     } else if(this.description.trim() === '') {
       throw new Error('Description cannot be empty');
     }
-    this.database.insertReport(1, this.report_problem as unknown as ReportType, this.description).then(r => {
+    this.database.send('insertReport', {id_user: 1, type : this.report_problem, description: this.description}, 'empty').then(r => {
       // TODO make a component for this
       if (r) {
         alert('Report sent successfully');

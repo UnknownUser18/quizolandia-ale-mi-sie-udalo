@@ -260,32 +260,45 @@ export interface Comment {
   publicTime: Date,
   stars: number,
 }
+type variables = {
+  quizzesList? : (Quiz & Category)[],
+  quizzesFromToday? : (Quiz & Category)[],
+  quizzesFromWeekend? : (Quiz & Category)[],
+  quiz? : (User & Quiz & Category),
+  categoryList? : Category[],
+  commentsList? : (Comment & User)[],
+  user? : (User & any),
+  empty? : any,
+  success? : any[],
+}
+type variableName = keyof variables;
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
   constructor() {}
   private socket! : WebSocket;
-  public initWebSocket() : number {
+  private variables : Map<variableName, any> = new Map<variableName, any>();
+  public async initWebSocket() : Promise<boolean> {
     try {
       this.socket = new WebSocket('ws://localhost:8080');
-      this.socket.onopen = () => {
+      this.socket.onopen = () : void => {
         console.log('WebSocket connection established');
-        return 0;
       };
-      this.socket.onerror = (error : Event) => {
+      this.socket.onerror = (error : Event) : void => {
         console.error('WebSocket error:', error);
-        return 1;
       };
-      this.socket.onclose = () => {
+      this.socket.onclose = () : void => {
         console.log('WebSocket connection closed');
-        return 0;
       };
     } catch (error) {
       console.error('WebSocket error:', error);
-      return 1;
     }
-    return 2;
+    return new Promise((resolve, reject) : void => {
+      setTimeout(() : void => {
+        this.socket.readyState === WebSocket.OPEN ? resolve(true) : reject(new Error('WebSocket connection failed'));
+      }, 1000);
+    })
   }
   private async sendData(type : string, data : any | null) : Promise<Array<any>> {
     if(!this.socket.readyState) throw new Error('WebSocket connection does not exist');
@@ -301,89 +314,42 @@ export class DatabaseService {
       }
     });
   }
-  public async getCategoryName() : Promise<Category[]> {
-    try {
-      return await this.sendData('getCategoryName', null);
-    } catch (error) {
-      console.error('Error getting category name:', error);
-      return [];
-    }
+  /**
+   * @method get
+   * @description Metoda do pobierania danych z serwera WebSocket.
+   * @param query_name - Nazwa zapytania do serwera.
+   * @param params - Parametry zapytania (opcjonalna).
+   * @param variable - Nazwa zmiennej, do której zostaną przypisane pobrane dane.
+   * @returns Zwraca obiekt z danymi pobranymi z serwera.
+   * @throws {Error} W przypadku błędu podczas komunikacji z serwerem.
+   * @example
+   * const data = await this.get('getQuizzes', { quiz_name: 'Quiz 1' }, 'quizzesList');
+   */
+  public async send(query_name: string, params: any, variable: variableName): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.socket.send(JSON.stringify({ type: query_name, params: params }));
+      this.socket.onmessage = (event: MessageEvent) => {
+        console.log('WebSocket message received:', event.data);
+        const data = JSON.parse(event.data);
+        this.variables.set(variable, data);
+        resolve(true);
+      };
+      this.socket.onerror = (error : Event) : void => {
+        reject(new Error('WebSocket error occurred', error as ErrorOptions));
+      };
+    });
   }
-  public async getCommentsFromQuiz(id_quiz: number): Promise<(Comment & User)[]> {
-    try {
-      return await this.sendData('getCommentsFromQuiz', id_quiz);
-    } catch (error) {
-      console.error('Error getting comments from quiz:', error);
-      return [];
-    }
-  }
-  public async getQuizzes(quiz_name : string, category_name : string | null) : Promise<(User & Quiz & Category)[]> {
-    try {
-      return await this.sendData('getQuizzes', {quiz_name, category_name});
-    } catch (error) {
-      console.error('Error getting quizzes:', error);
-      return [];
-    }
-  }
-  public async getQuiz(id_quiz : number) : Promise<(User & Quiz & Category) | null> {
-    try {
-      return (await this.sendData('getQuiz', id_quiz))[0];
-    } catch (error) {
-      console.error('Error getting quiz:', error);
-      return null;
-    }
-  }
-  public async insertReport(id_user : number, type : ReportType, description : string) : Promise<boolean> {
-    try {
-      const result : any = await this.sendData('insertReport', { id_user, type, description });
-      return !!result.affectedRows;
-    } catch (error) {
-      console.error('Error inserting report:', error);
-      return false;
-    }
-  }
-  public async checkLogin(username : string, password : string) : Promise<boolean> {
-    try {
-      const result : any = await this.sendData('checkLogin', {username, password});
-      return result[0].userExists;
-    } catch (error) {
-      console.error('Error checking login:', error);
-      return false;
-    }
-  }
-  public async insertUser(username : string, password : string, email : string) : Promise<boolean> {
-    try {
-      let date: Date = new Date();
-      let date_sql : string = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-      const result : any = await this.sendData('insertUser', {username, password, email, date_sql});
-      return !!result[result.length - 2].affectedRows;
-    } catch (error) {
-      console.error('Error inserting user:', error);
-      return false;
-    }
-  }
-  public async getQuizzesFromToday() : Promise<(Quiz & Category)[]> {
-    try {
-      return await this.sendData('getQuizzesFromToday', null);
-    } catch (error) {
-      console.error('Error getting quizzes from today:', error);
-      return [];
-    }
-  }
-  public async getQuizzesFromWeekend() : Promise<(Quiz & Category)[]> {
-    try {
-      return await this.sendData('getQuizzesFromWeekend', null);
-    } catch (error) {
-      console.error('Error getting quizzes from weekend:', error);
-      return [];
-    }
-  }
-  public async getUserData(username : string) : Promise<(User & any)> {
-    try {
-      return (await this.sendData('getUser', username))[0];
-    } catch (error) {
-      console.error('Error getUserData:', error);
-      return [];
-    }
+
+  /**
+   * @method get_variable
+   * @description Metoda do pobierania zmiennej z mapy.
+   * @param variable - Nazwa zmiennej do pobrania.
+   * @returns Zwraca wartość zmiennej lub undefined, jeśli zmienna nie istnieje.
+   * @example
+   * const quizzes = this.get_variable('quizzesList');
+   * @throws {Error} W przypadku błędu podczas pobierania zmiennej.
+   */
+  public get_variable<T extends variableName>(variable : T) : variables[T] | undefined {
+    return this.variables.get(variable);
   }
 }

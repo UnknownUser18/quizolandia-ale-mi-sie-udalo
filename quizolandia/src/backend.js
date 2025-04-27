@@ -71,27 +71,13 @@ function executeQuery(ws, value) {
     query = queries[value.type.toString()];
     switch (value.type) {
       case 'getQuizzes':
-        params = [`%${value.data.quiz_name}%`, value.data.category_name, value.data.category_name];
-        break;
-      case 'getQuiz':
-        params = [`${value.data}`];
-        break;
-      case 'insertReport':
-        params = [`${value.data.id_user}`, `${value.data.type}`, `${value.data.description}`];
+        params = [`%${value.params.quiz_name}%`, value.params.category_name, value.params.category_name];
         break;
       case 'checkLogin':
-        params = [`${value.data.username}`, `${value.data.username}`, `${value.data.password}`];
-        break;
-      case 'insertUser':
-        params = [`${value.data.email}`, `${value.data.username}`, `${value.data.password}`, `${value.data.date_sql}`];
-        break;
-      case 'getUser':
-        params = [`${value.data}`];
+        params = [value.params.username, value.params.username, value.params.password];
         break;
       default:
-        if(value.data) {
-          params = [`${value.data}`];
-        }
+        params = value ? Object.values(value.params) : {} || [];
         break;
     }
   }

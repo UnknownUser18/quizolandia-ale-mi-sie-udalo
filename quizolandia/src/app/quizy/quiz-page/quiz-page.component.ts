@@ -23,8 +23,8 @@ export class QuizPageComponent {
   constructor(protected router : Router, private database : DatabaseService, private title : Title) {
     const urlSegments : string[] = this.router.url.split('/');
     this.quizId = parseInt(urlSegments[urlSegments.length - 1], 10);
-    this.database.getQuiz(this.quizId).then((r : Quiz & Category & User | null) : void => {
-      this.result = r!;
+    this.database.send('getQuiz', { id_quiz: this.quizId }, 'quiz').then(() : void => {
+      this.result = (this.database.get_variable('quiz') as unknown as (Quiz & Category & User)[])[0];
       this.title.setTitle(`${this.result?.quiz_name!} - Quizolandia`);
     });
   }

@@ -16,15 +16,15 @@ import { NgOptimizedImage } from '@angular/common';
 export class SearchResultsComponent {
   protected searchQuery : string = '';
   protected selectedCategory : string = '';
-  protected result : (Quiz & User & Category)[] | null = null;
+  protected result : (Quiz & Category)[] | null = null;
   constructor(private title : Title, private route : ActivatedRoute, private database : DatabaseService) {
     this.route.queryParams.subscribe(params => {
       this.searchQuery = params['searchQuery'] || '';
       this.selectedCategory = params['selectedCategory'] || '';
       if(this.searchQuery === '' || this.searchQuery === undefined) return;
-      this.database.getQuizzes(this.searchQuery, this.selectedCategory).then((r : (Quiz & User & Category)[]) : void => {
-        this.result = r;
-        this.title.setTitle("Wyszukiwanie quizów - Quizolandia");
+      this.database.send('getQuizzes', { quiz_name: this.searchQuery, category_name: this.selectedCategory }, 'quizzesList').then(() : void => {
+        this.result = this.database.get_variable('quizzesList')!;
+        this.title.setTitle('Wyszukiwanie quizów - Quizolandia');
       });
     });
   }
