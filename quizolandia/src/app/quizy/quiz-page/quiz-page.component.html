@@ -1,24 +1,47 @@
-<!--@if (!router.url.match('solve')) {-->
-<!--  <h1>Quiz</h1>-->
-<!--  Nazwa: {{ result?.quiz_name }}-->
-<!--  Opis: {{ result?.description }}-->
-<!--  Kategoria: {{ result?.category_name }}-->
-<!--  <img ngSrc="{{ result?.image }}" alt="Quiz Image" width="1000" height="500">-->
-<!--  <button (click)="startQuiz()">Start Quiz</button>-->
-<!--  <app-comments [quizId]="quizId"></app-comments>-->
-<!--} @else if(router.url.match('solve')) {-->
-<!--  <app-quiz-solve></app-quiz-solve>-->
-<!--}-->
-<div class="quiz">
-  <div class="baner"></div>
-  <h2>Dzierżno Małe</h2>
-  <h3>łudki</h3>
-  <p>Opis tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tung tungsahur</p>
-  <div class="leaderboard">
-    tutaj leaderboard
-  </div>
-  <div>
+@defer (when result !== null) {
+  <div class="quiz">
+    <div class="baner" style="background-image: url('{{result?.image}}')"></div>
+    <div>
+      <h1>{{ result?.quiz_name }}</h1>
+      <h2>{{ result?.category_name }} </h2>
+      <p>{{ result?.description }}</p>
+    </div>
+    <button>Zacznij quiz</button>
 
+    <div class="leaderboard">
+      <div class="container">
+        <section class="left-panel">
+          <h2>Top Quizierów</h2>
+          <div class="line"></div>
+          <div class="list">
+            @for (user of leaderboard; track user.score) {
+              <div class="user">
+                {{ leaderboard!.indexOf(user) + 1 }}.
+                <img ngSrc="{{ user.avatar }}" alt="Zdjęcie {{ user.username }}" width="50" height="50">
+                {{ user.username }}
+                {{ user.score }} pkt.
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="right-panel">
+          <div class="avatar-container second">
+            <img src="https://i.imgur.com/mccFOYQ.png" alt="Dawid W">
+            <p><strong>Dawid W</strong><br>Poland</p>
+          </div>
+          <div class="avatar-container first">
+            <div class="crown">👑</div>
+            <img src="https://i.imgur.com/YFk4dAb.png" alt="Ruben">
+            <p><strong>Ruben</strong><br>China</p>
+          </div>
+          <div class="avatar-container third">
+            <img src="https://i.imgur.com/D8w44Pv.png" alt="Dawid W">
+            <p><strong>Dawid W</strong><br>Niger</p>
+          </div>
+        </section>
+      </div>
+    </div>
+    <app-comments [quizId]="quizId"></app-comments>
   </div>
-</div>
-<app-comments [quizId]="quizId"></app-comments>
+}

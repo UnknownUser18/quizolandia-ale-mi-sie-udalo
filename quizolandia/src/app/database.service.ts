@@ -267,6 +267,7 @@ type variables = {
   quiz? : (User & Quiz & Category),
   categoryList? : Category[],
   commentsList? : (Comment & User)[],
+  scoresList? : (Solve & User)[],
   user? : (User & any),
   empty? : any,
   success? : any[],
@@ -299,20 +300,6 @@ export class DatabaseService {
         this.socket.readyState === WebSocket.OPEN ? resolve(true) : reject(new Error('WebSocket connection failed'));
       }, 1000);
     })
-  }
-  private async sendData(type : string, data : any | null) : Promise<Array<any>> {
-    if(!this.socket.readyState) throw new Error('WebSocket connection does not exist');
-    this.socket.send(JSON.stringify({type, data}));
-    return new Promise((resolve, reject) : void => {
-      this.socket.onmessage = (event : MessageEvent) => {
-        if(!event.data) {
-          reject(new Error('Error in data', event.data));
-          return;
-        }
-        console.log('WebSocket message received:', event.data);
-        resolve(JSON.parse(event.data));
-      }
-    });
   }
   /**
    * @method get
