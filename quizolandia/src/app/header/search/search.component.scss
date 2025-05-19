@@ -1,19 +1,61 @@
-input {
-  height: 100%;
-  width: 70%;
-  font-size: 1.4em;
-  color: var(--text-color);
+@use "../../../assets/scss/index";
+label {
+  padding: 10px;
+  display: flex;
+  border-radius: index.$border-20;
+  border: 2px solid rgba(var(--color-7-rgb), 0.5);
+  min-width: 400px;
+  gap: 20px;
+  input {
+    transition: index.transition(color, index.$medium);
+    width: 100%;
+    color: var(--color-7);
+    &:placeholder-shown {
+      color: var(--color-8);
+      &:focus {
+        color: rgba(var(--color-7-rgb), 0.8);
+      }
+    }
+  }
 }
-select {
-  max-width: 20%;
-  width: 10%;
-  min-width: 5%;
-  font-size: 1.4em;
-  color: var(--text-color);
-}
-select, option {
-  background-color: var(--background-color);
-}
-button {
-  padding: 10px 20px;
+section {
+  transition: index.transition(backdrop-filter, index.$xlong);
+  @include index.fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &.done {
+    backdrop-filter: blur(10px);
+  }
+  div {
+    padding: 20px 15px;
+    color: var(--color-6);
+    border-radius: index.$border-32;
+    position: relative;
+    box-shadow: index.$box-shadow;
+    transition: index.transition(transform, index.$xlong);
+    transform: translateY(150%);
+    width: 50%;
+    height: 70%;
+    background-color: var(--color-7);
+    &.done {
+      transform: translateY(0);
+    }
+    i {
+      transition: index.transition(color, index.$medium);
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: var(--font-32);
+      cursor: pointer;
+      color: var(--color-6);
+      &:hover {
+        color: var(--color-1);
+      }
+    }
+    h3 {
+      text-align: center;
+      font-size: var(--font-28);
+    }
+  }
 }

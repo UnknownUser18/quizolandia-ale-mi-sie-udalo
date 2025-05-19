@@ -1,6 +1,7 @@
-<header>
+<nav>
   <h1><a routerLink="">Quizo Landia</a></h1>
-  <ul>
+  <app-search></app-search>
+  <menu>
     <li><a routerLink="dziedziny">Dziedziny</a></li>
     <li><a routerLink="ranking">Ranking</a></li>
     @if (localStorageUsername) {
@@ -8,6 +9,5 @@
     } @else {
       <li><a routerLink="login">Login</a></li>
     }
-  </ul>
-</header>
-<app-search></app-search>
+  </menu>
+</nav>

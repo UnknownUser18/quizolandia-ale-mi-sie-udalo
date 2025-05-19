@@ -1,21 +1,25 @@
-import {AfterViewInit, Component } from '@angular/core';
-import {SearchComponent} from '../search/search.component';
-import {RouterLink} from '@angular/router';
-
+import { AfterViewInit, Component, NgZone } from '@angular/core';
+import { SearchComponent } from '../search/search.component';
+import { RouterLink } from '@angular/router';
+import { LocalStorageService } from '../../local-storage.service';
 @Component({
   selector: 'app-nav',
   standalone: true,
   imports: [
     SearchComponent,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss'
 })
 export class NavComponent implements AfterViewInit {
-  public localStorageUsername: string | null = null;
-  constructor() {}
-  ngAfterViewInit(): void {
-    this.localStorageUsername = localStorage.getItem('username');
+  protected localStorageUsername: string | null = null;
+
+  constructor(private zone : NgZone, private localService : LocalStorageService) {}
+
+  public ngAfterViewInit(): void {
+    this.zone.onStable.subscribe(() : void => {
+        this.localStorageUsername = this.localService.get('username');
+    });
   }
 }

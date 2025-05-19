@@ -1,7 +1,7 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { NavComponent } from './header/nav/nav.component';
-import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +14,12 @@ import {Router, RouterLink, RouterOutlet} from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements AfterViewInit {
-  title = 'quizolandia';
-  result: boolean | undefined;
+export class AppComponent implements OnInit {
+  protected title = 'quizolandia';
+
   constructor(private databaseService: DatabaseService, protected router: Router) { }
-  async ngAfterViewInit(): Promise<void> {
-    this.result = await this.databaseService.initWebSocket();
+
+  public ngOnInit(): void {
+    this.databaseService.initWebSocket().then();
   }
 }

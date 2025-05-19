@@ -138,6 +138,7 @@ export interface Quiz {
   lastUpdate: Date,
   isPublic: boolean,
   id_category: Category["id_category"],
+  difficulty: number,
 }
 
 /** @interface Questions
@@ -280,37 +281,23 @@ export class DatabaseService {
   private socket! : WebSocket;
   private variables : Map<variableName, any> = new Map<variableName, any>();
   public async initWebSocket() : Promise<boolean> {
-    try {
-      this.socket = new WebSocket('ws://localhost:8080');
-      this.socket.onopen = () : void => {
-        console.log('WebSocket connection established');
-      };
-      this.socket.onerror = (error : Event) : void => {
+    return new Promise((resolve, reject) => {
+      try {
+        this.socket = new WebSocket('ws://localhost:8080');
+        this.socket.onopen = () : void => {
+          console.log('WebSocket connection established');
+          resolve(true);
+        };
+        this.socket.onerror = (error : Event) : void => {
+          console.error('WebSocket error:', error);
+          reject(new Error('WebSocket error occurred', error as ErrorOptions));
+        };
+        this.socket.onclose = () : void => {
+          console.log('WebSocket connection closed');
+        };
+      } catch (error) {
         console.error('WebSocket error:', error);
-      };
-      this.socket.onclose = () : void => {
-        console.log('WebSocket connection closed');
-      };
-    } catch (error) {
-      console.error('WebSocket error:', error);
-    }
-    return new Promise((resolve, reject) : void => {
-      setTimeout(() : void => {
-        this.socket.readyState === WebSocket.OPEN ? resolve(true) : reject(new Error('WebSocket connection failed'));
-      }, 1000);
-    })
-  }
-  private async sendData(type : string, data : any | null) : Promise<Array<any>> {
-    if(!this.socket.readyState) throw new Error('WebSocket connection does not exist');
-    this.socket.send(JSON.stringify({type, data}));
-    return new Promise((resolve, reject) : void => {
-      this.socket.onmessage = (event : MessageEvent) => {
-        if(!event.data) {
-          reject(new Error('Error in data', event.data));
-          return;
-        }
-        console.log('WebSocket message received:', event.data);
-        resolve(JSON.parse(event.data));
+        reject(new Error('WebSocket error occurred', error as ErrorOptions));
       }
     });
   }

@@ -1,30 +1,52 @@
 <section>
   <h2>Top Quizy Dzisiaj</h2>
-  @if (quizzes?.length === 0) {
-    <p>Nikt nie stworzył dzisiaj quizów. 🥀🥀🥀🥀🥀🥀🥀🥀🥀🥀🥀</p>
-  }
   <div>
-    @for (quiz of quizzes; track quiz.id_quiz) {
-      <article routerLink="quiz/{{quiz.id_quiz}}">
-        <img ngSrc="{{ quiz.image }}" alt="Zdjęcie do {{ quiz.quiz_name }}" width="40" height="50" priority>
-        <span>{{ quiz.category_name }}</span>
-        <h3>{{ quiz.quiz_name }}</h3>
-      </article>
+    @defer (when quizzes) {
+      @for (quiz of quizzes; track quiz.id_quiz) {
+        <article routerLink="quiz/{{quiz.id_quiz}}">
+          <img ngSrc="{{ quiz.image }}" alt="Zdjęcie do {{ quiz.quiz_name }}" width="40" height="50" priority>
+          <span>{{ quiz.category_name }}</span>
+          <h3>{{ quiz.quiz_name }}</h3>
+        </article>
+      } @empty {
+        <p>Brak quizów z dziś.</p>
+      }
+    } @placeholder (minimum 500ms) {
+      @for (i of [1,2,3]; track i) {
+        <article class="placeholder">
+          <div></div>
+          <span></span>
+          <span></span>
+        </article>
+      }
+    } @error {
+      <p><b>Wystąpił błąd podczas ładowania danych.</b></p>
     }
   </div>
 </section>
 <section>
   <h2>Najpopularniejsze w tym tygodniu</h2>
-  @if (quizzesWeekend?.length === 0) {
-    <p>Nikt nie stworzył quizów w ostatnich 7 dniach. 🥀🥀🥀🥀🥀🥀🥀🥀🥀</p>
-  }
   <div>
-    @for (quiz of quizzesWeekend; track quiz.id_quiz) {
-      <article routerLink="quiz/{{ quiz.id_quiz }}">
-        <img ngSrc="{{ quiz.image }}" alt="Zdjęcie do {{ quiz.quiz_name }}" width="40" height="50" priority>
-        <span>{{ quiz.category_name }}</span>
-        <h3>{{ quiz.quiz_name }}</h3>
-      </article>
+    @defer (when quizzesWeekend) {
+      @for (quiz of quizzesWeekend; track quiz.id_quiz) {
+        <article routerLink="quiz/{{ quiz.id_quiz }}">
+          <img ngSrc="{{ quiz.image }}" alt="Zdjęcie do {{ quiz.quiz_name }}" width="40" height="50" priority>
+          <span>{{ quiz.category_name }}</span>
+          <h3>{{ quiz.quiz_name }}</h3>
+        </article>
+      } @empty {
+        <p>Brak quizów z tego tygodnia.</p>
+      }
+    } @placeholder (minimum 500ms) {
+      @for (i of [1,2,3]; track i) {
+        <article class="placeholder">
+          <div></div>
+          <span></span>
+          <span></span>
+        </article>
+      }
+    } @error {
+      <p><b>Wystąpił błąd podczas ładowania danych.</b></p>
     }
   </div>
 </section>

@@ -1,6 +1,24 @@
-<input placeholder="Czego chcesz się dzisiaj nauczyć..." [(ngModel)]="searchQuery" (focus)="fetchCategories()" (keydown)="searchQuizzes($event)">
-<select [(ngModel)]="selectedCategory" (focus)="fetchCategories();">
-  <option value="wszystkie">Wszystkie</option>
-  <option *ngFor="let category of categories" [value]="category.category_name">{{ category.category_name }}</option>
-</select>
-<button (click)="searchQuizzes($event)"><img ngSrc="assets/search.svg" width="40" height="40" alt="Wyszukaj, Lupa"></button>
+<label for="search">
+  <input placeholder="Czego chcesz się dzisiaj nauczyć..." [(ngModel)]="searchQuery" (keydown)="searchQuizzes($event)" name="search" id="search">
+  <button (click)="openFilter()"><i class="fa-solid fa-filter"></i></button>
+  <button (click)="searchQuizzes($event)"><i class="fa-solid fa-search"></i></button>
+</label>
+@if (showFilter) {
+  <section #filter>
+    <div>
+      <h3>Filtry</h3>
+      <i class="fa-solid fa-xmark close" (click)="closeFilter()"></i>
+      <form name="filter">
+        <fieldset>
+          <legend>Kategorie</legend>
+          @for (category of categories; track category.id_category) {
+            <label>
+              <input type="checkbox" (change)="updateCategory(category.id_category)" name="category_{{ category.id_category }}">
+              {{ category.category_name }}
+            </label>
+          }
+        </fieldset>
+      </form>
+    </div>
+  </section>
+}
