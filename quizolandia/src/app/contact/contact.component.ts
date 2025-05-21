@@ -5,13 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { DatabaseService, ReportType } from '../database.service';
 
 @Component({
-  selector: 'app-contact',
-  standalone: true,
-  imports: [
-    FormsModule
-  ],
-  templateUrl: './contact.component.html',
-  styleUrl: './contact.component.scss'
+    selector: 'app-contact',
+    imports: [
+        FormsModule
+    ],
+    templateUrl: './contact.component.html',
+    styleUrl: './contact.component.scss'
 })
 export class ContactComponent {
   protected report_problem : string = '';

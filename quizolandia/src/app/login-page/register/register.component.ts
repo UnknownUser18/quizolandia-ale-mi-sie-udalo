@@ -4,15 +4,14 @@ import { Router, RouterLink } from '@angular/router';
 import { DatabaseService } from '../../database.service';
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    RouterLink
-  ],
-  templateUrl: './register.component.html',
-  styleUrl: '../login-page.scss'
+    selector: 'app-register',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLink
+    ],
+    templateUrl: './register.component.html',
+    styleUrl: '../login-page.scss'
 })
 export class RegisterComponent {
   protected username : string = '';

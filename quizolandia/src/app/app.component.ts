@@ -4,15 +4,14 @@ import { NavComponent } from './header/nav/nav.component';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    NavComponent,
-    RouterLink,
-    RouterOutlet,
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [
+        NavComponent,
+        RouterLink,
+        RouterOutlet,
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   protected title = 'quizolandia';

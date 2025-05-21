@@ -5,15 +5,14 @@ import { RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    NgForOf,
-    NgOptimizedImage,
-    RouterLink
-  ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+    selector: 'app-home',
+    imports: [
+        NgForOf,
+        NgOptimizedImage,
+        RouterLink
+    ],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent implements AfterViewInit {
   protected quizzes: (Quiz & Category)[] | undefined;

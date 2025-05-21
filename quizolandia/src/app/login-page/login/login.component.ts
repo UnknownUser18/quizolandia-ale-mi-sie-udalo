@@ -4,15 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { DatabaseService } from '../../database.service';
 
 @Component({
-  selector: 'app-login',
-  imports: [
-    FormsModule,
-    RouterLink,
-    RouterOutlet
-  ],
-  templateUrl: './login.component.html',
-  standalone: true,
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    imports: [
+        FormsModule,
+        RouterLink,
+        RouterOutlet
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   protected username: string = '';

@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { DatabaseService, User } from '../../database.service';
 
 @Component({
-  selector: 'app-user-page',
-  standalone: true,
-  imports: [],
-  templateUrl: './user-page.component.html',
-  styleUrl: './user-page.component.scss'
+    selector: 'app-user-page',
+    imports: [],
+    templateUrl: './user-page.component.html',
+    styleUrl: './user-page.component.scss'
 })
 export class UserPageComponent {
   protected result : User & any;

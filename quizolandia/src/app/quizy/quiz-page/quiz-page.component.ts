@@ -7,15 +7,14 @@ import { QuizSolveComponent } from '../quiz-solve/quiz-solve.component';
 import { Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-quiz-page',
-  standalone: true,
-  imports: [
-    CommentsComponent,
-    NgOptimizedImage,
-    QuizSolveComponent
-  ],
-  templateUrl: './quiz-page.component.html',
-  styleUrl: './quiz-page.component.scss'
+    selector: 'app-quiz-page',
+    imports: [
+        CommentsComponent,
+        NgOptimizedImage,
+        QuizSolveComponent
+    ],
+    templateUrl: './quiz-page.component.html',
+    styleUrl: './quiz-page.component.scss'
 })
 export class QuizPageComponent {
   protected quizId: number | undefined;

@@ -4,14 +4,13 @@ import { Title } from '@angular/platform-browser';
 import { Category, DatabaseService, Quiz, User } from '../database.service';
 import { NgOptimizedImage } from '@angular/common';
 @Component({
-  selector: 'app-search-results',
-  standalone: true,
-  imports: [
-    RouterLink,
-    NgOptimizedImage
-  ],
-  templateUrl: './search-results.component.html',
-  styleUrl: './search-results.component.scss'
+    selector: 'app-search-results',
+    imports: [
+        RouterLink,
+        NgOptimizedImage
+    ],
+    templateUrl: './search-results.component.html',
+    styleUrl: './search-results.component.scss'
 })
 export class SearchResultsComponent {
   protected searchQuery : string = '';

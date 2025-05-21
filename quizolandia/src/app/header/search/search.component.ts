@@ -5,13 +5,12 @@ import { Router } from '@angular/router';
 import {take} from 'rxjs';
 
 @Component({
-  selector: 'app-search',
-  standalone: true,
-  imports: [
-    FormsModule,
-  ],
-  templateUrl: './search.component.html',
-  styleUrl: './search.component.scss'
+    selector: 'app-search',
+    imports: [
+        FormsModule,
+    ],
+    templateUrl: './search.component.html',
+    styleUrl: './search.component.scss'
 })
 export class SearchComponent {
   protected showFilter : boolean = false;

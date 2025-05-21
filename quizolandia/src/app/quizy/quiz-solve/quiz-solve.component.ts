@@ -4,11 +4,10 @@ import { filter } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
-  selector: 'app-quiz-solve',
-  standalone: true,
-  imports: [],
-  templateUrl: './quiz-solve.component.html',
-  styleUrl: './quiz-solve.component.scss'
+    selector: 'app-quiz-solve',
+    imports: [],
+    templateUrl: './quiz-solve.component.html',
+    styleUrl: './quiz-solve.component.scss'
 })
 export class QuizSolveComponent {
   quiz : number | undefined;
