@@ -17,6 +17,33 @@ app-root {
   display: flex;
   flex-direction: column;
 }
+app-home {
+  display: block;
+  width: 70%;
+  margin: 0 auto;
+}
+app-quiz-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: index.$border-10;
+  box-shadow: index.$box-shadow;
+}
+app-login, app-register {
+  box-shadow: index.$box-shadow;
+  border: 2px solid var(--color-1);
+  border-radius: 20px;
+  background-color: var(--color-7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  margin: auto;
+}
 input, button, select, textarea {
   font-family: inherit;
   font-size: inherit;
@@ -37,25 +64,8 @@ ul, ol, menu {
   list-style-type: none;
   display: flex;
 }
-app-home {
-  display: block;
-  width: 70%;
-  margin: 0 auto;
-}
 abbr {
   text-decoration: none;
-}
-app-quiz-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 50%;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: index.$border-10;
-  box-shadow: index.$box-shadow;
-
 }
 .fa-solid {
   font-family: 'Font Awesome 6 Free', ui-sans-serif;

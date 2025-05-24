@@ -1,3 +1,4 @@
+@use "../../assets/scss/index";
 h1 {
   font-size: 2.4em;
   color: var(--color-1);
@@ -25,7 +26,7 @@ form {
 }
 input {
   border: 1px solid var(--color-1);
-  transition: outline 75ms ease-in-out;
+  transition: index.transition(outline, index.$short);
   width: 100%;
   padding: 10px;
   border-radius: 8px;
@@ -54,4 +55,15 @@ button {
 a {
   color: var(--color-2);
   margin-bottom: 10px;
+}
+section {
+  @include index.section(25%, 30%);
+  div {
+    transform: translateY(250%);
+  }
+  h3 {
+    text-align: center;
+    font-size: var(--font-28);
+    margin-bottom: 10px;
+  }
 }

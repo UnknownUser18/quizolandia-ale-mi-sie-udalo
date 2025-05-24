@@ -41,42 +41,20 @@ label {
   @include label;
 }
 section {
-  @include index.fixed;
-  @include justify;
-  transition: index.transition(backdrop-filter, index.$xlong);
-  &.done {
-    backdrop-filter: blur(10px);
-  }
+  @include index.section;
   & > div {
-    padding: 20px 15px;
     color: var(--color-7);
-    border-radius: index.$border-32;
-    position: relative;
-    box-shadow: index.$box-shadow;
-    transition: index.transition(transform, index.$xlong);
-    transform: translateY(150%);
-    width: 30%;
-    height: 70%;
     background-color: var(--color-1);
-    &.done {
-      transform: translateY(0);
-    }
-    & > i {
-      transition: index.transition(color, index.$medium);
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: var(--font-32);
-      cursor: pointer;
-      color: var(--color-7);
-      &:hover {
-        color: var(--color-4);
-      }
-    }
     h3 {
       text-align: center;
       font-size: var(--font-28);
       margin-bottom: 10px;
+    }
+    & > i {
+      color: var(--color-7);
+      &:hover {
+        color: rgba(var(--color-7-rgb), 0.8);
+      }
     }
     form {
       &:first-of-type label i {

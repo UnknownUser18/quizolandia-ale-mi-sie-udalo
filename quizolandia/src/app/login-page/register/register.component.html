@@ -2,20 +2,29 @@
 <form>
   <label>
     <span>Nazwa użytkownika: <small>*</small></span>
-    <input type="text" name="username" required [(ngModel)]="username">
+    <input type="text" name="username" required [(ngModel)]="forms.username">
   </label>
   <label>
     <span>Email: <small>*</small></span>
-    <input type="email" name="username" required [(ngModel)]="email">
+    <input type="email" name="username" required [(ngModel)]="forms.email">
   </label>
   <label>
     <span>Hasło:<small>*</small></span>
-    <input type="password" name="password" required [(ngModel)]="password">
+    <input type="password" name="password" required [(ngModel)]="forms.password">
   </label>
   <label>
     <span>Powtórz hasło:<small>*</small></span>
-    <input type="password" name="password" required [(ngModel)]="password_repeat">
+    <input type="password" name="password" required [(ngModel)]="forms.password_repeat">
   </label>
   <button type="submit" (click)="register()">Zarejestruj się</button>
   <a routerLink="../login">Masz konto? Zaloguj się tutaj.</a>
 </form>
+@if (showPanel) {
+  <section #panel>
+    <div>
+      <i class="fa fa-close" (click)="closePanel()"></i>
+      <h3>Błąd</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </section>
+}

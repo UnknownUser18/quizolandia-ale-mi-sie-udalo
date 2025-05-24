@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DatabaseService } from '../../database.service';
+import { TransitionService } from '../../transition.service';
+import {take} from 'rxjs/operators';
 
 @Component({
     selector: 'app-register',
@@ -14,55 +16,73 @@ import { DatabaseService } from '../../database.service';
     styleUrl: '../login-page.scss'
 })
 export class RegisterComponent {
-  protected username : string = '';
-  protected password : string = '';
-  protected email : string = '';
-  protected password_repeat : string = '';
-  constructor(private database : DatabaseService, private router : Router) {}
+  protected forms = {
+    username: '',
+    password: '',
+    email: '',
+    password_repeat: ''
+  };
+  protected showPanel : boolean = false;
+  protected errorMessage: string = '';
+  @ViewChild('panel') panel!: ElementRef;
 
+  constructor(
+    private database : DatabaseService,
+    private router : Router,
+    private transition : TransitionService,
+    private zone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  private async transitionHandler(open : boolean, errorMessage : string) : Promise<void> {
+    this.showPanel = open;
+    this.cdr.detectChanges();
+    this.errorMessage = errorMessage;
+    this.zone.onStable.pipe(take(1)).subscribe(() => {
+      this.transition.animateWithTransitions(open, this.zone, this.panel.nativeElement).then();
+    });
+  }
   protected register() : void {
-    if(this.password !== this.password_repeat) {
-      alert('Passwords do not match');
+    this.forms.username = this.forms.username.trim();
+    this.forms.password = this.forms.password.trim();
+    this.forms.email = this.forms.email.trim();
+    this.forms.password_repeat = this.forms.password_repeat.trim();
+    if(this.forms.username === '' || this.forms.email === '' || this.forms.password === '' || this.forms.password_repeat === '') {
+      this.transitionHandler(true, 'Każde pole musi zostać wypełnione.').then();
       return;
     }
-    if(this.username.length < 3) {
-      alert('Username must be at least 3 characters long');
+    if(this.forms.password.length < 6) {
+      this.transitionHandler(true, 'Hasło musi mieć przynajmniej 7 znaków.').then();
       return;
     }
-    if(this.password.length < 6) {
-      alert('Password must be at least 6 characters long');
+    if(this.forms.password !== this.forms.password_repeat) {
+      this.transitionHandler(true, 'Hasła się nie zgadzają.').then();
       return;
     }
-    if(!this.email.includes('@')) {
-      alert('Email is not valid');
+    if(this.forms.username.length < 3) {
+      this.transitionHandler(true, 'Nazwa użytkownika musi mieć przynajmniej 4 znaki.').then();
       return;
     }
-    if(!this.email.includes('.')) {
-      alert('Email is not valid');
-      return;
-    }
-    if(this.username.includes(' ')) {
-      alert('Username cannot contain spaces');
-      return;
-    }
-    if(this.password.includes(' ')) {
-      alert('Password cannot contain spaces');
-      return;
-    }
-    if(this.email.includes(' ')) {
-      alert('Email cannot contain spaces');
+    if(!this.forms.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      this.transitionHandler(true, 'Email nie jest prawidłowy.').then();
       return;
     }
     let date: Date = new Date();
     let date_sql : string = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-    this.database.send('insertUser', {email : this.email, username : this.username, password : this.password, accDate : date_sql}, 'success').then(() : void => {
+    this.database.send('insertUser', {email : this.forms.email, username : this.forms.username, password : this.forms.password, accDate : date_sql}, 'success').then(() : void => {
       const result = this.database.get_variable('success')![0];
-      if(!!result[result.length - 2].affectedRows) {
-        alert('User registered successfully');
+      if(result.affectedRows) {
         this.router.navigate(['/login']).then();
       } else {
-        alert('User already exists');
+        this.transitionHandler(true, 'Nazwa użytkownika lub email jest już zajęty.').then();
       }
     })
+  }
+
+  protected closePanel() : void {
+    this.transition.animateWithTransitions(false, this.zone, this.panel.nativeElement).then(() => {
+      this.showPanel = false;
+      this.errorMessage = '';
+    });
   }
 }
