@@ -1,4 +1,4 @@
-@forward 'assets/scss/index';
+@use 'assets/scss/index';
 * {
   margin: 0;
   padding: 0;
@@ -41,6 +41,21 @@ app-home {
   display: block;
   width: 70%;
   margin: 0 auto;
+}
+abbr {
+  text-decoration: none;
+}
+app-quiz-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: index.$border-10;
+  box-shadow: index.$box-shadow;
+
 }
 .fa-solid {
   font-family: 'Font Awesome 6 Free', ui-sans-serif;

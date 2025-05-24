@@ -52,16 +52,17 @@ wss.on('connection', (ws) => {
   });
 });
 const queries = {
-    'getCategoryName': 'SELECT category_name FROM category;',
+    'getCategoryName': 'SELECT category_name, id_category FROM category;',
     'getCommentsFromQuiz': 'SELECT username, content, publicTime, avatar, stars FROM comments JOIN user ON comments.id_user = user.id_user WHERE id_quiz = ?;',
-    'getQuiz': `SELECT quiz.name AS quiz_name, category_name, description, creationDate, lastUpdate, user.username, image FROM quiz JOIN user ON user.id_User = quiz.createdBy JOIN category ON quiz.id_category = category.id_category WHERE id_quiz = ?;`,
-    'getQuizzes': `SELECT id_quiz, quiz.name AS quiz_name, description, user.username, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE ? AND  (category_name = ? OR ? = 'wszystkie') AND isPublic = 1  ORDER BY quiz.name;`,
+    'getQuiz': `SELECT quiz.name AS quiz_name, category_name, quiz.description, creationDate, lastUpdate, user.username, image FROM quiz JOIN user ON user.id_User = quiz.createdBy JOIN category ON quiz.id_category = category.id_category WHERE id_quiz = ?;`,
+    'getQuizzes': `SELECT id_quiz, quiz.name AS quiz_name, quiz.description, user.username, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE ? AND  (category_name IN(?) OR ? = 'wszystkie') AND isPublic = 1  ORDER BY quiz.name;`,
     'getQuizzesFromToday': `SELECT id_quiz, quiz.name AS quiz_name, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category WHERE DATE(creationDate) = CURDATE() AND isPublic = 1 ORDER BY quiz.name LIMIT 4;`,
     'getQuizzesFromWeekend': `SELECT id_quiz, quiz.name AS quiz_name, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category WHERE DATE(creationDate) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND isPublic = 1 ORDER BY quiz.name LIMIT 4;`,
     'insertReport': `INSERT INTO report(id_user, type, description) VALUES (?, ?, ?);`,
     'checkLogin': `SELECT EXISTS (SELECT 1 FROM user WHERE (username = ? OR email = ?) AND password = ?) AS userExists;`,
     'insertUser': `INSERT INTO user (email, username, password, accCreation, avatar) VALUES (?, ?, ?, ?, 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.IFpxNz18Dg9hE4nTR_GAgQHaHa%26pid%3DApi&f=1&ipt=cdf1d7913e3aca2929e55cc1be469f595b956c4148e24db30b08360dcc142241'); SET @last_user_id = LAST_INSERT_ID(); INSERT INTO permissions (id_user, name)VALUES (@last_user_id, 'USER'); UPDATE user SET permission = (SELECT id_permissions FROM permissions WHERE name = 'USER' AND id_user = @last_user_id) WHERE id_user = @last_user_id;`,
-    'getUser': `SELECT u.username, u.avatar, u.nationality, u.accCreation, COUNT(q.id_quiz) AS quiz_count FROM user u LEFT JOIN quiz q ON q.createdBy = u.id_User WHERE username = ?;`
+    'getUser': `SELECT u.username, u.avatar, u.nationality, u.accCreation, COUNT(q.id_quiz) AS quiz_count FROM user u LEFT JOIN quiz q ON q.createdBy = u.id_User WHERE username = ?;`,
+    'getLeaderboard': `SELECT u.id_User, u.username, u.nationality, u.avatar, MAX(s.score) AS score, MIN(s.solveTime) AS solveTime FROM user u JOIN solve s ON u.id_User = s.id_user WHERE s.id_quiz = ? AND s.isPublic = 1 GROUP BY u.username, u.nationality, u.avatar ORDER BY score DESC, solveTime LIMIT 10;`
   }
 function executeQuery(ws, value) {
   value = JSON.parse(value);
@@ -71,7 +72,11 @@ function executeQuery(ws, value) {
     query = queries[value.type.toString()];
     switch (value.type) {
       case 'getQuizzes':
-        params = [`%${value.params.quiz_name}%`, value.params.category_name, value.params.category_name];
+        let categories = value.params.category_name;
+        if (typeof categories === 'string') {
+          categories = categories === 'wszystkie' ? [] : categories.split(',')
+        }
+        params = [`%${value.params.quiz_name}%`, categories.length ? categories : ['wszystkie'], value.params.category_name];
         break;
       case 'checkLogin':
         params = [value.params.username, value.params.username, value.params.password];

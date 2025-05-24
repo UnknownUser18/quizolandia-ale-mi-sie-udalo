@@ -17,7 +17,9 @@ export const routes : Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: UserPageComponent },
-  { path: 'quiz/:id/solve', component: QuizSolveComponent}
+  { path: 'quiz/:id/solve', component: QuizSolveComponent },
+  { path: 'user/:id', component: UserPageComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full' } // Redirect to home for any unknown routes
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

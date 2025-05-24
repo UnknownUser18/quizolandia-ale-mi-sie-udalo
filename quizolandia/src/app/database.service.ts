@@ -91,7 +91,6 @@ export interface User {
   accCreation: Date,
   permission: Permission,
 }
-
 /** @interface Quiz
  * @description Obiekt reprezentujący quiz w bazie danych.
  * @property {number} id_quiz - Unikalny identyfikator quizu.
@@ -224,17 +223,19 @@ export interface Solve {
  * @description Obiekt reprezentujący kategorię quizu.
  * @property {number} id_category - Unikalny identyfikator kategorii.
  * @property {string} name - Nazwa kategorii.
+ * @property {string} description - Opis kategorii.
  * @example
  *  const category: Category = {
  *  id_category: 1,
  *  name: 'Programowanie',
+ *  description: 'Kategoria dotycząca programowania i technologii informacyjnych',
  * }
  */
 export interface Category {
   id_category: number,
   category_name: string,
+  description: string,
 }
-
 /** @interface Comment
  * @description Obiekt reprezentujący komentarz do quizu.
  * @property {number} id_comment - Unikalny identyfikator komentarza.
@@ -271,6 +272,7 @@ type variables = {
   user? : (User & any),
   empty? : any,
   success? : any[],
+  leaderboard? : (Solve & User)[],
 }
 type variableName = keyof variables;
 @Injectable({

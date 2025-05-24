@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { Category, DatabaseService, Quiz, User } from '../database.service';
+import { Category, DatabaseService, Quiz } from '../database.service';
 import { NgOptimizedImage } from '@angular/common';
 @Component({
     selector: 'app-search-results',
@@ -14,14 +14,14 @@ import { NgOptimizedImage } from '@angular/common';
 })
 export class SearchResultsComponent {
   protected searchQuery : string = '';
-  protected selectedCategory : string = '';
+  protected selectedCategories : string = '';
   protected result : (Quiz & Category)[] | null = null;
   constructor(private title : Title, private route : ActivatedRoute, private database : DatabaseService) {
+
     this.route.queryParams.subscribe(params => {
       this.searchQuery = params['searchQuery'] || '';
-      this.selectedCategory = params['selectedCategory'] || '';
-      if(this.searchQuery === '' || this.searchQuery === undefined) return;
-      this.database.send('getQuizzes', { quiz_name: this.searchQuery, category_name: this.selectedCategory }, 'quizzesList').then(() : void => {
+      this.selectedCategories = params['selectedCategory'] || '';
+      this.database.send('getQuizzes', { quiz_name: this.searchQuery, category_name: this.selectedCategories }, 'quizzesList').then(() : void => {
         this.result = this.database.get_variable('quizzesList')!;
         this.title.setTitle('Wyszukiwanie quizów - Quizolandia');
       });
