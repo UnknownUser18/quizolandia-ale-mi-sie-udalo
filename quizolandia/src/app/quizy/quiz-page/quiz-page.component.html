@@ -1,6 +1,3 @@
-<!--} @else if(router.url.match('solve')) {-->
-<!--  <app-quiz-solve></app-quiz-solve>-->
-<!--}-->
 @defer (when result) {
   <img ngSrc="{{ result?.image }}" alt="Zdjęcie quizu {{ result?.quiz_name }}" width="1000" height="400" class="banner" priority>
   <article>
@@ -11,7 +8,7 @@
     </div>
     <p>{{ result?.description }}</p>
   </article>
-    <button>Rozpocznij quiz</button>
+    <button [routerLink]="['/quiz', quizId, 'solve']">Rozpocznij quiz</button>
   <hr>
   <div class="leaderboard">
     <section>

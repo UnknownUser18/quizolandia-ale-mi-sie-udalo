@@ -8,6 +8,7 @@ import { RegisterComponent } from './login-page/register/register.component';
 import { UserPageComponent } from './user/user-page/user-page.component';
 import { QuizSolveComponent } from './quizy/quiz-solve/quiz-solve.component';
 import { HomeComponent } from './home/home.component';
+import { QuizResultsComponent } from './quizy/quiz-results/quiz-results.component';
 
 export const routes : Routes = [
   { path: '', component: HomeComponent },
@@ -18,6 +19,7 @@ export const routes : Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: UserPageComponent },
   { path: 'quiz/:id/solve', component: QuizSolveComponent },
+  { path: 'quiz/:id/result', component: QuizResultsComponent },
   { path: 'user/:id', component: UserPageComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' } // Redirect to home for any unknown routes
 ]
@@ -26,3 +28,4 @@ export const routes : Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+

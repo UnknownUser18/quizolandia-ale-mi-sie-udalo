@@ -105,7 +105,6 @@ export interface User {
  * @property {string} quiz_name - Nazwa quizu.
  * @property {string} description - Opis quizu.
  * @property {string} image - Ścieżka URL do obrazu quizu.
- * @property {Questions[]} questions - JSON z pytaniami w quizie.
  * @property {number} createdBy - Identyfikator użytkownika, który stworzył quiz.
  * @property {Date} creationDate - Data utworzenia quizu.
  * @property {Date} lastUpdate - Data ostatniej aktualizacji quizu.
@@ -139,7 +138,6 @@ export interface Quiz {
   quiz_name: string,
   description: string,
   image: string,
-  questions: Questions[],
   createdBy: User["id_User"],
   creationDate: Date,
   lastUpdate: Date,
@@ -147,32 +145,22 @@ export interface Quiz {
   id_category: Category["id_category"],
   difficulty: number,
 }
-
-/** @interface Questions
- * @description Obiekt reprezentujący pytanie w quizie.
- * @property {string} question - Treść pytania.
- * @property {QuestionType} type - Typ pytania.
- * @property {boolean} multipleChoice - Czy pytanie ma wiele odpowiedzi.
- * @property {string[]} answers - Tablica z odpowiedziami.
- * @property {string} correctAnswer - Poprawna odpowiedź, zapisywana jako indeks do tablicy answers.
- * @property {string} hint - Podpowiedź do pytania.
- * @example
- *  const question: Questions = {
- *  question: 'Co to jest programowanie?',
- *  type: QuestionType.THREE_CHOICE,
- *  multipleChoice: true,
- *  answers: ['Programowanie', 'Program', 'Programista'],
- *  correctAnswer: '2,3',
- *  hint: 'Programowanie to proces tworzenia programów komputerowych',
- * }
- */
 export interface Questions {
-  question : string,
+  id_questions: number,
+  id_quiz: Quiz["id_quiz"],
+  index_quiz: number,
+  question: string,
   type: QuestionType,
   multipleChoice: boolean,
-  answers: string[],
-  correctAnswer: string,
+  correctAnswers: string, // Przechowuje indeksy poprawnych odpowiedzi jako string, np. "0,2" dla dwóch poprawnych odpowiedzi
   hint: string,
+}
+export interface Answers {
+  id_answer: number,
+  id_question: Questions["id_questions"],
+  index_answer: number,
+  answer_name: string,
+  isCorrect: boolean,
 }
 
 /** @interface Report
@@ -285,6 +273,8 @@ type variables = {
   empty? : any,
   success? : any[],
   leaderboard? : (Solve & User)[],
+  questions? : (Questions)[],
+  answers? : Answers[],
 }
 
 type variableName = keyof variables;

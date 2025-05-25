@@ -1,1 +1,36 @@
-cwel {{ quiz }}
+<h2>{{ quizName }}</h2>
+<div class="main">
+  <div>
+    <header><span><span>{{ currentQuestionIndex + 1 }}</span> / {{ questions.length }}</span><h3>{{ currentQuestion?.question }}</h3></header>
+    <form>
+    @for (answer of filterAnswersByQuestion(currentQuestion?.id_questions!); track answer.id_answer;) {
+      <label [class.radio]="!currentQuestion?.multipleChoice" [class.checkbox]="currentQuestion?.multipleChoice">
+        <input
+          [type]="currentQuestion?.multipleChoice ? 'checkbox' : 'radio'"
+          [name]="!currentQuestion?.multipleChoice ? `Pytanie ${currentQuestionIndex + 1}` : null"
+          (click)="selectAnswer(answer.index_answer)"
+        >
+        <span></span>
+        {{ answer.answer_name }}
+      </label>
+    }
+    </form>
+    <div>
+      <button type="button" (click)="showHint()"><i class="fa-solid fa-lightbulb"></i></button>
+      <button type="button" (click)="nextQuestion()">Prześlij odpowiedź</button>
+    </div>
+  </div>
+</div>
+@if (showHintPanel) {
+  <section #hintPanel>
+    <div>
+      <i class="fa-solid fa-xmark" (click)="closeHintPanel()"></i>
+      <h3>Podpowiedź</h3>
+      @if (currentQuestion?.hint) {
+        <p>{{ currentQuestion?.hint }}</p>
+      } @else {
+        <p>Brak podpowiedzi do tego pytania.</p>
+      }
+    </div>
+  </section>
+}

@@ -1,4 +1,5 @@
 @use '../../../assets/scss/index';
+@use '../quiz';
 .banner {
   width: 100%;
   height: 400px;
@@ -126,41 +127,7 @@ hr {
       }
     }
   }
-  ol {
-    flex-direction: column;
-    gap: 10px;
-    li {
-      transition: index.transition(background-color, index.$medium);
-      gap: 10px;
-      padding: 5px 10px;
-      display: flex;
-      align-items: center;
-      background-color: var(--color-4);
-      color: var(--color-7);
-      border-radius: 25px;
-      cursor: pointer;
-      &:hover {
-        background-color: rgba(var(--color-6-rgb), 0.8) !important;
-      }
-      &.first {
-        background-color: var(--color-1);
-      }
-      &.second {
-        background-color: var(--color-2);
-      }
-      &.third {
-        background-color: var(--color-3);
-      }
-    }
-    img {
-      border-radius: index.$border-32;
-      width: 50px;
-      height: auto;
-    }
-    i {
-      font-style: normal;
-    }
-  }
+
 }
 section.placeholders {
   width: 100%;

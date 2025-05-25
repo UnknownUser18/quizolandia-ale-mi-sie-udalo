@@ -1,15 +1,16 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import CryptoJS from 'crypto-js';
 import { WebSocketStatus } from './database.service';
 import { BehaviorSubject } from 'rxjs';
+import CryptoJS from 'crypto-js';
+
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
   public readonly key = CryptoJS.enc.Hex.parse("b0040a25cceb0bcff0ce7e63f103091616426f32f54086fdbf5d636ca789baa6");
   public websocketStatus : BehaviorSubject<WebSocketStatus> = new BehaviorSubject<WebSocketStatus>(WebSocketStatus.CLOSED);
-
+  public session : BehaviorSubject<any> = new BehaviorSubject<any>(null);
   constructor(@Inject(PLATFORM_ID) private platformId : Object) {}
 
   private encrypt(value: string): string {
