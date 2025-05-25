@@ -4,7 +4,7 @@
       <textarea name="komentarz" placeholder="Dodaj Komentarz..." rows="2" maxlength="255" [(ngModel)]="form.content"></textarea>
       <div>
         @for (star of [1, 2, 3, 4, 5]; track star; let i = $index) {
-          <i class="fa-solid fa-star" (click)="form.star = i" [class.filled]="i <= form.star"></i>
+          <i class="fa-solid fa-star" (click)="form.star = i + 1" [class.filled]="i <= form.star"></i>
         }
       </div>
     </div>
@@ -23,11 +23,11 @@
           <div>
             <div>
               <h3>{{ comment.username }}</h3>
-              <time><abbr [title]="getTime(comment.publicTime)">{{ getTimeRelative(comment.publicTime) }}</abbr></time>
+              <time><abbr [title]="getTime(comment.publicTime)">{{ getTimeRelativeObservable(comment.publicTime) | async }}</abbr></time>
             </div>
             <div>
               @for (star of [1, 2, 3, 4, 5]; track star; let i = $index) {
-                <i class="fa-solid fa-star" [class.filled]="i + 1 <= comment.stars"></i>
+                <i class="fa-solid fa-star" [class.filled]="i <= comment.stars"></i>
               }
             </div>
           </div>

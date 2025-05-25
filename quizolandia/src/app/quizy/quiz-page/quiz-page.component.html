@@ -1,11 +1,3 @@
-<!--@if (!router.url.match('solve')) {-->
-<!--  <h1>Quiz</h1>-->
-<!--  Nazwa: {{ result?.quiz_name }}-->
-<!--  Opis: {{ result?.description }}-->
-<!--  Kategoria: {{ result?.category_name }}-->
-<!--  <img ngSrc="{{ result?.image }}" alt="Quiz Image" width="1000" height="500">-->
-<!--  <button (click)="startQuiz()">Start Quiz</button>-->
-
 <!--} @else if(router.url.match('solve')) {-->
 <!--  <app-quiz-solve></app-quiz-solve>-->
 <!--}-->
@@ -14,7 +6,7 @@
   <article>
     <h2>{{ result?.quiz_name }}</h2>
     <div>
-      <h3><abbr [title]="'Autor: ' +  result?.username">{{ result?.username }}</abbr></h3>
+      <h3 [routerLink]="['/user',result?.id_User]"><abbr [title]="'Autor: ' +  result?.username">{{ result?.username }}</abbr></h3>
       <i><abbr [title]="'Kategoria: ' + result?.category_name">{{ result?.category_name }}</abbr></i>
     </div>
     <p>{{ result?.description }}</p>
@@ -28,7 +20,7 @@
       @if (leaderboard && leaderboard.length > 0) {
         <ol>
         @for (user of leaderboard; track user.username; let i = $index) {
-          <li [ngClass]="{'first': i === 0, 'second': i === 1, 'third': i === 2}" [routerLink]="['/user', user.id_user]">
+          <li [ngClass]="{'first': i === 0, 'second': i === 1, 'third': i === 2}" [routerLink]="['/user', user.id_User]">
             <img ngSrc="{{ user.avatar }}" alt="{{ user.username }}" width="50" height="50">
             <i>{{ i + 1 }}</i>
             <span>{{ user.username }}</span>
@@ -46,7 +38,7 @@
     </section>
     @if (leaderboard && leaderboard.length > 0) {
       <section>@for (user of leaderboard.slice(0,3); track user.username; let i = $index) {
-        <div [ngClass]="{'first': i === 0, 'second': i === 1, 'third': i === 2}" [routerLink]="['/user', user.id_user]">
+        <div [ngClass]="{'first': i === 0, 'second': i === 1, 'third': i === 2}" [routerLink]="['/user', user.id_User]">
           @if (i === 0) {
             <span><i class="fa-solid fa-crown"></i></span>
           }
