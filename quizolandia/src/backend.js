@@ -53,7 +53,9 @@ wss.on('connection', (ws) => {
 });
 const queries = {
     'getCategoryName': 'SELECT category_name, id_category FROM category;',
-    'getCommentsFromQuiz': 'SELECT username, content, publicTime, avatar, stars FROM comments JOIN user ON comments.id_user = user.id_user WHERE id_quiz = ?;',
+    // 'addComment': `INSERT INTO comments (id_user, id_quiz, content, publicTime, stars) `
+    'getCommentsFromQuiz': 'SELECT comments.id_comment, username, content, publicTime, avatar, stars FROM comments JOIN user ON comments.id_user = user.id_user WHERE id_quiz = ?;',
+    'checkUser': `SELECT EXISTS (SELECT 1 FROM user WHERE (username = ?) AND password = ?) AS userExists;`,
     'getQuiz': `SELECT quiz.name AS quiz_name, category_name, quiz.description, creationDate, lastUpdate, user.username, image FROM quiz JOIN user ON user.id_User = quiz.createdBy JOIN category ON quiz.id_category = category.id_category WHERE id_quiz = ?;`,
     'getQuizzes': `SELECT id_quiz, quiz.name AS quiz_name, quiz.description, user.username, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE ? AND  (category_name IN(?) OR ? = 'wszystkie') AND isPublic = 1  ORDER BY quiz.name;`,
     'getQuizzesFromToday': `SELECT id_quiz, quiz.name AS quiz_name, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category WHERE DATE(creationDate) = CURDATE() AND isPublic = 1 ORDER BY quiz.name LIMIT 4;`,
@@ -80,6 +82,9 @@ function executeQuery(ws, value) {
         break;
       case 'checkLogin':
         params = [value.params.username, value.params.username, value.params.password];
+        break;
+      case 'checkUser':
+        params = [value.params.username, value.params.password];
         break;
       default:
         params = value ? Object.values(value.params) : {} || [];

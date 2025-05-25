@@ -18,7 +18,7 @@ export class NavComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     this.zone.onStable.subscribe(() : void => {
-        this.localStorageUsername = this.localService.get('username');
+      // this.localStorageUsername = this.localService.get('username');
     });
   }
 }

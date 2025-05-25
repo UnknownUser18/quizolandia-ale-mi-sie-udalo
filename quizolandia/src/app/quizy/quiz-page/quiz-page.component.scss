@@ -38,6 +38,10 @@ button {
   &:hover {
     background-color: var(--color-2);
   }
+  &:disabled {
+    background-color: var(--color-4);
+    cursor: not-allowed;
+  }
 }
 hr {
   margin-bottom: 30px;
@@ -195,6 +199,9 @@ section.placeholders {
     width: 100%;
     height: 50px;
   }
+}
+app-comments {
+  width: 100%;
 }
 @keyframes pulse {
   0% {

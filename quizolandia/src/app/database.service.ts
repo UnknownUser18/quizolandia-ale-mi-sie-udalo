@@ -57,6 +57,13 @@ export enum Permission {
   MODERATOR,
   ADMIN
 }
+
+export enum WebSocketStatus {
+  CLOSED,
+  OPEN,
+  ERROR
+}
+
 /** @interface User
  *  @description Obiekt reprezentujący użytkownika w bazie danych.
  *  @property {number} id_User - Unikalny identyfikator użytkownika.
@@ -91,6 +98,7 @@ export interface User {
   accCreation: Date,
   permission: Permission,
 }
+
 /** @interface Quiz
  * @description Obiekt reprezentujący quiz w bazie danych.
  * @property {number} id_quiz - Unikalny identyfikator quizu.
@@ -190,6 +198,7 @@ export interface Report {
   description: string,
   date: Date,
 }
+
 /** @interface Solve
  * @description Obiekt reprezentujący rozwiązanie quizu przez użytkownika.
  * @property {number} id_solve - Unikalny identyfikator rozwiązania.
@@ -219,6 +228,7 @@ export interface Solve {
   whenSolve: Date,
   isPublic: boolean,
 }
+
 /** @interface Category
  * @description Obiekt reprezentujący kategorię quizu.
  * @property {number} id_category - Unikalny identyfikator kategorii.
@@ -236,6 +246,7 @@ export interface Category {
   category_name: string,
   description: string,
 }
+
 /** @interface Comment
  * @description Obiekt reprezentujący komentarz do quizu.
  * @property {number} id_comment - Unikalny identyfikator komentarza.
@@ -259,9 +270,10 @@ export interface Comment {
   id_user: User["id_User"],
   id_quiz: Quiz["id_quiz"],
   content: string,
-  publicTime: Date,
+  publicTime: string,
   stars: number,
 }
+
 type variables = {
   quizzesList? : (Quiz & Category)[],
   quizzesFromToday? : (Quiz & Category)[],
@@ -274,7 +286,10 @@ type variables = {
   success? : any[],
   leaderboard? : (Solve & User)[],
 }
+
 type variableName = keyof variables;
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -282,24 +297,25 @@ export class DatabaseService {
   constructor() {}
   private socket! : WebSocket;
   private variables : Map<variableName, any> = new Map<variableName, any>();
-  public async initWebSocket() : Promise<boolean> {
+  public async initWebSocket() : Promise<WebSocketStatus> {
     return new Promise((resolve, reject) => {
       try {
         this.socket = new WebSocket('ws://localhost:8080');
         this.socket.onopen = () : void => {
           console.log('WebSocket connection established');
-          resolve(true);
+          resolve(WebSocketStatus.OPEN);
         };
         this.socket.onerror = (error : Event) : void => {
           console.error('WebSocket error:', error);
-          reject(new Error('WebSocket error occurred', error as ErrorOptions));
+          reject(WebSocketStatus.ERROR);
         };
         this.socket.onclose = () : void => {
           console.log('WebSocket connection closed');
+          resolve(WebSocketStatus.CLOSED);
         };
       } catch (error) {
         console.error('WebSocket error:', error);
-        reject(new Error('WebSocket error occurred', error as ErrorOptions));
+        reject(WebSocketStatus.ERROR);
       }
     });
   }
@@ -318,7 +334,8 @@ export class DatabaseService {
     return new Promise((resolve, reject) => {
       this.socket.send(JSON.stringify({ type: query_name, params: params }));
       this.socket.onmessage = (event: MessageEvent) => {
-        console.log('WebSocket message received:', event.data);
+        console.log('WebSocket message received:');
+        console.table(JSON.parse(event.data));
         const data = JSON.parse(event.data);
         this.variables.set(variable, data);
         resolve(true);

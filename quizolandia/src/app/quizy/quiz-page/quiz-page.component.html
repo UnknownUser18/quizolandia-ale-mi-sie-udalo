@@ -5,12 +5,12 @@
 <!--  Kategoria: {{ result?.category_name }}-->
 <!--  <img ngSrc="{{ result?.image }}" alt="Quiz Image" width="1000" height="500">-->
 <!--  <button (click)="startQuiz()">Start Quiz</button>-->
-<!--  <app-comments [quizId]="quizId"></app-comments>-->
+
 <!--} @else if(router.url.match('solve')) {-->
 <!--  <app-quiz-solve></app-quiz-solve>-->
 <!--}-->
 @defer (when result) {
-  <img ngSrc="{{ result?.image }}" alt="Zdjęcie quizu {{ result?.quiz_name }}" width="1000" height="400" class="banner">
+  <img ngSrc="{{ result?.image }}" alt="Zdjęcie quizu {{ result?.quiz_name }}" width="1000" height="400" class="banner" priority>
   <article>
     <h2>{{ result?.quiz_name }}</h2>
     <div>
@@ -19,7 +19,7 @@
     </div>
     <p>{{ result?.description }}</p>
   </article>
-  <button>Rozpocznij quiz</button>
+    <button>Rozpocznij quiz</button>
   <hr>
   <div class="leaderboard">
     <section>
@@ -33,6 +33,7 @@
             <i>{{ i + 1 }}</i>
             <span>{{ user.username }}</span>
             <b>{{ user.score }} pkt.</b>
+            <b>{{ getTime(user.solveTime) }}</b>
           </li>
         }
         </ol>
@@ -56,6 +57,7 @@
       </section>
     }
     </div>
+  <app-comments [quizId]="quizId"></app-comments>
 } @placeholder (minimum 500ms) {
   <section class="placeholders">
     <span class="banner"></span>

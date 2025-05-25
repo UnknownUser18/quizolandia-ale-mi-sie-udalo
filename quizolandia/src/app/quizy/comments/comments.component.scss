@@ -1,177 +1,86 @@
-.comment-container {
+@use '../../../assets/scss/index';
+section {
   display: flex;
-  align-items: flex-start;
-  position: relative;
-  margin-bottom: 70px;
-
-  img {
-    width: 3em;
-    height: 3em;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-
-  #komentarz {
-    position: relative;
-    height: auto;
-    min-height: 1.5em;
-    width: 100%;
-    resize: none;
-    overflow: hidden;
-    background-color: white;
-    color: var(--color-text);
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    box-sizing: border-box;
-    outline: none;
-    border-bottom: 2px solid var(--color-border);
-    font-family: "Roboto", sans-serif;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      height: 4px;
-      width: 100%;
-      background-color: var(--color-primary);
-      transform: scaleX(0);
-      transform-origin: center;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    &:focus::after {
-      transform: scaleX(1);
-    }
-  }
-
-  .buttons {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 5px;
-    justify-content: center;
-
-    input[type="submit"],
-    input[type="reset"] {
-      background-color: var(--button-background);
-      color: var(--button-text);
-      border: none;
-      padding: 10px;
-      margin-right: 5px;
-      border-radius: 20px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &:hover {
-        background-color: var(--color-secondary);
-      }
-    }
-
-    input[type="reset"] {
-      background-color: white;
-      color: var(--color-text);
-
-      &:hover {
-        background-color: var(--color-border);
-      }
-    }
+  gap: 25px;
+  flex-direction: column;
+}
+i {
+  color: rgba(var(--color-6-rgb), 0.4);
+  &.filled {
+    color: var(--color-1);
   }
 }
-
-.rate {
-  float: left;
-  height: 46px;
-  padding: 0 10px;
-
-  &:not(:checked) > input {
-    position: absolute;
-    top: -9999px;
-  }
-
-  &:not(:checked) > label {
-    float: right;
-    width: 1em;
-    overflow: hidden;
-    white-space: nowrap;
-    cursor: pointer;
-    font-size: 30px;
-    color: #ccc;
-
-    &:before {
-      content: '★ ';
-    }
-  }
-
-  > input:checked ~ label {
-    color: var(--color-primary);
-  }
-
-  &:not(:checked) > label:hover,
-  &:not(:checked) > label:hover ~ label {
-    color: var(--color-secondary);
-  }
-
-  > input:checked + label:hover,
-  > input:checked + label:hover ~ label,
-  > input:checked ~ label:hover,
-  > input:checked ~ label:hover ~ label,
-  > label:hover ~ input:checked ~ label {
-    color: var(--color-background);
-  }
-}
-
-.example-comment {
+form {
+  margin: 20px 0;
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 70px;
-
-  img {
-    width: 3em;
-    height: 3em;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-
-  .comment-content {
+  flex-direction: column;
+  & > div:first-of-type {
     display: flex;
-    flex-direction: column;
-
-    p {
-      font-family: "Roboto", sans-serif;
-      margin: 5px 0 0 0;
+    gap: 25px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  button {
+    align-self: flex-start;
+    width: fit-content;
+    background-color: var(--color-1);
+    color: var(--color-7);
+    padding: 10px 20px;
+    margin: 10px 0;
+    border-radius: index.$border-10;
+    transition: index.transition(background-color, index.$medium);
+    &:hover {
+      background-color: var(--color-2);
     }
-
-    .username {
-      font-weight: bold;
+  }
+  textarea {
+    border-bottom: rgba(var(--color-6-rgb), 0.5) solid 1px;
+    resize: none;
+    width: 80%;
+    height: fit-content;
+  }
+  i {
+    font-size: 1.5em;
+    transition: index.transition(color, index.$medium);
+    cursor: pointer;
+    &:hover {
+      color: var(--color-1);
     }
-
-    .timestamp {
-      color: gray;
-      margin-left: 10px;
-    }
-
-    .comment-rate {
+  }
+}
+article {
+  border: 1px solid rgba(var(--color-6-rgb), 0.3);
+  padding: 10px;
+  border-radius: index.$border-20;
+  background-color: var(--color-7);
+  box-shadow: index.$box-shadow;
+  h3 {
+    color: var(--color-1);
+  }
+  time {
+    font-weight: 300;
+    color: var(--color-2);
+  }
+  & > div {
+    &:first-of-type {
       display: flex;
-
-      .filled-star {
-        font-size: 30px;
-        color: var(--color-primary);
-      }
-
-      .empty-star {
-        font-size: 30px;
-        color: #ccc;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      & > div > div {
+        display: flex;
+        align-items: center;
+        &:first-of-type {
+          gap: 10px;
+          margin-bottom: 5px;
+        }
+        &:last-of-type {
+          gap: 3px;
+        }
       }
     }
-
-    .delete-comment {
-      display: none;
-    }
+  }
+  img {
+    border-radius: 50%;
   }
 }
