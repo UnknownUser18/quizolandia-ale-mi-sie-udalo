@@ -53,6 +53,8 @@ wss.on('connection', (ws) => {
 });
 const queries = {
     'getCategoryName': 'SELECT category_name, id_category FROM category;',
+    'getCategories': 'SELECT category_name, description FROM category;',
+    'getCategoryCount': `SELECT category_name, COUNT(*) AS count FROM category JOIN quiz ON quiz.id_category = category.id_category GROUP BY category_name;`,
     'addComment': `INSERT INTO comments (id_user, id_quiz, content, publicTime, stars) VALUES (?, ?, ?, ?, ?);`,
     'getUserID': `SELECT id_user FROM user WHERE username = ? AND password = ?;`,
     'updateLastLogin': `UPDATE user SET lastlogin = ? WHERE username = ? AND password = ?;`,

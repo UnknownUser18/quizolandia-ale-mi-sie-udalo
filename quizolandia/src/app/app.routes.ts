@@ -11,13 +11,14 @@ import { HomeComponent } from './home/home.component';
 import { QuizResultsComponent } from './quizy/quiz-results/quiz-results.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { RankingComponent } from './ranking/ranking.component';
-
+import { DziedzinyComponent } from './dziedziny/dziedziny.component';
 export const routes : Routes = [
   { path: '', component: HomeComponent },
   { path: 'search-results', component: SearchResultsComponent },
   { path: 'quiz/:id', component: QuizPageComponent },
   { path: 'contact', component: ContactComponent},
   { path: 'login', component: LoginComponent },
+  { path: 'dziedziny', component: DziedzinyComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'leaderboard', component: RankingComponent },
   { path: 'profile', component: UserPageComponent },

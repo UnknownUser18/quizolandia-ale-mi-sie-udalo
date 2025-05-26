@@ -1,0 +1,14 @@
+<h2>Wybierz kategorię</h2>
+<div>
+  @for (category of categories; track category.category_name) {
+    <article [routerLink]="['/search-results']" [queryParams]="{ selectedCategory: category.category_name }">
+      <h3>{{ category.category_name }}</h3>
+      <p>{{ category.description }}</p>
+      <span>{{ findCount(category.category_name) || 0 }} quizów</span>
+    </article>
+  }
+  <article class="add" [routerLink]="['/contact']">
+    <h3>Dodaj kategorię</h3>
+    <i class="fa-solid fa-plus"></i>
+  </article>
+</div>

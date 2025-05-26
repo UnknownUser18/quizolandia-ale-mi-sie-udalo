@@ -73,7 +73,7 @@ app-user-edit {
   background-color: rgba(var(--color-4-rgb), 0.2);
   border-radius: index.$border-32;
 }
-app-ranking {
+app-ranking, app-dziedziny {
   display: block;
   width: 90%;
   margin: auto;
@@ -86,6 +86,15 @@ input, button, select, textarea {
   background-color: inherit;
   border: none;
   outline: none;
+}
+app-contact {
+  border-radius: 20px;
+  width: 30%;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: index.$box-shadow;
 }
 button {
   cursor: pointer;
