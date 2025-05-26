@@ -10,6 +10,7 @@ import { QuizSolveComponent } from './quizy/quiz-solve/quiz-solve.component';
 import { HomeComponent } from './home/home.component';
 import { QuizResultsComponent } from './quizy/quiz-results/quiz-results.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { RankingComponent } from './ranking/ranking.component';
 
 export const routes : Routes = [
   { path: '', component: HomeComponent },
@@ -18,6 +19,7 @@ export const routes : Routes = [
   { path: 'contact', component: ContactComponent},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'leaderboard', component: RankingComponent },
   { path: 'profile', component: UserPageComponent },
   { path: 'profile/edit', component: UserEditComponent },
   { path: 'user/:id', component: UserPageComponent },

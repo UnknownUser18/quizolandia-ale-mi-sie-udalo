@@ -79,6 +79,8 @@ const queries = {
     'getCountUserSolves': `SELECT COUNT(*) AS solve_count FROM solve WHERE id_user = ?;`,
     'getUserData': `SELECT username, avatar, nationality, lastlogin, acccreation FROM user WHERE id_user = ?;`,
     'getLastSolves': `SELECT s.id_solve, q.name AS quiz_name, q.id_quiz, s.score, s.solveTime, s.isPublic FROM solve s JOIN quiz q ON s.id_quiz = q.id_quiz WHERE s.id_user = ? ORDER BY s.solveTime DESC LIMIT 5;`,
+    'getTopUsers': `SELECT u.username, u.avatar, u.id_User, SUM(score) AS score, u.nationality FROM solve JOIN user u ON u.id_User = solve.id_user WHERE isPublic = 1 GROUP BY u.username ORDER BY score DESC;`,
+    'getCountSolved': `SELECT u.username, COUNT(*) AS quiz_count FROM solve JOIN user u ON u.id_User = solve.id_user WHERE isPublic = 1 GROUP BY u.username ORDER BY quiz_count DESC;`
   }
 function executeQuery(ws, value) {
   value = JSON.parse(value);

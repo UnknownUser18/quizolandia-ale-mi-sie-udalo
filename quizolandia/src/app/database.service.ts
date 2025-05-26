@@ -73,7 +73,7 @@ export enum WebSocketStatus {
  *  @property {string} password - Hasło użytkownika.
  *  @property {string} avatar - Ścieżka URL do awatara użytkownika.
  *  @property {Date} lastlogin - Data ostatniego logowania użytkownika.
- *  @property {Date} accCreation - Data utworzenia konta użytkownika.
+ *  @property {Date} acccreation - Data utworzenia konta użytkownika.
  *  @property {Permission} permission - Uprawnienia użytkownika.
  *  @example
  *  const user: User = {
