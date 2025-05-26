@@ -49,7 +49,11 @@ export class LoginComponent {
       if (result) {
         this.localStorage.set('username', this.username);
         this.localStorage.set('password', this.password);
-        this.router.navigate(['']).then();
+        const date = new Date();
+        const date_sql = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+        this.database.send('updateLastLogin', { lastlogin: date_sql, username: this.username, password: this.password }, 'empty').then(() : void => {
+          this.router.navigate(['']).then();
+        });
       } else {
         this.transitionHandler(true, 'Nieprawidłowa nazwa użytkownika lub hasło.').then();
       }

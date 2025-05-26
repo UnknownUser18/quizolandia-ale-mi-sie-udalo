@@ -4,7 +4,7 @@
       <textarea name="komentarz" placeholder="Dodaj Komentarz..." rows="2" maxlength="255" [(ngModel)]="form.content"></textarea>
       <div>
         @for (star of [1, 2, 3, 4, 5]; track star; let i = $index) {
-          <i class="fa-solid fa-star" (click)="form.star = i + 1" [class.filled]="i <= form.star"></i>
+          <i class="fa-solid fa-star" (click)="form.star = i + 1" [class.filled]="i < form.star"></i>
         }
       </div>
     </div>
@@ -27,48 +27,16 @@
             </div>
             <div>
               @for (star of [1, 2, 3, 4, 5]; track star; let i = $index) {
-                <i class="fa-solid fa-star" [class.filled]="i <= comment.stars"></i>
+                <i class="fa-solid fa-star" [class.filled]="i < comment.stars"></i>
               }
             </div>
           </div>
         </div>
         <p>{{ comment.content }}</p>
-
+        @if (isLoggedIn && comment.username === localStorage.get('username')) {
+          <button (click)="deleteComment(comment.id_comment)">Usuń</button>
+        }
       </article>
     }
   }
 </section>
-<script>
-  document.getElementById('komentarz').addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = (this.scrollHeight) + 'px';
-    document.querySelector('.buttons').style.display = 'flex';
-  });
-
-  document.getElementById('komentarz').addEventListener('focus', function() {
-    document.querySelector('.buttons').style.display = 'flex';
-  });
-
-  document.querySelector('input[type="reset"]').addEventListener('click', function() {
-    document.querySelector('.buttons').style.display = 'none';
-  });
-  document.addEventListener('DOMContentLoaded', function() {
-    const textarea = document.getElementById('komentarz');
-    const charCounter = document.createElement('div');
-    charCounter.classList.add('char-counter');
-    charCounter.textContent = '0/255';
-    textarea.parentNode.appendChild(charCounter);
-
-    textarea.addEventListener('input', function() {
-      const currentLength = textarea.value.length;
-      charCounter.textContent = `${currentLength}/255`;
-
-      if (currentLength >= 255) {
-        charCounter.style.color = 'var(--color-secondary)';
-        textarea.value = textarea.value.substring(0, 255);
-      } else {
-        charCounter.style.color = 'var(--color-text)';
-      }
-    });
-  });
-</script>

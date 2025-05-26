@@ -1,4 +1,50 @@
-@if (result) {
-  {{ result.username }}
-  Stworzone quizy : {{ result.quiz_count }}
+@defer (when user) {
+  <div>
+    <img ngSrc="{{ user?.avatar }}" alt="Zdjęcia użytkownika {{ user?.username }}" width="60" height="60">
+    <div>
+      <h2>{{ user?.username }}</h2>
+      <div>
+        <p>Ostatnie logowanie: <strong>{{ user?.lastlogin ? formatDate(user!.lastlogin) : 'Użytkownik jeszcze się nie logował.' }}</strong></p>
+        <p>Rejestracja: <strong>{{ formatDate(user!.acccreation) }}</strong></p>
+      </div>
+      @if (userData.isOwn) {
+        <button [routerLink]="['/profile/edit']">Edytuj dane</button>
+      }
+    </div>
+  </div>
+  <div>
+    <article>
+      <h3>Zakończone quizy</h3>
+      <i class="fa-solid fa-check"></i>
+      <p><strong>{{ userData.countSolves }}</strong></p>
+    </article>
+    <article>
+      <h3>Stworzone quizy</h3>
+      <i class="fa-solid fa-plus"></i>
+      <p><strong>{{ userData.countCreatedQuizzes }}</strong></p>
+    </article>
+    <article>
+      <h3>Pierwsze miejsca</h3>
+      <i class="fa-solid fa-trophy"></i>
+      <p><strong>{{ userData.topOne }}</strong></p>
+    </article>
+  </div>
+  <div>
+    <h3>Ostatnie quizy ukończone</h3>
+    <div>
+      @for (quiz of userData.lastSolves; track quiz.id_solve) {
+        @if (quiz.isPublic || userData.isOwn) {
+          <article>
+            <h4 [routerLink]="['/quiz', quiz.id_quiz]">{{ quiz.quiz_name }}</h4>
+            <p>Ukończono z wynikiem <strong>{{ quiz.score }} pkt.</strong> w czasie <strong>{{ formatTime(quiz.solveTime) }}</strong>.</p>
+            @if (!quiz.isPublic && userData.isOwn) {
+              <i>Te rozwiązanie nie jest widoczne dla innych oprócz Ciebie.</i>
+            }
+          </article>
+        }
+      } @empty {
+        <p class="info">Brak ukończonych quizów.</p>
+      }
+    </div>
+  </div>
 }

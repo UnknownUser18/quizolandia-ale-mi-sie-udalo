@@ -55,6 +55,7 @@ form {
   }
 }
 article {
+  position: relative;
   border: 1px solid rgba(var(--color-6-rgb), 0.3);
   padding: 10px;
   border-radius: index.$border-20;
@@ -88,5 +89,18 @@ article {
   }
   img {
     border-radius: 50%;
+  }
+  button {
+    transition: index.transition(background-color, index.$medium);
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background-color: var(--color-1);
+    color: var(--color-7);
+    padding: 5px 10px;
+    border-radius: index.$border-10;
+    &:hover {
+      background-color: var(--color-2);
+    }
   }
 }

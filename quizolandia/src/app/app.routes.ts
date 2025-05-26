@@ -9,6 +9,7 @@ import { UserPageComponent } from './user/user-page/user-page.component';
 import { QuizSolveComponent } from './quizy/quiz-solve/quiz-solve.component';
 import { HomeComponent } from './home/home.component';
 import { QuizResultsComponent } from './quizy/quiz-results/quiz-results.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
 
 export const routes : Routes = [
   { path: '', component: HomeComponent },
@@ -18,6 +19,8 @@ export const routes : Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: UserPageComponent },
+  { path: 'profile/edit', component: UserEditComponent },
+  { path: 'user/:id', component: UserPageComponent },
   { path: 'quiz/:id/solve', component: QuizSolveComponent },
   { path: 'quiz/:id/result', component: QuizResultsComponent },
   { path: 'user/:id', component: UserPageComponent },

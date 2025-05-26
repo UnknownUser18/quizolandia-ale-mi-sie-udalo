@@ -53,6 +53,26 @@ app-quiz-solve, app-quiz-results {
   width: 50%;
   margin: auto;
 }
+app-user-page {
+  padding: 40px;
+  width: 50%;
+  height: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(var(--color-4-rgb), 0.2);
+  border-radius: index.$border-32;
+}
+app-user-edit {
+  padding: 20px;
+  width: 30%;
+  height: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(var(--color-4-rgb), 0.2);
+  border-radius: index.$border-32;
+}
 input, button, select, textarea {
   font-family: inherit;
   font-size: inherit;

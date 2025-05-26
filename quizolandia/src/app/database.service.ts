@@ -1,5 +1,6 @@
 import { Injectable
 } from '@angular/core';
+import {LocalStorageService} from './local-storage.service';
 
 /** @enum QuestionType
  * @description Typ pytania w quizie.
@@ -71,7 +72,7 @@ export enum WebSocketStatus {
  *  @property {string} email - Adres e-mail użytkownika.
  *  @property {string} password - Hasło użytkownika.
  *  @property {string} avatar - Ścieżka URL do awatara użytkownika.
- *  @property {Date} lastLogin - Data ostatniego logowania użytkownika.
+ *  @property {Date} lastlogin - Data ostatniego logowania użytkownika.
  *  @property {Date} accCreation - Data utworzenia konta użytkownika.
  *  @property {Permission} permission - Uprawnienia użytkownika.
  *  @example
@@ -82,8 +83,8 @@ export enum WebSocketStatus {
  *  password: 'haslo123',
  *  avatar: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpreview.redd.it%2Fliteralnie-cibab-v0-jzrcwke4bslc1.jpeg%3Fauto%3Dwebp%26s%3De8a5241bcaa74a46978a78451db6651d6ce21806&f=1&nofb=1&ipt=1bbfa37bdbf81dd2123db5b6032c7377fe000a8036e703bd0019c8bb6b116fb1&ipo=images',
  *  nationality: 'Poland',
- *  lastLogin: new Date('2023-10-01'),
- *  accCreation: new Date('2023-01-01'),
+ *  lastlogin: '2023-01-01T12:00:00Z',
+ *  acccreation: '2023-01-01T12:00:00Z',
  *  permission: Permission.USER,
  *  }
  */
@@ -94,8 +95,8 @@ export interface User {
   password: string,
   avatar: string,
   nationality: string,
-  lastLogin: Date,
-  accCreation: Date,
+  lastlogin: string,
+  acccreation: string,
   permission: Permission,
 }
 
@@ -279,12 +280,18 @@ type variables = {
 
 type variableName = keyof variables;
 
+export async function checkUser(d : DatabaseService) : Promise<boolean> {
+  if(!(d.localStorage.get('username') || d.localStorage.get('password'))) return false;
+  await d.send('checkUser', { username: d.localStorage.get('username'), password: d.localStorage.get('password') }, 'success');
+  return d.get_variable('success')![0].userExists === 1;
+}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
-  constructor() {}
+  constructor(public localStorage : LocalStorageService) {}
   private socket! : WebSocket;
   private variables : Map<variableName, any> = new Map<variableName, any>();
   public async initWebSocket() : Promise<WebSocketStatus> {

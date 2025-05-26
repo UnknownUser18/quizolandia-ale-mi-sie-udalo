@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Comment, DatabaseService, User, WebSocketStatus } from '../../database.service';
+import { Comment, DatabaseService, User, WebSocketStatus, checkUser } from '../../database.service';
 import { LocalStorageService } from '../../local-storage.service';
 import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -25,7 +25,7 @@ export class CommentsComponent implements OnChanges {
   }
   @Input() quizId!: number | undefined;
 
-  constructor(private database: DatabaseService, private localStorage : LocalStorageService, private cdr : ChangeDetectorRef) {}
+  constructor(private database: DatabaseService, protected localStorage : LocalStorageService, private cdr : ChangeDetectorRef) {}
 
 
   protected getTime(date : string) : string {
@@ -71,38 +71,44 @@ export class CommentsComponent implements OnChanges {
   }
 
   protected async addComment() {
-    if(!(this.localStorage.get('username') || this.localStorage.get('password'))) return;
-    await this.database.send('checkUser', { username: this.localStorage.get('username'), password: this.localStorage.get('password') }, 'success');
-    if(this.database.get_variable('success')![0].userExists !== 1) return;
-    this.form.content = this.form.content.trim().slice(0, 254) || '';
-    await this.database.send('getUserID', { username: this.localStorage.get('username'), password: this.localStorage.get('password') }, 'user');
-    const user : number = this.database.get_variable('user')[0].id_user;
-    const date = new Date();
-    const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-    await this.database.send('addComment', { id_quiz: this.quizId, id_user: user, content: this.form.content, publicTime: dateString, stars: this.form.star }, 'success');
-    await this.database.send('getCommentsFromQuiz', { id_quiz: this.quizId }, 'commentsList');
-    this.comments = this.database.get_variable('commentsList')!;
-    this.form.content = '';
-    this.form.star = 5;
+    checkUser(this.database).then(async (r) : Promise<void> => {
+      if (!r) return;
+      this.form.content = this.form.content.trim().slice(0, 254) || '';
+      if (this.form.content.length === 0) return;
+      await this.database.send('getUserID', { username: this.localStorage.get('username'), password: this.localStorage.get('password') }, 'user');
+      const user : number = this.database.get_variable('user')[0].id_user;
+      const date = new Date();
+      const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+      await this.database.send('addComment', { id_quiz: this.quizId, id_user: user, content: this.form.content, publicTime: dateString, stars: this.form.star }, 'success');
+      await this.database.send('getCommentsFromQuiz', { id_quiz: this.quizId }, 'commentsList');
+      this.comments = this.database.get_variable('commentsList')!;
+      this.form.content = '';
+      this.form.star = 5;
+    });
   }
 
+  protected deleteComment(id_comment : number) : void {
+    checkUser(this.database).then((r) : void => {
+      if (!r) return;
+      this.database.send('deleteComment', { id_comment: id_comment }, 'success').then(() : void => {
+        this.database.send('getCommentsFromQuiz', {id_quiz: this.quizId}, 'commentsList').then(() => {
+          this.comments = this.database.get_variable('commentsList')!;
+        });
+      });
+    })
+  }
   public ngOnChanges(changes: SimpleChanges) {
     if(changes['quizId'] && changes['quizId'].currentValue !== undefined) {
       this.localStorage.websocketStatus.subscribe((status) => {
         if (status !== WebSocketStatus.OPEN) return;
         this.database.send('getCommentsFromQuiz', { id_quiz: changes['quizId'].currentValue }, 'commentsList').then(() : void => {
           this.comments = this.database.get_variable('commentsList')!;
-          if(!(this.localStorage.get('username') || this.localStorage.get('password'))) {
-            this.isLoggedIn = false;
-            return;
-          }
-          this.database.send('checkUser', { username: this.localStorage.get('username'), password: this.localStorage.get('password') }, 'success').then(() : void => {
-            this.isLoggedIn = this.database.get_variable('success')![0].userExists === 1;
+          checkUser(this.database).then((r) : void => {
+            this.isLoggedIn = r;
             this.cdr.detectChanges();
           });
         });
       })
     }
   }
-
 }

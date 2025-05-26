@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { LocalStorageService } from '../../local-storage.service';
-import { Answers, DatabaseService, Questions, Solve, User, WebSocketStatus } from '../../database.service';
+import {Answers, checkUser, DatabaseService, Questions, Solve, User, WebSocketStatus} from '../../database.service';
 import { Router, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { TransitionService } from '../../transition.service';
@@ -62,11 +62,8 @@ export class QuizResultsComponent {
         this.database.send('getQuizName', { id_quiz : this.quizId }, 'empty').then(() => {
           this.quizName = this.database.get_variable('empty')[0].quiz_name;
           this.title.setTitle(`Wyniki quizu - ${this.quizName}`);
-          if (!(this.localStorage.get('username')) && this.localStorage.get('password')) {
-            this.isLoggedIn.next(false);
-          }
-          this.database.send('checkUser', {username: this.localStorage.get('username'), password: this.localStorage.get('password')}, 'success').then(() => {
-            this.isLoggedIn.next(this.database.get_variable('success')![0].userExists === 1);
+          checkUser(this.database).then((r) => {
+            this.isLoggedIn.next(r);
             this.cdr.detectChanges();
           });
         });

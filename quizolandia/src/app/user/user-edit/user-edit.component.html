@@ -1,0 +1,53 @@
+@defer (when forms.username) {
+  <h2>Edycja profilu</h2>
+  <form name="edycja">
+    <label>
+      <span>Avatar:</span>
+      <img ngSrc="{{forms.avatar }}" alt="Avatar" width="100" height="100" (error)="showWarning = true" (load)="showWarning = false">
+      @if (showWarning) {
+        <p class="warning">Nie udało się załadować avatara. Sprawdź link.</p>
+      }
+      <input type="text" name="avatar" [(ngModel)]="forms.avatar" placeholder="Link do zdjęcia avataru..." required>
+    </label>
+    <label>
+      <span>Nazwa użytkownika:</span>
+      <input type="text" name="username" [(ngModel)]="forms.username" placeholder="Nazwa użytkownika..." required>
+    </label>
+    <label>
+      <span>Email:</span>
+      <input type="email" name="email" [(ngModel)]="forms.email" placeholder="Adres e-mail..." required>
+    </label>
+    <label>
+      <span>Hasło:</span>
+      <input type="password" name="password" [(ngModel)]="forms.password" placeholder="Hasło..." required>
+    </label>
+    <label>
+      <span>Powtórz hasło:</span>
+      <input type="password" name="repeatPassword" [(ngModel)]="forms.password_repeat" placeholder="Potwierdź hasło..." required>
+    </label>
+    <label>
+      <span>Narodowość:</span>
+      <select name="nationality" [(ngModel)]="forms.nationality">
+        <option [value]="null" disabled selected>Wybierz narodowość...</option>
+        @for (country of nationalities; track country) {
+          <option [value]="country">{{ country }}</option>
+        }
+      </select>
+    </label>
+    <button type="submit" (click)="saveProfile()">Zapisz zmiany</button>
+  </form>
+}
+@if (showPanel) {
+  <section #panel>
+    <div>
+      <i class="fa-solid fa-xmark" (click)="closePanel()"></i>
+      @if (forms.password_repeat !== forms.password) {
+        <h3>Hasła się nie zgadzają.</h3>
+        <p>Upewnij się, że oba pola hasła są takie same.</p>
+      } @else {
+        <h3>Pomyślnie zaktualizowano profil!</h3>
+        <p>Możesz zamknąć to okno.</p>
+      }
+    </div>
+  </section>
+}

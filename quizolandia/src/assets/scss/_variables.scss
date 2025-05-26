@@ -3,6 +3,7 @@
   --color-2: #1F61A2;
   --color-3: #39A6D5;
   --color-4: #518BC0;
+  --color-4-rgb: 81, 139, 192;
   --color-5: #FAFAFA;
   --color-6: #212121;
   --color-6-rgb: 33, 33, 33;
@@ -20,6 +21,7 @@
   --font-16: 16px;
 }
 $box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.3);
+$light-box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.1);
 $border-32: 32px;
 $border-20: 20px;
 $border-10: 10px;
