@@ -93,6 +93,8 @@ section {
   }
 }
 .question {
+  height: 100%;
+  overflow: auto;
   width: 20%;
   flex-direction: row;
   align-items: center;

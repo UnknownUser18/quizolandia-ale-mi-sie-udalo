@@ -1,7 +1,7 @@
 const mysql2 = require('mysql2');
 const ws = require('ws');
 const wss = new ws.WebSocketServer({
-  port: 8088,
+  port: 8080,
   perMessageDeflate: {
     zlibDeflateOptions: {
       // See zlib defaults.
@@ -53,6 +53,9 @@ wss.on('connection', (ws) => {
 });
 const queries = {
     'getCategoryName': 'SELECT category_name, id_category FROM category;',
+    'insertQuiz': `INSERT INTO quiz (name, description, id_category, createdBy, image, isPublic, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+    'insertQuestions': `INSERT INTO questions (index_quiz, question, type, multipleChoice, correctAnswers, hint, id_quiz) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+    'insertAnswers': `INSERT INTO answers (id_question, index_answer, answer_name) VALUES (?, ?, ?);`,
     'getCategories': 'SELECT category_name, description FROM category;',
     'getCategoryCount': `SELECT category_name, COUNT(*) AS count FROM category JOIN quiz ON quiz.id_category = category.id_category GROUP BY category_name;`,
     'addComment': `INSERT INTO comments (id_user, id_quiz, content, publicTime, stars) VALUES (?, ?, ?, ?, ?);`,

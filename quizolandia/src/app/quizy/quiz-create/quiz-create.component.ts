@@ -15,7 +15,7 @@ import { TransitionService } from '../../transition.service';
 })
 export class QuizCreateComponent {
   protected categories: Category[] = [];
-  protected questions: any[] = [];
+  protected indexQuiz : number | null = null;
   protected showQuizPage : boolean = false;
   protected readonly QuestionType = QuestionType;
   protected form = {
@@ -23,6 +23,7 @@ export class QuizCreateComponent {
     description: '',
     image: '',
     category: '',
+    difficulty: 1, // 1 - easy, 2 - medium, 3 - hard
     question: [] as {
       index_quiz: number;
       type: QuestionType;
@@ -33,7 +34,13 @@ export class QuizCreateComponent {
       answers: { index_answer: number; answer_name: string }[];
     }[],
   }
-  protected quizForm = {
+  protected quizForm: {
+    type: QuestionType;
+    multipleChoice: boolean;
+    hint: string;
+    question: string;
+    answers: string[];
+  } = {
     type: QuestionType.TRUE_FALSE,
     multipleChoice : false,
     hint: '',
@@ -70,12 +77,12 @@ export class QuizCreateComponent {
     this.localStorage.websocketStatus.subscribe((status) => {
       if (status !== WebSocketStatus.OPEN) return;
       this.localStorage.isLoggedin.subscribe((isLoggedin : boolean) => {
-        // if (!isLoggedin) {
-        //   this.router.navigate(['/']).then(() => {
-        //     alert("Nie jesteś zalogowany!");
-        //     return;
-        //   });
-        // }
+        if (!isLoggedin) {
+          this.router.navigate(['/']).then(() => {
+            alert("Nie jesteś zalogowany!");
+            return;
+          });
+        }
         this.database.send('getCategoryName', {}, 'categoryList').then(() => {
           this.categories = this.database.get_variable('categoryList')!;
         });
@@ -101,6 +108,7 @@ export class QuizCreateComponent {
         };
       } else {
         const question = this.form.question[index];
+        this.indexQuiz = index;
         this.quizForm = {
           type: question.type,
           multipleChoice: question.multipleChoice,
@@ -108,16 +116,19 @@ export class QuizCreateComponent {
           question: question.question,
           answers: question.answers.map((answer: any) => answer.answer_name),
         };
-        this.questionList.nativeElement.querySelectorAll('.question').forEach((questionElement: any, i: number) => {
-          questionElement.firstElementChild.checked = question.correctAnswers.includes(i.toString());
-          questionElement.lastElementChild.value = question.answers[i].answer_name;
-        });
+        setTimeout(() => {
+          this.questionList.nativeElement.querySelectorAll('.question').forEach((questionElement: any, i: number) => {
+            console.log(questionElement, i, question.correctAnswers.includes(i.toString()), questionElement.firstElementChild);
+            questionElement.firstElementChild.checked = question.correctAnswers.includes(i.toString());
+            questionElement.lastElementChild.value = question.answers[i].answer_name;
+          });
+        }, 500);
+
       }
       this.cdr.detectChanges();
     });
   }
   protected addAnswer() : void {
-    console.log(this.quizForm);
     let correctAnswers = ''
     const answers: { index_answer: number; answer_name: string }[] = [];
     this.questionList.nativeElement.querySelectorAll('.question').forEach((question: any, index: number) => {
@@ -131,16 +142,27 @@ export class QuizCreateComponent {
     });
     if (correctAnswers.endsWith(','))
       correctAnswers = correctAnswers.slice(0, -1);
-
-    this.form.question.push({
-      index_quiz: this.form.question.length + 1,
-      type: this.quizForm.type,
-      multipleChoice: this.quizForm.multipleChoice,
-      hint: this.quizForm.hint,
-      question: this.quizForm.question,
-      correctAnswers: correctAnswers,
-      answers: answers,
-    });
+    if (this.indexQuiz !== null) {
+      this.form.question[this.indexQuiz] = {
+        index_quiz: this.indexQuiz,
+        type: this.quizForm.type,
+        multipleChoice: this.quizForm.multipleChoice,
+        hint: this.quizForm.hint,
+        question: this.quizForm.question,
+        correctAnswers: correctAnswers,
+        answers: answers,
+      };
+    } else {
+      this.form.question.push({
+        index_quiz: this.form.question.length,
+        type: this.quizForm.type,
+        multipleChoice: this.quizForm.multipleChoice,
+        hint: this.quizForm.hint,
+        question: this.quizForm.question,
+        correctAnswers: correctAnswers,
+        answers: answers,
+      });
+    }
     this.quizForm = {
       type: QuestionType.TRUE_FALSE,
       multipleChoice: false,
@@ -148,6 +170,52 @@ export class QuizCreateComponent {
       question: '',
       answers: [],
     };
+    this.indexQuiz = null;
+  }
 
+  protected async publishQuiz() : Promise<void> {
+    //       'insertQuiz': `INSERT INTO quiz (name, description, id_category, createdBy, image, isPublic) VALUES (?, ?, ?, ?, ?, ?);`,
+    //     'insertQuestions': `INSERT INTO questions (index_quiz, question, type, multipleChoice, correctAnswers, hint, id_quiz) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+    //     'insertAnswers': `INSERT INTO answers (id_question, index_answer, answer_name) VALUES (?, ?, ?);`,
+    if (this.form.title === '' || this.form.description === '' || this.form.category === '' || this.form.image === '') {
+      alert('Wypełnij wszystkie pola!');
+      return;
+    }
+    if (this.form.question.length === 0) {
+      alert('Dodaj przynajmniej jedno pytanie!');
+      return;
+    }
+    await this.database.send('getUserID', {username: this.localStorage.get('username'), password: this.localStorage.get('password')}, 'empty');
+    const userId = this.database.get_variable('empty')![0].id_user;
+    await this.database.send('insertQuiz', {
+      name: this.form.title,
+      description: this.form.description,
+      id_category: this.form.category,
+      createdBy: userId,
+      image: this.form.image,
+      isPublic: true,
+      difficulty: this.form.difficulty
+    }, 'empty');
+    const quizId = this.database.get_variable('empty')!.insertId;
+    for (const question of this.form.question) {
+      await this.database.send('insertQuestions', {
+        index_quiz: question.index_quiz,
+        question: question.question,
+        type: QuestionType[question.type],
+        multipleChoice: question.multipleChoice,
+        correctAnswers: question.correctAnswers,
+        hint: question.hint,
+        id_quiz: quizId
+      }, 'empty');
+      const questionId = this.database.get_variable('empty')!.insertId;
+      for (const answer of question.answers) {
+        console.log(answer, questionId);
+        await this.database.send('insertAnswers', {
+          id_question: questionId,
+          index_answer: answer.index_answer,
+          answer_name: answer.answer_name
+        }, 'empty');
+      }
+    }
   }
 }
