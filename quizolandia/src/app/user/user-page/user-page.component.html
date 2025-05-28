@@ -8,6 +8,7 @@
         <p>Rejestracja: <strong>{{ formatDate(user!.acccreation) }}</strong></p>
       </div>
       @if (userData.isOwn) {
+        <button (click)="logOut()">Wyloguj się</button>
         <button [routerLink]="['/profile/edit']">Edytuj dane</button>
       }
     </div>

@@ -19,6 +19,9 @@ div {
       position: absolute;
       top: 0;
       right: 0;
+      &:first-of-type {
+        right: 135px;
+      }
       background-color: var(--color-4);
       color: var(--color-7);
       padding: 10px 15px;

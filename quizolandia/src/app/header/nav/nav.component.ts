@@ -1,8 +1,8 @@
-import {Component, NgZone} from '@angular/core';
-import {SearchComponent} from '../search/search.component';
-import {RouterLink} from '@angular/router';
-import {LocalStorageService} from '../../local-storage.service';
-import {WebSocketStatus} from '../../database.service';
+import { Component, NgZone } from '@angular/core';
+import { SearchComponent } from '../search/search.component';
+import { RouterLink } from '@angular/router';
+import { LocalStorageService } from '../../local-storage.service';
+import { checkUser, DatabaseService, WebSocketStatus } from '../../database.service';
 
 @Component({
     selector: 'app-nav',
@@ -14,13 +14,20 @@ import {WebSocketStatus} from '../../database.service';
     styleUrl: './nav.component.scss'
 })
 export class NavComponent {
-  protected localStorageUsername: string | null = null;
+  protected isLoggedin : boolean = false;
 
-  constructor(private zone : NgZone, private localService : LocalStorageService) {
+  constructor(private localService : LocalStorageService, private database : DatabaseService, private zone : NgZone) {
     this.localService.websocketStatus.subscribe(status => {
       if(status !== WebSocketStatus.OPEN) return;
-      this.localStorageUsername = this.localService.get('username');
-    })
+      this.localService.isLoggedin.subscribe((status) => {
+        this.isLoggedin = status;
+      });
+      setTimeout(() => {
+        checkUser(this.database).then((r) => {
+          this.localService.isLoggedin.next(r);
+        });
+      }, 500);
+    });
   }
 
 }
