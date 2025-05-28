@@ -35,11 +35,11 @@ export enum QuestionType {
  * console.log(reportType); // 0
  */
 export enum ReportType {
-  BUG,
-  CHEATING,
-  SUGGESTION,
-  INAPPROPRIATE,
-  OTHER,
+  BUG = 'bug',
+  CHEATING = 'cheating',
+  SUGGESTION = 'suggestion',
+  INAPPROPRIATE = 'inappropriate',
+  OTHER = 'other',
 }
 
 /** @enum Permission
@@ -161,7 +161,6 @@ export interface Answers {
   id_question: Questions["id_questions"],
   index_answer: number,
   answer_name: string,
-  isCorrect: boolean,
 }
 
 /** @interface Report
@@ -272,7 +271,7 @@ type variables = {
   commentsList? : (Comment & User)[],
   user? : (User & any),
   empty? : any,
-  success? : any[],
+  success? : any,
   leaderboard? : (Solve & User)[],
   questions? : (Questions)[],
   answers? : Answers[],

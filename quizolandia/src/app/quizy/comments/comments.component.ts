@@ -25,7 +25,12 @@ export class CommentsComponent implements OnChanges {
   }
   @Input() quizId!: number | undefined;
 
-  constructor(private database: DatabaseService, protected localStorage : LocalStorageService, private cdr : ChangeDetectorRef) {}
+  constructor(private database: DatabaseService, protected localStorage : LocalStorageService, private cdr : ChangeDetectorRef) {
+    this.localStorage.isLoggedin.subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+      this.cdr.markForCheck();
+    });
+  }
 
 
   protected getTime(date : string) : string {
@@ -71,20 +76,19 @@ export class CommentsComponent implements OnChanges {
   }
 
   protected async addComment() {
-    checkUser(this.database).then(async (r) : Promise<void> => {
-      if (!r) return;
-      this.form.content = this.form.content.trim().slice(0, 254) || '';
-      if (this.form.content.length === 0) return;
-      await this.database.send('getUserID', { username: this.localStorage.get('username'), password: this.localStorage.get('password') }, 'user');
-      const user : number = this.database.get_variable('user')[0].id_user;
-      const date = new Date();
-      const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-      await this.database.send('addComment', { id_quiz: this.quizId, id_user: user, content: this.form.content, publicTime: dateString, stars: this.form.star }, 'success');
-      await this.database.send('getCommentsFromQuiz', { id_quiz: this.quizId }, 'commentsList');
-      this.comments = this.database.get_variable('commentsList')!;
-      this.form.content = '';
-      this.form.star = 5;
-    });
+    let response = await checkUser(this.database);
+    if (!response) return;
+    this.form.content = this.form.content.trim().slice(0, 254) || '';
+    if (this.form.content.length === 0) return;
+    await this.database.send('getUserID', { username: this.localStorage.get('username'), password: this.localStorage.get('password') }, 'user');
+    const user : number = this.database.get_variable('user')[0].id_user;
+    const date = new Date();
+    const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+    await this.database.send('addComment', { id_quiz: this.quizId, id_user: user, content: this.form.content, publicTime: dateString, stars: this.form.star }, 'success');
+    await this.database.send('getCommentsFromQuiz', { id_quiz: this.quizId }, 'commentsList');
+    this.comments = this.database.get_variable('commentsList')!;
+    this.form.content = '';
+    this.form.star = 5;
   }
 
   protected deleteComment(id_comment : number) : void {
@@ -104,8 +108,7 @@ export class CommentsComponent implements OnChanges {
         this.database.send('getCommentsFromQuiz', { id_quiz: changes['quizId'].currentValue }, 'commentsList').then(() : void => {
           this.comments = this.database.get_variable('commentsList')!;
           checkUser(this.database).then((r) : void => {
-            this.isLoggedIn = r;
-            this.cdr.detectChanges();
+            this.localStorage.isLoggedin.next(r);
           });
         });
       })

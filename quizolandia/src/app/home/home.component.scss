@@ -14,6 +14,34 @@ section {
     border-bottom: 5px solid var(--color-10);
     margin: 25px 0;
   }
+  &:nth-of-type(3) {
+    width: 30%;
+    margin: 15% auto 0 auto;
+    gap: 15px;
+    color: var(--color-7);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    background-color: var(--color-4);
+    padding: 20px;
+    border-radius: index.$border-32;
+    h3 {
+      font-size: var(--font-24);
+    }
+    p {
+      line-height: 1.8em;
+    }
+    button {
+      transition: index.transition(background-color, index.$short);
+      background-color: var(--color-1);
+      padding: 10px 20px;
+      border-radius: index.$border-20;
+      &:hover {
+        background-color: var(--color-2);
+      }
+    }
+  }
 }
 article {
   display: grid;

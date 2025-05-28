@@ -12,6 +12,8 @@ import { QuizResultsComponent } from './quizy/quiz-results/quiz-results.componen
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { RankingComponent } from './ranking/ranking.component';
 import { DziedzinyComponent } from './dziedziny/dziedziny.component';
+import { QuizCreateComponent } from './quizy/quiz-create/quiz-create.component';
+
 export const routes : Routes = [
   { path: '', component: HomeComponent },
   { path: 'search-results', component: SearchResultsComponent },
@@ -27,6 +29,7 @@ export const routes : Routes = [
   { path: 'quiz/:id/solve', component: QuizSolveComponent },
   { path: 'quiz/:id/result', component: QuizResultsComponent },
   { path: 'user/:id', component: UserPageComponent },
+  { path: 'create-quiz', component: QuizCreateComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' } // Redirect to home for any unknown routes
 ]
 @NgModule({

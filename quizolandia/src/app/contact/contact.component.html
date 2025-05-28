@@ -4,16 +4,31 @@
     <span>Wybierz typ problemu:<small>*</small></span>
     <select required name="report_problem" [(ngModel)]="report_problem">
       <option value="" disabled selected>Wybierz typ problemu</option>
-      <option value="BUG">Błąd</option>
-      <option value="CHEATING">Oszukiwanie</option>
-      <option value="SUGGESTION">Sugestia</option>
-      <option value="INAPPROPRIATE">Nieodpowiednia zawartość</option>
-      <option value="OTHER">Inne</option>
+      <option [value]="ReportType.BUG">Błąd</option>
+      <option [value]="ReportType.CHEATING">Oszukiwanie</option>
+      <option [value]="ReportType.SUGGESTION">Sugestia</option>
+      <option [value]="ReportType.INAPPROPRIATE">Nieodpowiednia zawartość</option>
+      <option [value]="ReportType.OTHER">Inny</option>
     </select>
   </label>
   <label>
     <span>Opisz problem:<small>*</small></span>
     <textarea placeholder="Opisz problem..." name="description" required [(ngModel)]="description"></textarea>
   </label>
-  <input type="submit" value="Wyślij zgłoszenie" (click)="sendReport()">
+  <input type="submit" value="Wyślij zgłoszenie" (click)="sendReport()" [disabled]="">
 </form>
+
+@if (sentReport) {
+  <section #panel>
+    <div>
+      <i class="fa-solid fa-xmark" (click)="closePanel()"></i>
+      @if (result) {
+        <h3>Pomyślnie przesłano formularz!</h3>
+        <p>Możesz zamknąć to okno.</p>
+      } @else {
+        <h3>Wystąpił błąd podczas przesyłania formularza</h3>
+        <p>Spróbuj ponownie później.</p>
+      }
+    </div>
+  </section>
+}
