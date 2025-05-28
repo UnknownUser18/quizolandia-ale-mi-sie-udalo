@@ -1,7 +1,7 @@
 const mysql2 = require('mysql2');
 const ws = require('ws');
 const wss = new ws.WebSocketServer({
-  port: 8080,
+  port: 8088,
   perMessageDeflate: {
     zlibDeflateOptions: {
       // See zlib defaults.

@@ -296,7 +296,7 @@ export class DatabaseService {
   public async initWebSocket() : Promise<WebSocketStatus> {
     return new Promise((resolve, reject) => {
       try {
-        this.socket = new WebSocket('ws://localhost:8080');
+        this.socket = new WebSocket('ws://84.205.160.162:8080');
         this.socket.onopen = () : void => {
           console.log('WebSocket connection established');
           resolve(WebSocketStatus.OPEN);
