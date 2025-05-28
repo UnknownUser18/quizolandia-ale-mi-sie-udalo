@@ -50,3 +50,10 @@
     }
   </div>
 </section>
+@if (isLoggedIn) {
+  <section>
+    <h3>Stwórz swój własny quiz!</h3>
+    <p>Przetestuj nasz nowy kreator quizów i stwórz quiz na miarę swoich potrzeb. Zachwyć znajomych swoją wiedzą i zaproś ich do korzystania z Quizolandii</p>
+    <button routerLink="/create-quiz">Stwórz quiz <i class="fa-solid fa-plus"></i></button>
+  </section>
+}

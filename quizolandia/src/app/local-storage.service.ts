@@ -11,6 +11,7 @@ export class LocalStorageService {
   public readonly key = CryptoJS.enc.Hex.parse("b0040a25cceb0bcff0ce7e63f103091616426f32f54086fdbf5d636ca789baa6");
   public websocketStatus : BehaviorSubject<WebSocketStatus> = new BehaviorSubject<WebSocketStatus>(WebSocketStatus.CLOSED);
   public session : BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public isLoggedin : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   constructor(@Inject(PLATFORM_ID) private platformId : Object) {}
 
   private encrypt(value: string): string {

@@ -53,6 +53,19 @@ app-quiz-solve, app-quiz-results {
   width: 50%;
   margin: auto;
 }
+app-quiz-create {
+  gap: 20px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 0.1fr 1fr;
+  width: 50%;
+  height: 80%;
+  margin: auto;
+  background-color: rgba(var(--color-4-rgb), 0.2);
+  border-radius: index.$border-32;
+}
+
 app-user-page {
   padding: 40px;
   width: 50%;

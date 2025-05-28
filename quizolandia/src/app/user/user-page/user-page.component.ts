@@ -104,4 +104,10 @@ export class UserPageComponent {
     const tenths = Math.floor((time - Math.floor(time)) * 10);
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${tenths.toString().padEnd(2, '0')}`;
   }
+
+  protected logOut() : void {
+    this.localStorage.remove('user');
+    this.localStorage.remove('password');
+    this.router.navigate(['/']).then();
+  }
 }

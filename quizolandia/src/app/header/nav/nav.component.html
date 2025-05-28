@@ -4,7 +4,7 @@
   <menu>
     <li><a routerLink="dziedziny">Dziedziny</a></li>
     <li><a routerLink="leaderboard">Ranking</a></li>
-    @if (localStorageUsername) {
+    @if (isLoggedin) {
       <li><a routerLink="profile">Konto</a></li>
     } @else {
       <li><a routerLink="login">Login</a></li>
