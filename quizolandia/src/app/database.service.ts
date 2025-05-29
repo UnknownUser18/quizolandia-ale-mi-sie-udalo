@@ -1,5 +1,6 @@
 import { Injectable
 } from '@angular/core';
+import {LocalStorageService} from './local-storage.service';
 
 /** @enum QuestionType
  * @description Typ pytania w quizie.
@@ -34,11 +35,11 @@ export enum QuestionType {
  * console.log(reportType); // 0
  */
 export enum ReportType {
-  BUG,
-  CHEATING,
-  SUGGESTION,
-  INAPPROPRIATE,
-  OTHER,
+  BUG = 'bug',
+  CHEATING = 'cheating',
+  SUGGESTION = 'suggestion',
+  INAPPROPRIATE = 'inappropriate',
+  OTHER = 'other',
 }
 
 /** @enum Permission
@@ -57,6 +58,13 @@ export enum Permission {
   MODERATOR,
   ADMIN
 }
+
+export enum WebSocketStatus {
+  CLOSED,
+  OPEN,
+  ERROR
+}
+
 /** @interface User
  *  @description Obiekt reprezentujący użytkownika w bazie danych.
  *  @property {number} id_User - Unikalny identyfikator użytkownika.
@@ -64,8 +72,8 @@ export enum Permission {
  *  @property {string} email - Adres e-mail użytkownika.
  *  @property {string} password - Hasło użytkownika.
  *  @property {string} avatar - Ścieżka URL do awatara użytkownika.
- *  @property {Date} lastLogin - Data ostatniego logowania użytkownika.
- *  @property {Date} accCreation - Data utworzenia konta użytkownika.
+ *  @property {Date} lastlogin - Data ostatniego logowania użytkownika.
+ *  @property {Date} acccreation - Data utworzenia konta użytkownika.
  *  @property {Permission} permission - Uprawnienia użytkownika.
  *  @example
  *  const user: User = {
@@ -75,8 +83,8 @@ export enum Permission {
  *  password: 'haslo123',
  *  avatar: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpreview.redd.it%2Fliteralnie-cibab-v0-jzrcwke4bslc1.jpeg%3Fauto%3Dwebp%26s%3De8a5241bcaa74a46978a78451db6651d6ce21806&f=1&nofb=1&ipt=1bbfa37bdbf81dd2123db5b6032c7377fe000a8036e703bd0019c8bb6b116fb1&ipo=images',
  *  nationality: 'Poland',
- *  lastLogin: new Date('2023-10-01'),
- *  accCreation: new Date('2023-01-01'),
+ *  lastlogin: '2023-01-01T12:00:00Z',
+ *  acccreation: '2023-01-01T12:00:00Z',
  *  permission: Permission.USER,
  *  }
  */
@@ -87,8 +95,8 @@ export interface User {
   password: string,
   avatar: string,
   nationality: string,
-  lastLogin: Date,
-  accCreation: Date,
+  lastlogin: string,
+  acccreation: string,
   permission: Permission,
 }
 
@@ -98,7 +106,6 @@ export interface User {
  * @property {string} quiz_name - Nazwa quizu.
  * @property {string} description - Opis quizu.
  * @property {string} image - Ścieżka URL do obrazu quizu.
- * @property {Questions[]} questions - JSON z pytaniami w quizie.
  * @property {number} createdBy - Identyfikator użytkownika, który stworzył quiz.
  * @property {Date} creationDate - Data utworzenia quizu.
  * @property {Date} lastUpdate - Data ostatniej aktualizacji quizu.
@@ -132,39 +139,28 @@ export interface Quiz {
   quiz_name: string,
   description: string,
   image: string,
-  questions: Questions[],
   createdBy: User["id_User"],
   creationDate: Date,
   lastUpdate: Date,
   isPublic: boolean,
   id_category: Category["id_category"],
+  difficulty: number,
 }
-
-/** @interface Questions
- * @description Obiekt reprezentujący pytanie w quizie.
- * @property {string} question - Treść pytania.
- * @property {QuestionType} type - Typ pytania.
- * @property {boolean} multipleChoice - Czy pytanie ma wiele odpowiedzi.
- * @property {string[]} answers - Tablica z odpowiedziami.
- * @property {string} correctAnswer - Poprawna odpowiedź, zapisywana jako indeks do tablicy answers.
- * @property {string} hint - Podpowiedź do pytania.
- * @example
- *  const question: Questions = {
- *  question: 'Co to jest programowanie?',
- *  type: QuestionType.THREE_CHOICE,
- *  multipleChoice: true,
- *  answers: ['Programowanie', 'Program', 'Programista'],
- *  correctAnswer: '2,3',
- *  hint: 'Programowanie to proces tworzenia programów komputerowych',
- * }
- */
 export interface Questions {
-  question : string,
+  id_questions: number,
+  id_quiz: Quiz["id_quiz"],
+  index_quiz: number,
+  question: string,
   type: QuestionType,
   multipleChoice: boolean,
-  answers: string[],
-  correctAnswer: string,
+  correctAnswers: string, // Przechowuje indeksy poprawnych odpowiedzi jako string, np. "0,2" dla dwóch poprawnych odpowiedzi
   hint: string,
+}
+export interface Answers {
+  id_answer: number,
+  id_question: Questions["id_questions"],
+  index_answer: number,
+  answer_name: string,
 }
 
 /** @interface Report
@@ -190,6 +186,7 @@ export interface Report {
   description: string,
   date: Date,
 }
+
 /** @interface Solve
  * @description Obiekt reprezentujący rozwiązanie quizu przez użytkownika.
  * @property {number} id_solve - Unikalny identyfikator rozwiązania.
@@ -219,19 +216,23 @@ export interface Solve {
   whenSolve: Date,
   isPublic: boolean,
 }
+
 /** @interface Category
  * @description Obiekt reprezentujący kategorię quizu.
  * @property {number} id_category - Unikalny identyfikator kategorii.
  * @property {string} name - Nazwa kategorii.
+ * @property {string} description - Opis kategorii.
  * @example
  *  const category: Category = {
  *  id_category: 1,
  *  name: 'Programowanie',
+ *  description: 'Kategoria dotycząca programowania i technologii informacyjnych',
  * }
  */
 export interface Category {
   id_category: number,
   category_name: string,
+  description: string,
 }
 
 /** @interface Comment
@@ -257,9 +258,10 @@ export interface Comment {
   id_user: User["id_User"],
   id_quiz: Quiz["id_quiz"],
   content: string,
-  publicTime: Date,
+  publicTime: string,
   stars: number,
 }
+
 type variables = {
   quizzesList? : (Quiz & Category)[],
   quizzesFromToday? : (Quiz & Category)[],
@@ -270,36 +272,49 @@ type variables = {
   scoresList? : (Solve & User)[],
   user? : (User & any),
   empty? : any,
-  success? : any[],
+  success? : any,
+  leaderboard? : (Solve & User)[],
+  questions? : (Questions)[],
+  answers? : Answers[],
 }
+
 type variableName = keyof variables;
+
+export async function checkUser(d : DatabaseService) : Promise<boolean> {
+  if(!(d.localStorage.get('username') || d.localStorage.get('password'))) return false;
+  await d.send('checkUser', { username: d.localStorage.get('username'), password: d.localStorage.get('password') }, 'success');
+  return d.get_variable('success')![0].userExists === 1;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
-  constructor() {}
+  constructor(public localStorage : LocalStorageService) {}
   private socket! : WebSocket;
   private variables : Map<variableName, any> = new Map<variableName, any>();
-  public async initWebSocket() : Promise<boolean> {
-    try {
-      this.socket = new WebSocket('ws://localhost:8080');
-      this.socket.onopen = () : void => {
-        console.log('WebSocket connection established');
-      };
-      this.socket.onerror = (error : Event) : void => {
+  public async initWebSocket() : Promise<WebSocketStatus> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.socket = new WebSocket('ws://localhost:8080');
+        this.socket.onopen = () : void => {
+          console.log('WebSocket connection established');
+          resolve(WebSocketStatus.OPEN);
+        };
+        this.socket.onerror = (error : Event) : void => {
+          console.error('WebSocket error:', error);
+          reject(WebSocketStatus.ERROR);
+        };
+        this.socket.onclose = () : void => {
+          console.log('WebSocket connection closed');
+          resolve(WebSocketStatus.CLOSED);
+        };
+      } catch (error) {
         console.error('WebSocket error:', error);
-      };
-      this.socket.onclose = () : void => {
-        console.log('WebSocket connection closed');
-      };
-    } catch (error) {
-      console.error('WebSocket error:', error);
-    }
-    return new Promise((resolve, reject) : void => {
-      setTimeout(() : void => {
-        this.socket.readyState === WebSocket.OPEN ? resolve(true) : reject(new Error('WebSocket connection failed'));
-      }, 1000);
-    })
+        reject(WebSocketStatus.ERROR);
+      }
+    });
   }
   /**
    * @method get
@@ -316,7 +331,8 @@ export class DatabaseService {
     return new Promise((resolve, reject) => {
       this.socket.send(JSON.stringify({ type: query_name, params: params }));
       this.socket.onmessage = (event: MessageEvent) => {
-        console.log('WebSocket message received:', event.data);
+        console.log('WebSocket message received:');
+        console.table(JSON.parse(event.data));
         const data = JSON.parse(event.data);
         this.variables.set(variable, data);
         resolve(true);

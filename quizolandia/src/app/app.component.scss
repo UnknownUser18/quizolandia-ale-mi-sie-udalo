@@ -1,20 +1,30 @@
-a {
-  color: var(--accent-color);
+@use "../assets/scss/index";
+app-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--color-1);
+  z-index: 1;
+  padding: 15px 40px;
+}
+main {
+  margin-top: 125px;
+  flex: 1 0 auto;
 }
 footer {
+  color: var(--color-7);
+  gap: 150px;
+  background-color: var(--color-1);
   display: flex;
+  padding: 20px 50px;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-  padding: 10px 15px;
-  background-color: var(--border-color);
-  color: var(--white-text-color);
-  div {
-    display: grid;
-    grid-template-rows: 1fr repeat(4, minmax(16px, 1fr));
-  }
-  h2, h3 {
-    text-align: center;
-    margin-bottom: 10px;
+  flex-shrink: 0;
+  a {
+    transition: index.transition(color, index.$short);
+    color: var(--color-3);
+    &:hover {
+      color: var(--color-2);
+    }
   }
 }

@@ -1,47 +1,59 @@
-@defer (when result !== null) {
-  <div class="quiz">
-    <div class="baner" style="background-image: url('{{result?.image}}')"></div>
+@defer (when result) {
+  <img ngSrc="{{ result?.image }}" alt="Zdjęcie quizu {{ result?.quiz_name }}" width="1000" height="400" class="banner" priority>
+  <article>
+    <h2>{{ result?.quiz_name }}</h2>
     <div>
-      <h1>{{ result?.quiz_name }}</h1>
-      <h2>{{ result?.category_name }} </h2>
-      <p>{{ result?.description }}</p>
+      <h3 [routerLink]="['/user',result?.id_User]"><abbr [title]="'Autor: ' +  result?.username">{{ result?.username }}</abbr></h3>
+      <i><abbr [title]="'Kategoria: ' + result?.category_name">{{ result?.category_name }}</abbr></i>
     </div>
-    <button>Zacznij quiz</button>
-
-    <div class="leaderboard">
-      <div class="container">
-        <section class="left-panel">
-          <h2>Top Quizierów</h2>
-          <div class="line"></div>
-          <div class="list">
-            @for (user of leaderboard; track user.score) {
-              <div class="user">
-                {{ leaderboard!.indexOf(user) + 1 }}.
-                <img ngSrc="{{ user.avatar }}" alt="Zdjęcie {{ user.username }}" width="50" height="50">
-                {{ user.username }}
-                {{ user.score }} pkt.
-              </div>
-            }
-          </div>
-        </section>
-
-        <section class="right-panel">
-          <div class="avatar-container second">
-            <img src="https://i.imgur.com/mccFOYQ.png" alt="Dawid W">
-            <p><strong>Dawid W</strong><br>Poland</p>
-          </div>
-          <div class="avatar-container first">
-            <div class="crown">👑</div>
-            <img src="https://i.imgur.com/YFk4dAb.png" alt="Ruben">
-            <p><strong>Ruben</strong><br>China</p>
-          </div>
-          <div class="avatar-container third">
-            <img src="https://i.imgur.com/D8w44Pv.png" alt="Dawid W">
-            <p><strong>Dawid W</strong><br>Niger</p>
-          </div>
-        </section>
-      </div>
+    <p>{{ result?.description }}</p>
+  </article>
+    <button [routerLink]="['/quiz', quizId, 'solve']">Rozpocznij quiz</button>
+  <hr>
+  <div class="leaderboard">
+    <section>
+      <h3>Top Quizierów</h3>
+      <div class="line"></div>
+      @if (leaderboard && leaderboard.length > 0) {
+        <ol>
+        @for (user of leaderboard; track user.username; let i = $index) {
+          <li [ngClass]="{'first': i === 0, 'second': i === 1, 'third': i === 2}" [routerLink]="['/user', user.id_User]">
+            <img ngSrc="{{ user.avatar }}" alt="{{ user.username }}" width="50" height="50">
+            <i>{{ i + 1 }}</i>
+            <span>{{ user.username }}</span>
+            <b>{{ user.score }} pkt.</b>
+            <b>{{ getTime(user.solveTime) }}</b>
+          </li>
+        }
+        </ol>
+      } @else {
+        <div class="empty">
+          <h3>Brak wyników w rankingu.</h3>
+          <i>Może Ty będziesz pierwszy?</i>
+        </div>
+      }
+    </section>
+    @if (leaderboard && leaderboard.length > 0) {
+      <section>@for (user of leaderboard.slice(0,3); track user.username; let i = $index) {
+        <div [ngClass]="{'first': i === 0, 'second': i === 1, 'third': i === 2}" [routerLink]="['/user', user.id_User]">
+          @if (i === 0) {
+            <span><i class="fa-solid fa-crown"></i></span>
+          }
+          <img ngSrc="{{ user.avatar }}" alt="{{ user.username }}" width="120" height="120">
+          <p><strong>{{ user.username }}</strong><br>{{ user.nationality }}</p>
+        </div>
+      }
+      </section>
+    }
     </div>
-    <app-comments [quizId]="quizId"></app-comments>
-  </div>
-}
+  <app-comments [quizId]="quizId"></app-comments>
+} @placeholder (minimum 500ms) {
+  <section class="placeholders">
+    <span class="banner"></span>
+    <h2></h2>
+    <div>
+      <h3></h3>
+      <i></i>
+    </div>
+    <p></p>
+  </section>

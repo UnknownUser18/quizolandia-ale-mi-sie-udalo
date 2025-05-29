@@ -52,17 +52,40 @@ wss.on('connection', (ws) => {
   });
 });
 const queries = {
-    'getCategoryName': 'SELECT category_name FROM category;',
-    'getCommentsFromQuiz': 'SELECT username, content, publicTime, avatar, stars FROM comments JOIN user ON comments.id_user = user.id_user WHERE id_quiz = ?;',
-    'getQuiz': `SELECT quiz.name AS quiz_name, category_name, description, creationDate, lastUpdate, user.username, image FROM quiz JOIN user ON user.id_User = quiz.createdBy JOIN category ON quiz.id_category = category.id_category WHERE id_quiz = ?;`,
-    'getQuizzes': `SELECT id_quiz, quiz.name AS quiz_name, description, user.username, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE ? AND  (category_name = ? OR ? = 'wszystkie') AND isPublic = 1  ORDER BY quiz.name;`,
+    'getCategoryName': 'SELECT category_name, id_category FROM category;',
+    'insertQuiz': `INSERT INTO quiz (name, description, id_category, createdBy, image, isPublic, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+    'insertQuestions': `INSERT INTO questions (index_quiz, question, type, multipleChoice, correctAnswers, hint, id_quiz) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+    'insertAnswers': `INSERT INTO answers (id_question, index_answer, answer_name) VALUES (?, ?, ?);`,
+    'getCategories': 'SELECT category_name, description FROM category;',
+    'getCategoryCount': `SELECT category_name, COUNT(*) AS count FROM category JOIN quiz ON quiz.id_category = category.id_category GROUP BY category_name;`,
+    'addComment': `INSERT INTO comments (id_user, id_quiz, content, publicTime, stars) VALUES (?, ?, ?, ?, ?);`,
+    'getUserID': `SELECT id_user FROM user WHERE username = ? AND password = ?;`,
+    'updateLastLogin': `UPDATE user SET lastlogin = ? WHERE username = ? AND password = ?;`,
+    'updateUser': `UPDATE user SET username = ?, email = ?, password = ?, nationality = ?, avatar = ? WHERE id_user = ?;`,
+    'getCommentsFromQuiz': 'SELECT id_comment, username, content, publicTime, avatar, stars FROM comments JOIN user ON comments.id_user = user.id_user WHERE id_quiz = ? ORDER BY publicTime DESC, username;',
+    'checkUser': `SELECT EXISTS (SELECT 1 FROM user WHERE (username = ?) AND password = ?) AS userExists;`,
+    'getQuizName': `SELECT name as quiz_name, difficulty FROM quiz WHERE id_quiz = ?;`,
+    'getQuestions': `SELECT id_questions, index_quiz, question, type, multipleChoice, correctAnswers, hint FROM questions JOIN quiz ON quiz.id_quiz = questions.id_quiz WHERE quiz.id_quiz = ?;`,
+    'getAnswers': `SELECT id_question, id_answer, index_answer, answer_name FROM answers JOIN questions ON questions.id_questions = answers.id_question JOIN quiz ON quiz.id_quiz = questions.id_quiz WHERE quiz.id_quiz = ?;`,
+    'getQuiz': `SELECT quiz.name AS quiz_name, category_name, quiz.description, creationDate, lastUpdate, user.username, image, user.id_User FROM quiz JOIN user ON user.id_User = quiz.createdBy JOIN category ON quiz.id_category = category.id_category WHERE id_quiz = ?;`,
+    'getQuizzes': `SELECT id_quiz, quiz.name AS quiz_name, quiz.description, user.username, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category JOIN user ON user.id_User = quiz.createdBy = user.id_User WHERE quiz.name LIKE ? AND  (category_name IN(?) OR ? = 'wszystkie') AND isPublic = 1  ORDER BY quiz.name;`,
     'getQuizzesFromToday': `SELECT id_quiz, quiz.name AS quiz_name, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category WHERE DATE(creationDate) = CURDATE() AND isPublic = 1 ORDER BY quiz.name LIMIT 4;`,
     'getQuizzesFromWeekend': `SELECT id_quiz, quiz.name AS quiz_name, category_name, image FROM quiz JOIN category ON quiz.id_category = category.id_category WHERE DATE(creationDate) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND isPublic = 1 ORDER BY quiz.name LIMIT 4;`,
     'insertReport': `INSERT INTO report(id_user, type, description) VALUES (?, ?, ?);`,
     'checkLogin': `SELECT EXISTS (SELECT 1 FROM user WHERE (username = ? OR email = ?) AND password = ?) AS userExists;`,
     'insertUser': `INSERT INTO user (email, username, password, accCreation, avatar) VALUES (?, ?, ?, ?, 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.IFpxNz18Dg9hE4nTR_GAgQHaHa%26pid%3DApi&f=1&ipt=cdf1d7913e3aca2929e55cc1be469f595b956c4148e24db30b08360dcc142241'); SET @last_user_id = LAST_INSERT_ID(); INSERT INTO permissions (id_user, name)VALUES (@last_user_id, 'USER'); UPDATE user SET permission = (SELECT id_permissions FROM permissions WHERE name = 'USER' AND id_user = @last_user_id) WHERE id_user = @last_user_id;`,
-    'getUser': `SELECT u.username, u.avatar, u.nationality, u.accCreation, COUNT(q.id_quiz) AS quiz_count FROM user u LEFT JOIN quiz q ON q.createdBy = u.id_User WHERE username = ?;`,
-    'getLeaderboard': `SELECT MAX(solve.score) AS score, user.username, avatar FROM solve JOIN user ON user.id_User = solve.id_user WHERE id_quiz = ? GROUP BY user.username, solveTime ORDER BY score DESC, solveTime DESC LIMIT 10;`
+    'getUser': `SELECT u.username, u.avatar, u.nationality, u.accCreation, COUNT(q.id_quiz) AS quiz_count FROM user u LEFT JOIN quiz q ON q.createdBy = u.id_User WHERE username = ? AND password = ?;`,
+    'getUserEditData': `SELECT u.username, u.email, u.nationality, u.avatar, u.email, u.password FROM user u WHERE u.id_user = ?;`,
+    'getLeaderboard': `SELECT u.id_User, u.username, u.nationality, u.avatar, MAX(s.score) AS score, MIN(s.solveTime) AS solveTime FROM user u JOIN solve s ON u.id_User = s.id_user WHERE s.id_quiz = ? AND s.isPublic = 1 GROUP BY u.username, u.nationality, u.avatar ORDER BY score DESC, solveTime LIMIT 10;`,
+    'insertSolve': `INSERT INTO solve (id_quiz, id_user, score, solveTime, isPublic) VALUES (?, ?, ?, ?, ?);`,
+    'deleteComment': `DELETE FROM comments WHERE id_comment = ?;`,
+    'getTopLeaderboard': `WITH ranked_solves AS (SELECT id_user, score, solveTime, id_quiz, ROW_NUMBER() OVER (PARTITION BY id_quiz ORDER BY score DESC, solveTime) AS rn FROM solve WHERE isPublic = 1) SELECT COUNT(*) AS count FROM ranked_solves JOIN user ON user.id_User = ranked_solves.id_user WHERE rn = 1 AND user.id_User = ?;`,
+    'getCountUserQuizzes': `SELECT COUNT(*) AS quiz_count FROM quiz WHERE createdBy = ?;`,
+    'getCountUserSolves': `SELECT COUNT(*) AS solve_count FROM solve WHERE id_user = ?;`,
+    'getUserData': `SELECT username, avatar, nationality, lastlogin, acccreation FROM user WHERE id_user = ?;`,
+    'getLastSolves': `SELECT s.id_solve, q.name AS quiz_name, q.id_quiz, s.score, s.solveTime, s.isPublic FROM solve s JOIN quiz q ON s.id_quiz = q.id_quiz WHERE s.id_user = ? ORDER BY s.solveTime DESC LIMIT 5;`,
+    'getTopUsers': `SELECT u.username, u.avatar, u.id_User, SUM(score) AS score, u.nationality FROM solve JOIN user u ON u.id_User = solve.id_user WHERE isPublic = 1 GROUP BY u.username ORDER BY score DESC;`,
+    'getCountSolved': `SELECT u.username, COUNT(*) AS quiz_count FROM solve JOIN user u ON u.id_User = solve.id_user WHERE isPublic = 1 GROUP BY u.username ORDER BY quiz_count DESC;`
   }
 function executeQuery(ws, value) {
   value = JSON.parse(value);
@@ -72,13 +95,23 @@ function executeQuery(ws, value) {
     query = queries[value.type.toString()];
     switch (value.type) {
       case 'getQuizzes':
-        params = [`%${value.params.quiz_name}%`, value.params.category_name, value.params.category_name];
+        let categories = value.params.category_name;
+        if (typeof categories === 'string') {
+          categories = categories === 'wszystkie' ? [] : categories.split(',')
+        }
+        params = [`%${value.params.quiz_name}%`, categories.length ? categories : ['wszystkie'], value.params.category_name];
         break;
       case 'checkLogin':
         params = [value.params.username, value.params.username, value.params.password];
         break;
-      case 'getLeaderboard':
-        params = [value.params.id_quiz];
+      case 'addComment':
+        params = [value.params.id_user, value.params.id_quiz, value.params.content, value.params.publicTime, value.params.stars];
+        break;
+      case 'checkUser':
+        params = [value.params.username, value.params.password];
+        break;
+      case 'insertSolve':
+        params = [value.params.id_quiz, value.params.id_user, value.params.score, value.params.solveTime, value.params.isPublic];
         break;
       default:
         params = value ? Object.values(value.params) : {} || [];

@@ -1,0 +1,32 @@
+:root {
+  --color-1: #17385A;
+  --color-2: #1F61A2;
+  --color-3: #39A6D5;
+  --color-4: #518BC0;
+  --color-4-rgb: 81, 139, 192;
+  --color-5: #FAFAFA;
+  --color-6: #212121;
+  --color-6-rgb: 33, 33, 33;
+  --color-7-rgb: 250, 250, 250;
+  --color-7: #FAFAFA;
+  --color-8: #BDAFBB;
+  --color-9: #FAFAFA;
+  --color-10: #40447B;
+  --font-48: 48px;
+  --font-40: 40px;
+  --font-32: 32px;
+  --font-28: 28px;
+  --font-24: 24px;
+  --font-20: 20px;
+  --font-16: 16px;
+}
+$box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.3);
+$light-box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.1);
+$border-32: 32px;
+$border-20: 20px;
+$border-10: 10px;
+$short: 200ms;
+$medium: 300ms;
+$long: 500ms;
+$xlong: 750ms;
+$cubic: cubic-bezier(.4,.01,.59,1);

@@ -1,19 +1,154 @@
-input {
-  height: 100%;
-  width: 70%;
-  font-size: 1.4em;
-  color: var(--text-color);
+@use "../../../assets/scss/index";
+@mixin flex {
+  display: flex;
 }
-select {
-  max-width: 20%;
-  width: 10%;
-  min-width: 5%;
-  font-size: 1.4em;
-  color: var(--text-color);
+@mixin align {
+  @include flex;
+  align-items: center;
 }
-select, option {
-  background-color: var(--background-color);
+@mixin justify {
+  @include align;
+  justify-content: center;
 }
-button {
-  padding: 10px 20px;
+@mixin label {
+  @include flex;
+  padding: 10px;
+  border-radius: index.$border-20;
+  border: 2px solid rgba(var(--color-7-rgb), 0.5);
+  min-width: 400px;
+  gap: 20px;
+  input {
+    transition: index.transition(color, index.$medium);
+    width: 100%;
+    color: var(--color-7);
+    &:placeholder-shown {
+      color: var(--color-8);
+      &:focus {
+        color: rgba(var(--color-7-rgb), 0.8);
+      }
+    }
+  }
+  i {
+    transition: index.transition(color, index.$medium);
+    color: var(--color-7);
+    cursor: pointer;
+    &:hover {
+      color: rgba(var(--color-7-rgb), 0.8);
+    }
+  }
+}
+label {
+  @include label;
+}
+section {
+  @include index.section;
+  & > div {
+    color: var(--color-7);
+    background-color: var(--color-1);
+    h3 {
+      text-align: center;
+      font-size: var(--font-28);
+      margin-bottom: 10px;
+    }
+    & > i {
+      color: var(--color-7);
+      &:hover {
+        color: rgba(var(--color-7-rgb), 0.8);
+      }
+    }
+    form {
+      &:first-of-type label i {
+        @include justify;
+      }
+      &:last-of-type {
+        height: 85%;
+      }
+      &:last-of-type fieldset {
+        @include flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: auto;
+        border-radius: index.$border-20;
+        padding: 10px 15px;
+        p {
+          position: sticky;
+          top: 0;
+          text-align: end;
+        }
+        button {
+          width: fit-content;
+          transition: index.transition(background-color, index.$medium);
+          position: sticky;
+          bottom: 0;
+          background-color: var(--color-2);
+          padding: 10px 15px;
+          border-radius: index.$border-10;
+          &:hover {
+            background-color: var(--color-4);
+          }
+          &:first-of-type {
+            align-self: flex-start;
+          }
+          &:last-of-type {
+            align-self: flex-end;
+          }
+        }
+        label {
+          border-radius: 0;
+          border: 0;
+          border-bottom: 1px solid rgba(var(--color-7-rgb), 0.5);
+          @include align;
+          justify-content: space-between;
+          white-space: nowrap;
+          gap: 10px;
+          width: clamp(250px, 300px, 100%);
+          height: 50px;
+          margin: 10px auto;
+          min-width: 0;
+          &:first-of-type {
+            border-top: 1px solid rgba(var(--color-7-rgb), 0.5);
+          }
+          div {
+            @include justify;
+            width: 25px;
+            height: 25px;
+            position: relative;
+            input {
+              display: none;
+              &:checked + span {
+                background-color: var(--color-4);
+                border-color: var(--color-4);
+              }
+              &:checked + span:after {
+                display: block;
+              }
+            }
+            span {
+              cursor: pointer;
+              width: 100%;
+              height: 100%;
+              border: 2px solid rgba(var(--color-7-rgb), 0.5);
+              border-radius: 4px;
+              background: #fff;
+              transition: background 0.2s, border 0.2s;
+              position: relative;
+              display: inline-block;
+              &:after {
+                content: "";
+                position: absolute;
+                left: 5px;
+                top: 0;
+                width: 8px;
+                height: 14px;
+                border: solid var(--color-1);
+                border-width: 0 3px 3px 0;
+                transform: rotate(45deg);
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

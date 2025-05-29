@@ -1,19 +1,23 @@
+@use '../../assets/scss/index';
 .result {
-  background-color: transparent;
-  border-radius: 0;
   margin: 10px 0;
-  box-shadow: none;
-  cursor: default;
   h2 {
     font-size: 1.8em;
     text-align: center;
-    color: var(--border-color);
+    color: var(--color-1);
   }
   p {
     text-align: center;
     margin-top: 5px;
+    color: var(--color-2);
     font-weight: 300;
-    color: var(--accent-color);
+    &.try-again {
+      transition: index.transition(color, index.$short);
+      cursor: pointer;
+    }
+    &.try-again:hover {
+      color: var(--color-3);
+    }
   }
   h3 {
     font-size: 1.5em;
@@ -34,21 +38,39 @@ section {
   margin: 10px auto;
   overflow-y: scroll;
 }
-div {
+article {
+  max-width: 500px;
   transition: transform 150ms ease-in-out;
-  &:not(.result) {
-    width: 400px;
-    height: 320px;
-    overflow: hidden;
-  }
-  will-change: transform;
   cursor: pointer;
   width: 100%;
   display: flex;
   flex-direction: column;
   border-radius: 12px;
-  background-color: var(--white-color);
+  background-color: var(--color-7);
   box-shadow: 5px 10px 46px -9px rgba(0,0,0,0.22);
+  &.placeholder {
+    cursor: wait;
+    height: 400px;
+    *:not(span) {
+      animation: pulse 1.5s infinite;
+    }
+    div {
+      border-radius: index.$border-20;
+      height: 300px;
+    }
+    i {
+      display: inline-block;
+      height: 15px;
+      width: 150px;
+      border-radius: index.$border-32;
+    }
+    h3 {
+      width: 200px;
+      height: 20px;
+      margin-top: 25px;
+      border-radius: index.$border-32;
+    }
+  }
   &:hover {
     transform: scale(1.05);
   }
@@ -71,6 +93,14 @@ img {
   height: auto;
   max-height: 350px;
 }
-.try-again {
-  cursor: pointer;
+@keyframes pulse {
+  0% {
+    background-color: rgba((var(--color-6-rgb)), 0.2);
+  }
+  50% {
+    background-color: rgba((var(--color-6-rgb)), 0.3);
+  }
+  100% {
+    background-color: rgba((var(--color-6-rgb)), 0.2);
+  }
 }

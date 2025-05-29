@@ -1,8 +1,8 @@
 @defer (when result !== null) {
     <div class="result">
       @if (result?.length! > 0) {
-        <h2>Wyniki wyszukiwania dla: {{ searchQuery }}</h2>
-        <p>Kategoria: {{ selectedCategory }}</p>
+        <h2>Wyniki wyszukiwania dla{{ searchQuery ? ': ' + searchQuery : ' kategorii: ' + selectedCategories.split(',').slice(0, 3).join(', ') + (selectedCategories.split(',').length > 3 ? '...' : '') }} </h2>
+        <p>Kategoria: {{ selectedCategories.split(',').join(', ') }}</p>
       } @else {
         <h2>Nie znaleziono wyników dla twego wyszukiwania.</h2>
         <p routerLink="" class="try-again">Spróbuj ponownie.</p>
@@ -10,13 +10,29 @@
     </div>
   <section>
     @for (quiz of result; track quiz.id_quiz ) {
-      <div [routerLink]="'../quiz/' + quiz.id_quiz">
+      <article [routerLink]="'../quiz/' + quiz.id_quiz">
         <img ngSrc="{{ quiz.image }}"  width="600" height="350" [alt]="'Obraz ' + quiz.quiz_name">
         <span>
           <i>{{ quiz.category_name }}</i>
           <h3>{{ quiz.quiz_name }}</h3>
         </span>
-      </div>
+      </article>
+    }
+  </section>
+} @placeholder (minimum 500ms) {
+  <div class="result">
+    <h2>Wyniki wyszukiwania dla{{ searchQuery ? ': ' + searchQuery : ' kategorii: ' + selectedCategories.split(',').slice(0, 3).join(', ') + (selectedCategories.split(',').length > 3 ? '...' : '') }} </h2>
+    <p>Kategoria: {{ selectedCategories.split(',').join(', ') }}</p>
+  </div>
+  <section>
+    @for (quiz of [1, 2, 3, 4, 5]; track quiz) {
+      <article class="placeholder">
+        <div></div>
+        <span>
+          <i></i>
+          <h3></h3>
+        </span>
+      </article>
     }
   </section>
 }

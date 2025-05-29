@@ -1,0 +1,45 @@
+<h2>Najlepsi quizerzy</h2>
+@defer (when leaderboard) {
+  <div class="leaderboard">
+    @for (user of leaderboard?.slice(0,3); track user.id_User; let i = $index) {
+      <div [routerLink]="['/user', user.id_User]">
+        @if (i === 0) {
+          <i class="fa-solid fa-crown"></i>
+        }
+        <img [ngSrc]="user.avatar" alt="Zdjęcie użytkownika {{ user.username }}" width="120" height="120">
+        <h3>{{ user.username }}</h3>
+        @if (user.nationality) {
+          <p>{{ user.nationality }}</p>
+        } @else {
+          <p>Brak informacji o narodowości</p>
+        }
+      </div>
+    }
+  </div>
+  <section>
+    <table>
+      <thead>
+        <tr>
+          <th>Numer</th>
+          <th>Zdjęcie</th>
+          <th>Użytkownik</th>
+          <th>Kraj</th>
+          <th>Punkty</th>
+          <th>Rozwiązane quizy</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of leaderboard; track user.id_User; let i = $index) {
+          <tr [ngClass]="{'first': i === 0, 'second': i === 1, 'third': i === 2}" [routerLink]="['/user', user.id_User]">
+            <td>{{ i + 1 }}</td>
+            <td><img [ngSrc]="user.avatar" alt="Zdjęcie użytkownika {{ user.username }}" width="75" height="75"></td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.nationality }}</td>
+            <td>{{ user.score }}</td>
+            <td>{{ findUserSolve(user.username) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+}

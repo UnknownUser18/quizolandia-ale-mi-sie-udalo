@@ -1,0 +1,95 @@
+@defer (when userSession) {
+  <h2>{{ quizName }}</h2>
+  <div class="main">
+    <div>
+      <header>
+        <i class="fa-solid fa-check"></i>
+        <h3>Ukończono quiz!</h3>
+      </header>
+      <div class="quiz-results">
+        <article>
+          <h4>Wynik</h4>
+          <p><strong>{{ userSession.score }} pkt.</strong></p>
+        </article>
+        <article>
+          <h4>Poprawne odpowiedzi</h4>
+          <p><strong>{{ userSession.correctAnswers }}/{{ userSession.selectedAnswers.length }}</strong></p>
+        </article>
+        <article>
+          <h4>Czas</h4>
+          <p><strong>{{ formattedTimeSpent }}</strong></p>
+        </article>
+      </div>
+      <div>
+        <button (click)="showAnswers()">
+          <i class="fa-solid fa-question"></i>
+          Zobacz odpowiedzi
+        </button>
+        <button (click)="showRanking()">
+          <i class="fa-solid fa-trophy"></i>
+          Zobacz ranking
+        </button>
+        <button (click)="goBack(false)">
+          <i class="fa-solid fa-rotate-left"></i>
+          Powrót
+        </button>
+        <button (click)="goBack(true)" [disabled]="(isLoggedIn | async) === false">
+          <i class="fa-solid fa-save"></i>
+          @if ((isLoggedIn | async) === true) {
+            Zapisz wynik
+          } @else {
+            Zaloguj się, aby zapisać wynik
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
+@if (showAnswerPanel) {
+  <section #answerPanel>
+    <div>
+      <h3>Odpowiedzi</h3>
+      <i class="fa-solid fa-xmark" (click)="closeAnswerPanel()"></i>
+      @for (question of questions; track question.id_questions) {
+        <article>
+          <span>{{ question.index_quiz }}. <h4>{{ question.question }}</h4></span>
+          <ul>
+            @for (answer of filterAnswersByQuestion(question.id_questions); track answer.id_answer; let i = $index) {
+              <li [ngClass]="{
+                'correct': correctAnswer(question.correctAnswers, i),
+                'wrong': !correctAnswer(question.correctAnswers, i)
+              }">
+                <i class="fa-solid" [ngClass]="{
+                  'fa-check': containsAnswer(userSession.selectedAnswers[i], i),
+                  'fa-xmark': !containsAnswer(userSession.selectedAnswers[i], i)
+                }"></i>
+                {{ answer.answer_name }}
+              </li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+  </section>
+}
+@if (showRankingPanel) {
+  <section #rankingPanel>
+    <div>
+      <h3>Ranking</h3>
+      <i class="fa-solid fa-xmark" (click)="closeRankingPanel()"></i>
+      <ol>
+        @for (user of leaderboard; track user.username; let i = $index) {
+          <li [ngClass]="{'first': i === 0, 'second': i === 1, 'third': i === 2}" [routerLink]="['/user', user.id_User]">
+            <img ngSrc="{{ user.avatar }}" alt="{{ user.username }}" width="50" height="50">
+            <i>{{ i + 1 }}</i>
+            <span>{{ user.username }}</span>
+            <b>{{ user.score }} pkt.</b>
+            <b>{{ getTime(user.solveTime) }}</b>
+          </li>
+        } @empty {
+          <li>Brak wyników w rankingu</li>
+        }
+      </ol>
+    </div>
+  </section>
+}

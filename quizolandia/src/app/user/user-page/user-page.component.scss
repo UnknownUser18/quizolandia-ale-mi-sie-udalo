@@ -1,0 +1,114 @@
+@use '../../../assets/scss/index';
+img {
+  border-radius: 50%;
+  border: 3px solid var(--color-1);
+}
+div {
+  color: #6B7280;
+  display: flex;
+  &:first-child {
+    position: relative;
+    width: 100%;
+    gap: 15px;
+    align-items: center;
+    div {
+      flex-direction: column;
+    }
+    button {
+      transition: index.transition(background-color, index.$medium);
+      position: absolute;
+      top: 0;
+      right: 0;
+      &:first-of-type {
+        right: 135px;
+      }
+      background-color: var(--color-4);
+      color: var(--color-7);
+      padding: 10px 15px;
+      border-radius: index.$border-32;
+      &:hover {
+        background-color: var(--color-2);
+      }
+    }
+  }
+  &:nth-of-type(2) {
+    padding: 0 5%;
+    justify-content: space-between;
+    margin-top: 70px;
+    article {
+      display: grid;
+      row-gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      h3 {
+        font-size: 1em;
+        font-weight: 400;
+        grid-column: 1 / span 2;
+      }
+      i {
+        grid-column: 3 / span 1;
+        place-self: center end;
+      }
+      strong {
+        font-size: var(--font-28);
+      }
+      &:first-of-type i, &:nth-of-type(2) i {
+        border-radius: 50%;
+        font-size: var(--font-16);
+        padding: 5px 6px;
+        color: var(--color-7);
+      }
+      &:first-of-type i {
+        background-color: #22C55E;
+      }
+      &:nth-of-type(2) i {
+        background-color: #3B82F6;
+      }
+      &:last-of-type i {
+        color: #EAB308
+      }
+    }
+  }
+  &:nth-of-type(3) {
+    display: block;
+    height: 50%;
+    margin-top: 5%;
+    h3 {
+      text-align: center;
+      font-size: var(--font-20);
+      color: #1F2937;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+    div {
+      height: 100%;
+      overflow: auto;
+      gap: 25px;
+      flex-direction: column;
+    }
+    article {
+      width: 95%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 15px;
+      background-color: var(--color-7);
+      border-radius: index.$border-20;
+      box-shadow: index.$light-box-shadow;
+    }
+    h4 {
+      font-size: var(--font-20);
+      color: #1F2937;
+    }
+    .info {
+      place-self: center;
+    }
+  }
+  h2 {
+    color: #1F2937;
+    font-size: var(--font-24);
+  }
+  strong {
+    color: #1F2937;
+  }
+}

@@ -12,3 +12,12 @@
   <button type="submit" (click)="login()">Zaloguj się</button>
   <a routerLink="../register">Nie masz konta? Zarejestruj się!</a>
 </form>
+@if (showPanel) {
+  <section #panel>
+    <div>
+      <i class="fa fa-close" (click)="closePanel()"></i>
+      <h3>Błąd</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </section>
+}

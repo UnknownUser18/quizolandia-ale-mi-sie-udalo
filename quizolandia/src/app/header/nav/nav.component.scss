@@ -1,39 +1,21 @@
-header {
-  background-color: var(--border-color);
-  color: var(--white-text-color);
-  padding: 10px 20px;
+@use '../../../assets/scss/index';
+nav {
+  color: var(--color-7);
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-h1 {
-  font-size: 2.1em;
-  font-weight: 600;
-}
-a:hover {
-  text-decoration: none;
-  color: var(--gradient-text-color);
-}
-ul {
-  list-style: none;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  min-width: 30%;
-  width: 45%;
-  max-width: 60%;
   a {
-    font-size: 1.5em;
+    transition: index.transition(color, index.$medium);
+    font-weight: 400;
+    &:hover {
+      color: var(--color-8)
+    }
   }
-}
-app-search {
-  border: 2px solid var(--text-color);
-  border-radius: 32px;
-  width: 95%;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10px;
-  margin: 10px auto 0 auto;
-  display: flex;
-  column-gap: 50px;
+  h1 {
+    font-size: var(--font-32);
+  }
+  menu {
+    gap: 40px;
+    font-size: var(--font-20);
+  }
 }

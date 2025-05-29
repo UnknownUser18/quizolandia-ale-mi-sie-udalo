@@ -1,6 +1,7 @@
+@use "../../assets/scss/index";
 h1 {
   font-size: 2.4em;
-  color: var(--border-color);
+  color: var(--color-1);
   margin: 5px 0 10px 0;
 }
 span {
@@ -24,18 +25,18 @@ form {
   align-items: center;
 }
 input {
-  border: 1px solid var(--border-color);
-  transition: outline 75ms ease-in-out;
+  border: 1px solid var(--color-1);
+  transition: index.transition(outline, index.$short);
   width: 100%;
   padding: 10px;
   border-radius: 8px;
-  background-color: var(--background-color);
-  color: var(--text-color);
+  background-color: var(--color-5);
+  color: var(--color-6);
   font-size: 1em;
   margin-bottom: 10px;
   &:focus {
     border: 0;
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid var(--color-2);
   }
 }
 button {
@@ -43,15 +44,26 @@ button {
   width: fit-content;
   padding: 10px 20px;
   border-radius: 8px;
-  background-color: var(--accent-color);
-  color: var(--white-text-color);
+  background-color: var(--color-2);
+  color: var(--color-7);
   font-size: 1.1em;
   margin-bottom: 10px;
   &:hover {
-    background-color: var(--border-color);
+    background-color: var(--color-1);
   }
 }
 a {
-  color: var(--accent-color);
+  color: var(--color-2);
   margin-bottom: 10px;
+}
+section {
+  @include index.section(25%, 30%);
+  div {
+    transform: translateY(250%);
+  }
+  h3 {
+    text-align: center;
+    font-size: var(--font-28);
+    margin-bottom: 10px;
+  }
 }

@@ -1,0 +1,4 @@
+@use "variables";
+@function transition($property, $duration: variables.$short) {
+  @return $property $duration variables.$cubic;
+}

@@ -1,63 +1,104 @@
-:root {
-  --border-color: #17385A;
-  --accent-color: #1F61A2;
-  --secondary-color: #39A6D5;
-  --primary-color: #518BC0;
-  --background-color: #FAFAFA;
-  --text-color: #212121;
-  --white-text-color: #FAFAFA;
-  --gradient-text-color: #BDAFBB;
-  --white-color: #FAFAFA;
-}
+@use 'assets/scss/index';
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  will-change: transition;
+}
+html, body, app-root {
+  height: 100%;
 }
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
+  background-color: var(--color-5);
+  color: var(--color-6);
 }
-a {
-  text-decoration: none;
-  transition: color 150ms ease-in-out;
-  will-change: transition;
-  color: inherit;
-  &:hover {
-    text-decoration: underline;
-  }
+app-root {
+  display: flex;
+  flex-direction: column;
 }
-input, textarea, select, option, button {
-  border: 0;
-  outline: 0;
-  color: inherit;
-  font-family: inherit;
-  background-color: transparent;
-  &:placeholder-shown {
-    font-style: italic;
-    color: var(--gradient-text-color) !important;
-  }
+app-home {
+  display: block;
+  width: 70%;
+  margin: 0 auto;
 }
-button {
-  cursor: pointer;
-  will-change: transition;
-  transition: background-color 150ms ease-in-out;
-}
-input {
-  will-change: transition;
-  transition: all 150ms ease-in-out;
+app-quiz-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: index.$border-10;
+  box-shadow: index.$box-shadow;
 }
 app-login, app-register {
-  box-shadow: 10px 10px 26px -18px rgba(0,0,0,0.75);
-  border: 2px solid var(--border-color);
+  box-shadow: index.$box-shadow;
+  border: 2px solid var(--color-1);
   border-radius: 20px;
-  background-color: var(--white-color);
+  background-color: var(--color-7);
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 40%;
-  margin: 10px auto;
+  margin: auto;
+}
+app-quiz-solve, app-quiz-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 50%;
+  margin: auto;
+}
+app-quiz-create {
+  gap: 20px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 0.1fr 1fr;
+  width: 50%;
+  height: 80%;
+  margin: auto;
+  background-color: rgba(var(--color-4-rgb), 0.2);
+  border-radius: index.$border-32;
+}
+
+app-user-page {
+  padding: 40px;
+  width: 50%;
+  height: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(var(--color-4-rgb), 0.2);
+  border-radius: index.$border-32;
+}
+app-user-edit {
+  padding: 20px;
+  width: 30%;
+  height: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(var(--color-4-rgb), 0.2);
+  border-radius: index.$border-32;
+}
+app-ranking, app-dziedziny {
+  display: block;
+  width: 90%;
+  margin: auto;
+}
+input, button, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background-color: inherit;
+  border: none;
+  outline: none;
 }
 app-contact {
   border-radius: 20px;
@@ -66,6 +107,36 @@ app-contact {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--white-color);
-  box-shadow: 10px 10px 26px -18px rgba(0,0,0,0.75);
+  box-shadow: index.$box-shadow;
+}
+button {
+  cursor: pointer;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+ul, ol, menu {
+  list-style-type: none;
+  display: flex;
+}
+abbr {
+  text-decoration: none;
+}
+.fa-solid {
+  font-family: 'Font Awesome 6 Free', ui-sans-serif;
+}
+.placeholder {
+  animation: placeholder 1.5s infinite;
+}
+@keyframes placeholder {
+  0% {
+    background-color: rgba(var(--color-7-rgb), 0.3);
+  }
+  50% {
+    background-color: rgba(var(--color-7-rgb), 0.5);
+  }
+  100% {
+    background-color: rgba(var(--color-7-rgb), 0.3);
+  }
 }

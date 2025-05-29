@@ -1,0 +1,112 @@
+<h2>Stwórz quiz</h2>
+<button (click)="publishQuiz()">Opublikuj quiz</button>
+<form name="main-stats">
+  <label>
+    <span>Nazwa quizu:</span>
+    <input type="text" name="quiz" placeholder="Nazwa quizu" [(ngModel)]="form.title" required>
+  </label>
+  <label>
+    <span>Zdjęcie:</span>
+    <input type="text" name="thumbnail" placeholder="URL miniaturki" [(ngModel)]="form.image" required>
+  </label>
+  <label>
+    <span>Poziom trudności:</span>
+    <select name="difficulty" [(ngModel)]="form.difficulty" required>
+      <option value="" disabled selected>Wybierz poziom trudności</option>
+      <option [value]="1">Łatwy</option>
+      <option [value]="2">Średni</option>
+      <option [value]="3">Trudny</option>
+    </select>
+  </label>
+  <label>
+    <span>Kategoria:</span>
+    <select name="category" [(ngModel)]="form.category" required>
+      <option value="" disabled selected>Wybierz kategorię</option>
+      @for (category of categories; track category.id_category) {
+        <option [value]="category.id_category">{{ category.category_name }}</option>
+      }
+    </select>
+  </label>
+  <label>
+    <span>Opis:</span>
+    <textarea name="description" placeholder="Opis quizu" [(ngModel)]="form.description" required></textarea>
+  </label>
+  <label>
+    <span>Obrazek:</span>
+    <input type="text" name="image" placeholder="URL obrazka" [(ngModel)]="form.image" required>
+  </label>
+</form>
+<div class="main">
+  <h3>Pytania</h3>
+  @for (question of form.question; track question.index_quiz) {
+    <div class="quest">
+      <span>{{ question.index_quiz + 1 }}.</span>
+      <h3>{{ question.question }}</h3>
+      <div>
+        @for (answer of question.answers; track answer.index_answer) {
+          <label>
+              @if (question.multipleChoice) {
+                <input type="checkbox" name="answer" [checked]="question.correctAnswers.includes(answer.index_answer.toString())" disabled>
+              } @else {
+                <input type="radio" name="answer" [checked]="question.correctAnswers.includes(answer.index_answer.toString())" disabled>
+              }
+            <span>{{ answer.answer_name }}</span>
+          </label>
+        }
+      </div>
+      <button (click)="selectQuestion(question.index_quiz)">Edytuj</button>
+    </div>
+  }
+  <div class="add" (click)="selectQuestion(null)">
+    <i class="fa-solid fa-plus"></i>
+  </div>
+</div>
+@if (showQuizPage) {
+  <section #quizPage>
+    <div>
+      <i class="fa-solid fa-xmark" (click)="closePage()"></i>
+      <h2>Typ quizu</h2>
+      <select name="typ" (change)="onTypeOrModeChange()" [(ngModel)]="quizForm.multipleChoice">
+        <option [value]="false" selected>Jednokrotnego wyboru</option>
+        <option [value]="true">Wielokrotnego wyboru</option>
+      </select>
+      <select name="option" (change)="onTypeOrModeChange()" [(ngModel)]="quizForm.type">
+        <option [disabled]="quizForm.multipleChoice" [value]="QuestionType.TRUE_FALSE">Prawda Fałsz</option>
+        <option [value]="QuestionType.TWO_CHOICE">2 Odpowiedzi</option>
+        <option [value]="QuestionType.THREE_CHOICE">3 Odpowiedzi</option>
+        <option [value]="QuestionType.FOUR_CHOICE">4 Odpowiedzi</option>
+        <option [value]="QuestionType.FIVE_CHOICE">5 Odpowiedzi</option>
+        <option [value]="QuestionType.SIX_CHOICE">6 Odpowiedzi</option>
+      </select>
+      <h3>Pytanie</h3>
+      <label>
+        <input type="text" name="questionText" placeholder="Treść pytania" [(ngModel)]="quizForm.question" required class="question-text">
+      </label>
+      <h3>Podpowiedz</h3>
+      <label>
+        <input type="text" name="hint" placeholder="Podpowiedź (opcjonalnie)" [(ngModel)]="quizForm.hint">
+      </label>
+      <div class="question-list" #questionList>
+        @for (i of answerIndexes; track i) {
+          <label class="question">
+            @if (quizForm.multipleChoice) {
+              <input type="checkbox" name="answer">
+              <input type="text" name="answerText" placeholder="Odpowiedź {{ i + 1 }}" [(ngModel)]="quizForm.answers[i]" required>
+            } @else {
+              <input type="radio" name="answer">
+              <input type="text" name="answerText" placeholder="Odpowiedź {{ i + 1 }}" [(ngModel)]="quizForm.answers[i]" required>
+            }
+          </label>
+        }
+      </div>
+<!--   TODO: Fix not rendering after changing.   -->
+      <button (click)="addAnswer()">
+        @if (indexQuiz) {
+          Edytuj odpowiedź
+        } @else {
+          Dodaj odpowiedź
+        }
+        </button>
+    </div>
+  </section>
+}
