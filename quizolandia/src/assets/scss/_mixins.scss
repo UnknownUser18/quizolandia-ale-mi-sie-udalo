@@ -25,6 +25,9 @@
   &.done {
     backdrop-filter: blur(10px);
   }
+  p {
+    text-align: center;
+  }
   & > div {
     padding: 20px 15px;
     color: var(--color-6);

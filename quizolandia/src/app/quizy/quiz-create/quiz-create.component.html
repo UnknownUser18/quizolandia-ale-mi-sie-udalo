@@ -44,15 +44,17 @@
       <h3>{{ question.question }}</h3>
       <div>
         @for (answer of question.answers; track answer.index_answer) {
-            @if (question.multipleChoice) {
-              <input type="checkbox" name="answer" [checked]="question.correctAnswers.includes(answer.index_answer.toString())" disabled>
-            } @else {
-              <input type="radio" name="answer" [checked]="question.correctAnswers.includes(answer.index_answer.toString())" disabled>
-            }
-          <span>{{ answer.answer_name }}</span>
+          <label>
+              @if (question.multipleChoice) {
+                <input type="checkbox" name="answer" [checked]="question.correctAnswers.includes(answer.index_answer.toString())" disabled>
+              } @else {
+                <input type="radio" name="answer" [checked]="question.correctAnswers.includes(answer.index_answer.toString())" disabled>
+              }
+            <span>{{ answer.answer_name }}</span>
+          </label>
         }
-        <button (click)="selectQuestion(question.index_quiz)">Edytuj</button>
       </div>
+      <button (click)="selectQuestion(question.index_quiz)">Edytuj</button>
     </div>
   }
   <div class="add" (click)="selectQuestion(null)">

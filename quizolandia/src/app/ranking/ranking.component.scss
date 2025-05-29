@@ -90,6 +90,9 @@ table {
     td {
       font-size: var(--font-20);
       img {
+        display: inline-block;
+        min-width: 75px;
+        min-height: 75px;
         border-radius: 50%;
       }
     }

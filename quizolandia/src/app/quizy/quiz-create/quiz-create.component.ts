@@ -60,8 +60,11 @@ export class QuizCreateComponent {
   }
 
   onTypeOrModeChange() {
+    // Ustal liczbę odpowiedzi na podstawie typu pytania
+    const answerCount = this.quizForm.type === QuestionType.TRUE_FALSE ? 2 : Number(this.quizForm.type) + 1;
     this.quizForm = {
       ...this.quizForm,
+      answers: Array(answerCount).fill(''),
       multipleChoice: this.quizForm.multipleChoice,
     };
     this.cdr.detectChanges();
@@ -98,32 +101,37 @@ export class QuizCreateComponent {
     this.showQuizPage = true;
     this.cdr.detectChanges();
     this.transition.animateWithTransitions(true, this.zone, this.quizPage.nativeElement).then(() => {
+      let answerCount: number;
       if (index === null) {
+        // Nowe pytanie
+        answerCount = this.quizForm.type === QuestionType.TRUE_FALSE ? 2 : Number(this.quizForm.type) + 1;
         this.quizForm = {
           type: QuestionType.TRUE_FALSE,
           multipleChoice: false,
           hint: '',
           question: '',
-          answers: [],
+          answers: Array(answerCount).fill(''),
         };
       } else {
         const question = this.form.question[index];
         this.indexQuiz = index;
+        answerCount = question.type === QuestionType.TRUE_FALSE ? 2 : Number(question.type) + 1;
+        // Uzupełnij odpowiedzi do wymaganej długości
+        const answers = question.answers.map((answer: any) => answer.answer_name);
+        while (answers.length < answerCount) answers.push('');
         this.quizForm = {
           type: question.type,
           multipleChoice: question.multipleChoice,
           hint: question.hint,
           question: question.question,
-          answers: question.answers.map((answer: any) => answer.answer_name),
+          answers: answers,
         };
         setTimeout(() => {
           this.questionList.nativeElement.querySelectorAll('.question').forEach((questionElement: any, i: number) => {
-            console.log(questionElement, i, question.correctAnswers.includes(i.toString()), questionElement.firstElementChild);
             questionElement.firstElementChild.checked = question.correctAnswers.includes(i.toString());
-            questionElement.lastElementChild.value = question.answers[i].answer_name;
+            questionElement.lastElementChild.value = answers[i];
           });
         }, 500);
-
       }
       this.cdr.detectChanges();
     });
@@ -174,9 +182,6 @@ export class QuizCreateComponent {
   }
 
   protected async publishQuiz() : Promise<void> {
-    //       'insertQuiz': `INSERT INTO quiz (name, description, id_category, createdBy, image, isPublic) VALUES (?, ?, ?, ?, ?, ?);`,
-    //     'insertQuestions': `INSERT INTO questions (index_quiz, question, type, multipleChoice, correctAnswers, hint, id_quiz) VALUES (?, ?, ?, ?, ?, ?, ?);`,
-    //     'insertAnswers': `INSERT INTO answers (id_question, index_answer, answer_name) VALUES (?, ?, ?);`,
     if (this.form.title === '' || this.form.description === '' || this.form.category === '' || this.form.image === '') {
       alert('Wypełnij wszystkie pola!');
       return;
@@ -209,7 +214,6 @@ export class QuizCreateComponent {
       }, 'empty');
       const questionId = this.database.get_variable('empty')!.insertId;
       for (const answer of question.answers) {
-        console.log(answer, questionId);
         await this.database.send('insertAnswers', {
           id_question: questionId,
           index_answer: answer.index_answer,

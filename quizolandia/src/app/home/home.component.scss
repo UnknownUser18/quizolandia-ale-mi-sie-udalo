@@ -16,14 +16,15 @@ section {
   }
   &:nth-of-type(3) {
     width: 30%;
-    margin: 15% auto 0 auto;
+    margin: 5% auto;
     gap: 15px;
-    color: var(--color-7);
+    border: 3px dotted var(--color-4);
+    color: var(--color-4);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
-    background-color: var(--color-4);
+    background-color: var(--color-7);
     padding: 20px;
     border-radius: index.$border-32;
     h3 {
@@ -33,8 +34,10 @@ section {
       line-height: 1.8em;
     }
     button {
+      align-self: center;
       transition: index.transition(background-color, index.$short);
       background-color: var(--color-1);
+      color: var(--color-7);
       padding: 10px 20px;
       border-radius: index.$border-20;
       &:hover {
@@ -45,13 +48,33 @@ section {
 }
 article {
   display: grid;
-  grid-template-rows: auto 1fr;
+  cursor: pointer;
+  grid-template-rows: auto 0.5fr 1fr;
   border-radius: index.$border-32;
   min-height: 216px;
+  background-color: var(--color-4);
+  @include index.box-shadow;
+  color: var(--color-7);
+  img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: index.$border-32 index.$border-32 0 0;
+  }
+  span {
+    color: var(--color-6);
+    margin-top: 5px;
+  }
+  h3 {
+    align-self: center;
+    font-weight: 400;
+  }
+  span,h3 {
+    margin-left: 16px;
+  }
   &.placeholder {
     cursor: wait;
     animation: none;
-    background-color: var(--color-2);
     @include index.box-shadow;
     & > * {
       animation: placeholder 1.5s alternate infinite;
