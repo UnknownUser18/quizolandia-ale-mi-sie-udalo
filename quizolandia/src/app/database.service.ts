@@ -269,6 +269,7 @@ type variables = {
   quiz? : (User & Quiz & Category),
   categoryList? : Category[],
   commentsList? : (Comment & User)[],
+  scoresList? : (Solve & User)[],
   user? : (User & any),
   empty? : any,
   success? : any,
